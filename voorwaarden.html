@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Algemene voorwaarden | SWITI SPANG</title>
+    <meta name="description" content="Algemene voorwaarden voor bestellingen en afhalen bij SWITI SPANG." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <a href="index.html" class="brand">SWITI <span>SPANG</span></a>
+        <nav>
+          <a href="index.html#menu">Weekmenu</a>
+          <a href="index.html#drop">Weekly drop</a>
+          <a href="index.html#story">Waarom SWITI SPANG?</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <div class="mini-status"><span class="dot"></span> Bestellen open</div>
+        <button class="cart-trigger" id="openCartBtn">Bestelling <span class="cart-count" id="cartCount">0</span></button>
+      </div>
+    </header>
+
+    <main class="container page-shell">
+      <div class="title-wrap">
+        <p class="eyebrow">Algemene voorwaarden</p>
+        <h1>Voorwaarden voor bestellingen</h1>
+      </div>
+
+      <div class="info-card">
+        <h3>1. Afhalen</h3>
+        <p>Bestellingen worden alleen afgehaald tijdens het vaste afhaalmoment van vrijdag. Het exacte tijdslot en adres worden in de bevestiging meegedeeld.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>2. Betaalverwerking</h3>
+        <p>Betalingen worden via een veilige online betaalprovider verwerkt. Een bestelling wordt pas definitief na succesvolle betaling, tenzij anders is vermeld.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>3. Voorraad</h3>
+        <p>Voorraad is beperkt en kan per week verschillen. Als iets uitverkocht is, wordt dit in het menu duidelijk weergegeven.</p>
+      </div>
+    </main>
+
+    <div class="scrim" id="scrim"></div>
+    <aside class="drawer" id="cartDrawer" aria-label="Winkelmand">
+      <div class="drawer-header">
+        <h3>Jouw bestelling</h3>
+        <button class="close-btn" id="closeCartBtn" aria-label="Sluiten">✕</button>
+      </div>
+      <div class="drawer-body" id="drawerBody"></div>
+      <div class="drawer-footer" id="drawerFooter"></div>
+    </aside>
+
+    <div class="sticky-cart" id="stickyCart">
+      <button class="sticky-btn" id="stickyCartBtn">Bekijk bestelling · <span id="stickyTotal">€0,00</span></button>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>

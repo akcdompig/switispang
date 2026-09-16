@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SWITI SPANG | Surinaams Home-Food in Almere</title>
+    <meta name="description" content="SWITI SPANG — authentiek Surinaams & Caribisch home-food, vers bereid in beperkte oplage. Bestel online en haal vrijdag jouw bestelling op in Almere." />
+    <meta name="keywords" content="Surinaams eten Almere, Surinaams afhalen Almere, Surinaamse maaltijden Almere, Surinaams home-food Almere, Surinaamse catering Almere" />
+    <meta property="og:title" content="SWITI SPANG | Surinaams Home-Food in Almere" />
+    <meta property="og:description" content="Authentiek Surinaams & Caribisch home-food. Elke week vers gekookt in beperkte oplage." />
+    <meta name="theme-color" content="#1c140f" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <div class="brand">SWITI <span>SPANG</span></div>
+        <nav>
+          <a href="#menu">Weekmenu</a>
+          <a href="#drop">Weekly drop</a>
+          <a href="#story">Waarom SWITI SPANG?</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <div class="mini-status"><span class="dot"></span> Bestellen open</div>
+        <button class="cart-trigger" id="openCartBtn">Bestelling <span class="cart-count" id="cartCount">0</span></button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">Surinaams home-food in Almere</p>
+            <h1>Switi eten. <span>Spang geregeld.</span></h1>
+            <p class="lead">Authentiek Surinaams & Caribisch home-food. Elke week vers gekookt in beperkte oplage en klaar voor afhalen op vrijdag.</p>
+            <div class="cta-row">
+              <a href="#menu" class="btn primary">Bekijk het weekmenu</a>
+              <a href="#drop" class="btn secondary">Hoe werkt het?</a>
+            </div>
+            <div class="hero-note">
+              <span>↳</span>
+              <span>Geheel via vooraf bestellen — vers bereid, beperkt, zonder restaurantgedoe.</span>
+            </div>
+          </div>
+
+          <div class="hero-card" aria-label="Het weekmenu bord">
+            <div class="board-head">
+              <span class="script">Deze week</span>
+              <span class="date" id="dropDate">Vrijdag</span>
+            </div>
+            <ul class="board-list" id="boardList"></ul>
+            <div class="board-footer">
+              <div class="countdown-label">Bestellen sluit donderdag 20:00</div>
+              <div class="countdown" id="countdown"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="steps">
+        <div class="container">
+          <div class="steps-grid">
+            <div class="step">
+              <div class="step-number">01</div>
+              <h3>Kies je gerechten</h3>
+              <p>De weekkaart is kort en krachtig. Kies wat je wilt, kies wat je wilt herhalen.</p>
+            </div>
+            <div class="step">
+              <div class="step-number">02</div>
+              <h3>Betaal online</h3>
+              <p>Bestel eenvoudig, betaal veilig en ontvang direct je bevestiging met je ophaaltijd.</p>
+            </div>
+            <div class="step">
+              <div class="step-number">03</div>
+              <h3>Haal vrijdag op</h3>
+              <p>Vrijdag tussen 17:00 en 20:00 staat jouw bestelling warm en klaar voor je afhaalmoment.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="menu">
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow">Het weekmenu</p>
+            <h2>Gerechten die je echt terughaalt.</h2>
+            <p>We houden het klein, warm en goed. Verzamelde klassiekers, een paar specials en altijd een beetje ruimte voor de week die net weer anders ruikt.</p>
+          </div>
+          <div class="pills" id="categoryTabs"></div>
+          <div class="menu-grid" id="menuGrid"></div>
+        </div>
+      </section>
+
+      <section id="drop">
+        <div class="container">
+          <div class="special-wrap">
+            <div>
+              <p class="eyebrow">Weekly drop</p>
+              <h2>Deze week bij SWITI SPANG</h2>
+              <p><strong>Vrijdag = SWITI SPANG DAY.</strong> Bestellen kan tot donderdag 20:00. Daarna sluiten we en gaan we koken op basis van wat echt besteld is.</p>
+              <p style="margin-top: 16px;">Als iets uitverkocht is: uitverkocht. Dat is onderdeel van het gevoel. Een echte limited drop, geen eindeloze menukaart.</p>
+            </div>
+            <div class="special-panel">
+              <div class="script">Spang geregeld</div>
+              <ul>
+                <li><span>Deadline</span><strong>Donderdag 20:00</strong></li>
+                <li><span>Ophalen</span><strong>Vrijdag 17:00 – 20:00</strong></li>
+                <li><span>Beperkte oplage</span><strong>Week voor week</strong></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="story">
+        <div class="container story-grid">
+          <div>
+            <p class="eyebrow">Waarom SWITI SPANG?</p>
+            <h2>We koken zoals we thuis koken. Alleen maken we een beetje extra.</h2>
+            <p>Geen grote keuken. Geen massaproductie. Geen eindeloze menukaart. Het eten komt vanuit huis, met aandacht, met tijd, en met een beetje liefde in de pan.</p>
+            <p>Bij SWITI SPANG gaat het om de smaak die je herkent omdat het op een echte Surinaamse tafel thuishoort: warm, rijk, direct, ongedwongen. We knippen niet in porties of voor de massa. We koken voor de mensen die weer terugkomen omdat het goed is.</p>
+            <p class="sig">— SWITI SPANG</p>
+          </div>
+          <div class="quote-box">
+            <p>“We koken zoals we thuis koken. Alleen maak je deze week net een beetje extra.”</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow">Van de buurt</p>
+            <h2>Wat mensen terugbrengen</h2>
+          </div>
+          <div class="reviews">
+            <article class="review">
+              <div class="stars">★★★★★</div>
+              <p>De saoto voelt echt alsof ik het weer bij thuis eet. Warm, duidelijk, krachtig. Je merkt dat er aandacht in zit, niet alleen massa.</p>
+              <cite>Rayan · Almere Buiten</cite>
+            </article>
+            <article class="review">
+              <div class="stars">★★★★★</div>
+              <p>Ik bestel altijd op donderdag. Als iets op is, is het op. Dat werkt juist goed, want alles voelt exclusief en vers.</p>
+              <cite>Sandra · Almere Haven</cite>
+            </article>
+            <article class="review">
+              <div class="stars">★★★★★</div>
+              <p>Het voelt niet als een snackbar. Het voelt als “je kent iemand die echt lekker kookt” en je haalt het vrijdag op.</p>
+              <cite>Jules · Almere Poort</cite>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="faq">
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow">Praktisch</p>
+            <h2>De dingen die je wilt weten</h2>
+          </div>
+          <div class="faq">
+            <details open>
+              <summary>Waar haal ik mijn bestelling op?</summary>
+              <p>Je haalt je bestelling op in Almere tijdens het vaste afhaalmoment van vrijdag. Het exacte adres ontvang je in je bestelbevestiging.</p>
+            </details>
+            <details>
+              <summary>Wanneer kan ik bestellen?</summary>
+              <p>De bestelling sluit donderdag om 20:00. Daarna wordt er gekookt op basis van wat echt is besteld.</p>
+            </details>
+            <details>
+              <summary>Waarom is er soms iets uitverkocht?</summary>
+              <p>Omdat we in beperkte oplage koken. De drop is bewust klein. Als iets op is, is het op — dat maakt het een echte weekly drop.</p>
+            </details>
+            <details>
+              <summary>Is het alleen afhalen?</summary>
+              <p>Ja. SWITI SPANG werkt met vooraf bestellen en afhalen. Dat is het volledige model, zodat de kwaliteit en versheid blijven.</p>
+            </details>
+            <details>
+              <summary>Hoe werkt de betaling?</summary>
+              <p>De website is voorbereid voor Mollie. De checkout stroomt naar online betaling, met duidelijke orderstatus, bevestiging en ophaalinstructies.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div>
+            <div class="brand" style="margin-bottom: 12px;">SWITI <span>SPANG</span></div>
+            <p>Authentiek Surinaams & Caribisch home-food. Vers bereid in beperkte oplage en klaar voor afhalen in Almere.</p>
+          </div>
+          <div>
+            <h4>Menu</h4>
+            <ul>
+              <li><a href="#menu">Weekmenu</a></li>
+              <li><a href="#drop">Weekly drop</a></li>
+              <li><a href="#story">Ons verhaal</a></li>
+              <li><a href="#faq">Praktisch</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Contact</h4>
+            <ul>
+              <li><a href="mailto:hallo@switispang.nl">hallo@switispang.nl</a></li>
+              <li><a href="https://instagram.com" target="_blank" rel="noreferrer">Instagram</a></li>
+              <li><a href="contact.html">Contact</a></li>
+              <li><a href="allergenen.html">Allergenen</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2026 SWITI SPANG • Afhalen alleen</span>
+          <span><a href="voorwaarden.html">Algemene voorwaarden</a> · <a href="privacy.html">Privacy</a></span>
+        </div>
+      </div>
+    </footer>
+
+    <div class="scrim" id="scrim"></div>
+    <aside class="drawer" id="cartDrawer" aria-label="Winkelmand">
+      <div class="drawer-header">
+        <h3>Jouw bestelling</h3>
+        <button class="close-btn" id="closeCartBtn" aria-label="Sluiten">✕</button>
+      </div>
+      <div class="drawer-body" id="drawerBody"></div>
+      <div class="drawer-footer" id="drawerFooter"></div>
+    </aside>
+
+    <div class="sticky-cart" id="stickyCart">
+      <button class="sticky-btn" id="stickyCartBtn">Bekijk bestelling · <span id="stickyTotal">€0,00</span></button>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>

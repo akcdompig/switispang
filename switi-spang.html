@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SWITI SPANG | Surinaams Home-Food in Almere</title>
+    <meta
+      name="description"
+      content="SWITI SPANG — authentiek Surinaams & Caribisch home-food, vers bereid in beperkte oplage. Bestel online en haal vrijdag jouw bestelling op in Almere."
+    />
+    <meta
+      name="keywords"
+      content="Surinaams eten Almere, Surinaams afhalen Almere, Surinaamse maaltijden Almere, Surinaams home-food Almere, Surinaamse catering Almere"
+    />
+    <meta property="og:title" content="SWITI SPANG | Surinaams Home-Food in Almere" />
+    <meta
+      property="og:description"
+      content="Authentiek Surinaams & Caribisch home-food. Elke week vers gekookt in beperkte oplage."
+    />
+    <meta name="theme-color" content="#1c140f" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Playfair+Display:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #17120f;
+        --paper: #f6efe5;
+        --card: #201914;
+        --panel: #2b211d;
+        --muted: #cab99f;
+        --accent: #e0ae42;
+        --accent-2: #dabf69;
+        --rust: #a04f2d;
+        --green: #66815b;
+        --line: rgba(255,255,255,0.08);
+        --shadow: rgba(0,0,0,0.35);
+        --max: 1180px;
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        font-family: "Manrope", sans-serif;
+        background: var(--bg);
+        color: var(--paper);
+        line-height: 1.6;
+      }
+      a { color: inherit; text-decoration: none; }
+      img { max-width: 100%; display: block; }
+      button, input { font: inherit; }
+      h1, h2, h3, h4 { font-family: "Playfair Display", serif; margin: 0; letter-spacing: -0.03em; }
+      p { margin: 0; }
+      .container { width: min(var(--max), calc(100% - 32px)); margin: 0 auto; }
+      .eyebrow {
+        display: inline-block;
+        font-size: 0.7rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--accent);
+        font-weight: 800;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        border: 1px solid transparent;
+        border-radius: 999px;
+        padding: 15px 24px;
+        font-size: 0.8rem;
+        letter-spacing: 0.12em;
+        font-weight: 800;
+        text-transform: uppercase;
+        transition: 0.2s ease;
+        cursor: pointer;
+      }
+      .btn.primary { background: var(--accent); color: #1a120d; }
+      .btn.primary:hover { filter: brightness(1.06); }
+      .btn.secondary { background: transparent; border-color: rgba(255,255,255,0.18); color: var(--paper); }
+      .btn.secondary:hover { background: rgba(255,255,255,0.05); }
+      .btn.ghost { background: transparent; border-color: rgba(224,174,66,0.5); color: var(--accent); }
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        background: rgba(23,18,15,0.88);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--line);
+      }
+      .topbar-inner {
+        min-height: 74px;
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+      .brand {
+        font-family: "Playfair Display", serif;
+        font-weight: 800;
+        font-size: 1.42rem;
+        letter-spacing: 0.08em;
+      }
+      .brand span { color: var(--accent); }
+      nav {
+        margin-left: auto;
+        display: flex;
+        gap: 22px;
+        align-items: center;
+      }
+      nav a {
+        color: var(--muted);
+        font-size: 0.9rem;
+        transition: color 0.2s ease;
+      }
+      nav a:hover { color: var(--paper); }
+      .mini-status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(102,129,91,0.5);
+        color: #b9d8aa;
+        font-size: 0.68rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      .mini-status .dot {
+        width: 8px; height: 8px; border-radius: 50%; background: #7db266; display: inline-block;
+      }
+      .cart-trigger {
+        position: relative;
+        border: none;
+        background: var(--accent);
+        color: #1d150f;
+        padding: 12px 18px;
+        border-radius: 999px;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+      .cart-count {
+        display: inline-grid;
+        place-items: center;
+        min-width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: rgba(29,21,15,0.88);
+        color: var(--accent);
+        font-size: 0.7rem;
+        margin-left: 8px;
+      }
+      .hero {
+        position: relative;
+        padding: 76px 0 80px;
+        overflow: hidden;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(circle at 15% 15%, rgba(224,174,66,0.15), transparent 36%),
+          radial-gradient(circle at 80% 10%, rgba(102,129,91,0.12), transparent 32%);
+      }
+      .hero-grid {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 52px;
+        align-items: center;
+      }
+      .hero-copy h1 {
+        font-size: clamp(3rem, 6vw, 5.2rem);
+        line-height: 0.98;
+        margin: 18px 0 20px;
+      }
+      .hero-copy h1 span {
+        display: block;
+        color: var(--accent);
+      }
+      .lead {
+        max-width: 510px;
+        font-size: 1.08rem;
+        color: var(--muted);
+      }
+      .cta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-top: 28px;
+      }
+      .hero-note {
+        margin-top: 22px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+      .hero-card {
+        position: relative;
+        background: var(--paper);
+        color: #1a120d;
+        border-radius: 22px;
+        padding: 26px 24px 22px;
+        box-shadow: 0 28px 60px rgba(0,0,0,0.32);
+        transform: rotate(-1.5deg);
+      }
+      .hero-card::before,
+      .hero-card::after {
+        content: "";
+        position: absolute;
+        width: 124px;
+        height: 22px;
+        background: rgba(224,174,66,0.4);
+        top: -12px;
+      }
+      .hero-card::before { left: 20px; transform: rotate(-18deg); }
+      .hero-card::after { right: 20px; transform: rotate(16deg); }
+      .board-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        border-bottom: 2px solid rgba(26,18,13,0.8);
+        padding-bottom: 12px;
+        margin-bottom: 18px;
+      }
+      .board-head .script {
+        font-family: "Georgia", serif;
+        font-style: italic;
+        font-size: 2rem;
+        color: #33261c;
+      }
+      .board-head .date {
+        color: rgba(26,18,13,0.78);
+        font-size: 0.7rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        font-weight: 800;
+      }
+      .board-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .board-list li {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 10px 0;
+        border-bottom: 1px dashed rgba(26,18,13,0.25);
+      }
+      .board-list li:last-child { border-bottom: none; }
+      .board-item-name { font-weight: 800; }
+      .board-item-stock {
+        white-space: nowrap;
+        padding: 4px 8px;
+        border-radius: 999px;
+        background: rgba(102,129,91,0.12);
+        color: #3d5d36;
+        font-size: 0.72rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        font-weight: 800;
+      }
+      .board-item-stock.low { background: rgba(224,174,66,0.15); color: #7a5d1d; }
+      .board-item-stock.out { background: rgba(160,79,45,0.12); color: #8e4328; }
+      .board-footer {
+        margin-top: 18px;
+        padding-top: 16px;
+        border-top: 2px solid rgba(26,18,13,0.8);
+      }
+      .countdown-label {
+        color: rgba(26,18,13,0.72);
+        text-transform: uppercase;
+        letter-spacing: 0.14em;
+        font-size: 0.68rem;
+        font-weight: 800;
+      }
+      .countdown { margin-top: 12px; display: flex; gap: 8px; }
+      .countdown .box {
+        min-width: 62px;
+        border-radius: 12px;
+        background: #1a120d;
+        color: var(--paper);
+        text-align: center;
+        padding: 10px 8px;
+      }
+      .countdown .box strong {
+        display: block;
+        font-size: 1.4rem;
+        line-height: 1;
+      }
+      .countdown .box span {
+        display: block;
+        margin-top: 4px;
+        font-size: 0.56rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--accent-2);
+      }
+      .steps {
+        background: #201914;
+        border-top: 1px solid var(--line);
+        border-bottom: 1px solid var(--line);
+      }
+      .steps-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1px;
+        background: var(--line);
+      }
+      .step {
+        padding: 40px 32px 32px;
+        background: #201914;
+      }
+      .step-number {
+        font-family: "Playfair Display", serif;
+        font-size: 3rem;
+        color: var(--accent);
+        line-height: 1;
+      }
+      .step h3 {
+        margin-top: 14px;
+        margin-bottom: 10px;
+        font-size: 1.3rem;
+      }
+      .step p { color: var(--muted); }
+      section { padding: 84px 0; }
+      .section-head {
+        max-width: 640px;
+        margin-bottom: 32px;
+      }
+      .section-head h2 {
+        font-size: clamp(2.1rem, 4vw, 3.1rem);
+        margin: 12px 0 12px;
+      }
+      .section-head p { color: var(--muted); }
+      .pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 26px;
+      }
+      .pill {
+        border: 1px solid rgba(255,255,255,0.12);
+        background: transparent;
+        color: var(--muted);
+        border-radius: 999px;
+        padding: 10px 18px;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-weight: 800;
+        cursor: pointer;
+      }
+      .pill.active {
+        background: var(--paper);
+        color: #1a120d;
+        border-color: var(--paper);
+      }
+      .menu-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
+        gap: 20px;
+      }
+      .dish {
+        background: #201914;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 22px;
+        display: flex;
+        flex-direction: column;
+        min-height: 100%;
+      }
+      .dish.soldout { opacity: 0.7; }
+      .dish-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 18px;
+        align-items: start;
+      }
+      .dish-top h3 {
+        font-size: 1.45rem;
+      }
+      .price {
+        color: var(--accent);
+        font-family: "Playfair Display", serif;
+        font-size: 1.55rem;
+        font-weight: 700;
+      }
+      .dish-desc {
+        color: var(--muted);
+        margin-top: 12px;
+        min-height: 78px;
+      }
+      .meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 12px;
+      }
+      .chip {
+        border-radius: 999px;
+        border: 1px solid rgba(255,255,255,0.12);
+        padding: 5px 9px;
+        font-size: 0.6rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 800;
+      }
+      .chip.accent { border-color: rgba(224,174,66,0.45); color: var(--accent); }
+      .stock {
+        margin-top: 16px;
+        font-size: 0.7rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-weight: 800;
+        color: #9fe28a;
+      }
+      .stock.low { color: var(--accent); }
+      .stock.out { color: #e0876e; }
+      .bar {
+        height: 4px;
+        background: rgba(255,255,255,0.06);
+        border-radius: 999px;
+        overflow: hidden;
+        margin-top: 10px;
+      }
+      .bar span {
+        display: block;
+        height: 100%;
+        width: 60%;
+        background: #7db266;
+        border-radius: inherit;
+      }
+      .bar.low span { background: var(--accent); }
+      .dish-details { margin-top: 16px; }
+      .dish-details summary {
+        cursor: pointer;
+        list-style: none;
+        color: var(--muted);
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        font-weight: 800;
+      }
+      .dish-details summary::-webkit-details-marker { display: none; }
+      .options { padding-top: 12px; display: grid; gap: 8px; }
+      .option {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+      .option b { color: var(--accent-2); font-weight: 700; }
+      .dish-actions {
+        margin-top: auto;
+        padding-top: 18px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .qty-picker {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 6px 10px;
+      }
+      .qty-picker button {
+        width: 28px;
+        height: 28px;
+        border: none;
+        border-radius: 50%;
+        background: transparent;
+        color: var(--paper);
+        font-size: 1.2rem;
+        cursor: pointer;
+      }
+      .qty-picker span {
+        min-width: 20px;
+        text-align: center;
+        font-weight: 800;
+      }
+      .add-btn {
+        flex: 1;
+        border: none;
+        padding: 12px 18px;
+        border-radius: 999px;
+        background: var(--paper);
+        color: #1a120d;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+      .waitlist-btn {
+        width: 100%;
+        padding: 12px 18px;
+        border-radius: 999px;
+        border: 1px solid rgba(160,79,45,0.6);
+        background: transparent;
+        color: #f7cdbb;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+      .special-wrap {
+        background: var(--paper);
+        color: #1a120d;
+        border-radius: 24px;
+        padding: 44px;
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 36px;
+        align-items: center;
+      }
+      .special-wrap .eyebrow { color: #7a5d1d; }
+      .special-wrap h2 {
+        font-size: clamp(2rem, 4vw, 3rem);
+        margin: 12px 0 14px;
+      }
+      .special-wrap p { color: rgba(26,18,13,0.72); }
+      .special-panel {
+        background: #1a120d;
+        color: var(--paper);
+        border-radius: 18px;
+        padding: 24px;
+      }
+      .special-panel .script {
+        font-family: Georgia, serif;
+        font-style: italic;
+        font-size: 2rem;
+        color: var(--accent-2);
+      }
+      .special-panel ul {
+        list-style: none;
+        margin: 20px 0 0;
+        padding: 0;
+        display: grid;
+        gap: 10px;
+      }
+      .special-panel li {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding-bottom: 8px;
+        border-bottom: 1px dashed rgba(255,255,255,0.15);
+      }
+      .special-panel li strong { color: var(--accent); }
+      .story-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 52px;
+        align-items: center;
+      }
+      .story-grid p {
+        color: var(--muted);
+        margin-bottom: 18px;
+      }
+      .quote-box {
+        background: #201914;
+        border-left: 3px solid var(--accent);
+        border-radius: 0 16px 16px 0;
+        padding: 28px 30px;
+      }
+      .quote-box p {
+        color: var(--paper);
+        font-family: "Playfair Display", serif;
+        font-size: 1.7rem;
+        line-height: 1.25;
+      }
+      .sig { color: var(--accent-2); font-size: 1.25rem; }
+      .reviews {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 20px;
+      }
+      .review {
+        background: #201914;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 24px;
+      }
+      .stars { color: var(--accent); letter-spacing: 0.2em; margin-bottom: 12px; }
+      .review p { color: var(--muted); margin-bottom: 16px; }
+      .review cite {
+        font-style: normal;
+        font-size: 0.72rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(255,255,255,0.6);
+      }
+      .faq {
+        max-width: 880px;
+      }
+      .faq details {
+        border-bottom: 1px solid var(--line);
+      }
+      .faq summary {
+        list-style: none;
+        cursor: pointer;
+        padding: 20px 0;
+        font-family: "Playfair Display", serif;
+        font-size: 1.2rem;
+        display: flex;
+        justify-content: space-between;
+        gap: 18px;
+      }
+      .faq summary::-webkit-details-marker { display: none; }
+      .faq summary::after { content: "+"; color: var(--accent); font-size: 1.5rem; }
+      .faq details[open] summary::after { content: "−"; }
+      .faq p {
+        padding: 0 0 20px;
+        color: var(--muted);
+      }
+      footer {
+        background: #201914;
+        border-top: 1px solid var(--line);
+        padding: 62px 0 30px;
+      }
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr 1fr;
+        gap: 42px;
+        margin-bottom: 42px;
+      }
+      .footer-grid h4 {
+        font-size: 0.72rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 14px;
+      }
+      .footer-grid p, .footer-grid li, .footer-bottom { color: var(--muted); }
+      .footer-grid ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 10px;
+      }
+      .footer-bottom {
+        display: flex;
+        justify-content: space-between;
+        gap: 18px;
+        flex-wrap: wrap;
+        border-top: 1px solid var(--line);
+        padding-top: 22px;
+      }
+      .drawer {
+        position: fixed;
+        inset: 0 0 0 auto;
+        width: min(420px, 100%);
+        background: #1b1512;
+        border-left: 1px solid var(--line);
+        z-index: 80;
+        transform: translateX(110%);
+        transition: transform 0.28s ease;
+        display: flex;
+        flex-direction: column;
+      }
+      .drawer.open { transform: translateX(0); }
+      .drawer-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 18px 20px;
+        border-bottom: 1px solid var(--line);
+      }
+      .drawer-header h3 { font-size: 1.5rem; }
+      .close-btn {
+        width: 36px; height: 36px; border: 1px solid var(--line); border-radius: 50%; background: transparent; color: var(--paper); cursor: pointer;
+      }
+      .drawer-body { padding: 20px; overflow: auto; flex: 1; }
+      .drawer-footer { border-top: 1px solid var(--line); padding: 18px 20px 20px; }
+      .empty-state {
+        text-align: center;
+        color: var(--muted);
+        padding: 40px 8px 16px;
+      }
+      .empty-state .script { font-size: 2.2rem; color: var(--accent); display: block; }
+      .cart-item {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 14px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .cart-item strong { display: block; }
+      .cart-item small { color: var(--muted); }
+      .cart-meta {
+        display: flex;
+        flex-direction: column;
+        align-items: end;
+        gap: 8px;
+      }
+      .qty-adjust {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 5px 8px;
+      }
+      .qty-adjust button {
+        width: 24px; height: 24px; border-radius: 50%; border: none; background: transparent; color: var(--paper); cursor: pointer;
+      }
+      .cart-upsell {
+        margin-top: 22px;
+        padding: 18px;
+        border: 1px dashed rgba(224,174,66,0.5);
+        border-radius: 16px;
+        background: rgba(224,174,66,0.05);
+      }
+      .cart-upsell strong {
+        display: block;
+        color: var(--accent);
+        font-size: 0.68rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        margin-bottom: 14px;
+      }
+      .chip-row { display: flex; flex-wrap: wrap; gap: 8px; }
+      .small-chip {
+        border: 1px solid var(--line);
+        background: transparent;
+        border-radius: 999px;
+        padding: 8px 12px;
+        color: var(--paper);
+        cursor: pointer;
+      }
+      .field { margin-top: 18px; }
+      .field label {
+        display: block;
+        font-size: 0.68rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 8px;
+      }
+      .field input {
+        width: 100%;
+        background: rgba(255,255,255,0.02);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 12px 14px;
+        color: var(--paper);
+      }
+      .slot-grid {
+        display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px;
+      }
+      .slot-button {
+        border: 1px solid var(--line);
+        background: transparent;
+        color: var(--paper);
+        border-radius: 12px;
+        padding: 10px 6px;
+        font-size: 0.82rem;
+        cursor: pointer;
+      }
+      .slot-button.active { background: var(--accent); color: #1a120d; border-color: var(--accent); }
+      .totals { display: grid; gap: 10px; }
+      .line-total {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        color: var(--muted);
+      }
+      .line-total strong { color: var(--paper); }
+      .checkout-btn {
+        width: 100%;
+        margin-top: 16px;
+        border: none;
+        background: var(--accent);
+        color: #1a120d;
+        padding: 16px 22px;
+        border-radius: 999px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+      .drawer-note { color: var(--muted); font-size: 0.78rem; margin-top: 10px; }
+      .toast {
+        position: fixed;
+        left: 50%; bottom: 26px; transform: translateX(-50%) translateY(160%);
+        background: var(--paper); color: #1a120d;
+        padding: 12px 20px;
+        border-radius: 999px; box-shadow: 0 25px 44px rgba(0,0,0,0.3);
+        transition: transform 0.25s ease; z-index: 100;
+        font-weight: 800;
+      }
+      .toast.show { transform: translateX(-50%) translateY(0); }
+      .scrim {
+        position: fixed; inset: 0;
+        background: rgba(0,0,0,0.52);
+        opacity: 0; pointer-events: none; transition: 0.24s ease; z-index: 70;
+      }
+      .scrim.show { opacity: 1; pointer-events: auto; }
+      .sticky-cart {
+        position: fixed; left: 0; right: 0; bottom: 0; z-index: 60;
+        display: none; padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+        background: rgba(17,13,11,0.94); border-top: 1px solid var(--line);
+      }
+      .sticky-cart.show { display: block; }
+      .sticky-btn {
+        width: 100%;
+        border: none; border-radius: 999px; background: var(--accent); color: #1a120d;
+        padding: 15px 22px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer;
+      }
+      @media (max-width: 980px) {
+        nav { display: none; }
+        .hero-grid, .story-grid, .special-wrap { grid-template-columns: 1fr; }
+        .steps-grid, .reviews, .footer-grid { grid-template-columns: 1fr; }
+        .drawer { width: 100%; }
+      }
+      @media (max-width: 560px) {
+        .hero { padding-top: 54px; }
+        .cta-row { flex-direction: column; }
+        .cta-row .btn { width: 100%; }
+        .countdown { gap: 6px; }
+        .countdown .box { min-width: auto; flex: 1; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <div class="brand">SWITI <span>SPANG</span></div>
+        <nav>
+          <a href="#menu">Weekmenu</a>
+          <a href="#drop">Weekly drop</a>
+          <a href="#story">Waarom SWITI SPANG?</a>
+          <a href="#faq">Vragen</a>
+        </nav>
+        <div class="mini-status"><span class="dot"></span> Bestellen open</div>
+        <button class="cart-trigger" id="openCartBtn">Bestelling <span class="cart-count" id="cartCount">0</span></button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">Surinaams home-food in Almere</p>
+            <h1>Switi eten. <span>Spang geregeld.</span></h1>
+            <p class="lead">
+              Authentiek Surinaams & Caribisch home-food. Elke week vers gekookt in beperkte oplage en klaar voor afhalen op vrijdag.
+            </p>
+            <div class="cta-row">
+              <a href="#menu" class="btn primary">Bekijk het weekmenu</a>
+              <a href="#drop" class="btn secondary">Hoe werkt het?</a>
+            </div>
+            <div class="hero-note">
+              <span>↳</span>
+              <span>Geheel via vooraf bestellen — vers bereid, beperkt, zonder restaurantgedoe.</span>
+            </div>
+          </div>
+
+          <div class="hero-card" aria-label="Het weekmenu bord">
+            <div class="board-head">
+              <span class="script">Deze week</span>
+              <span class="date" id="dropDate">Vrijdag</span>
+            </div>
+            <ul class="board-list" id="boardList"></ul>
+            <div class="board-footer">
+              <div class="countdown-label">Bestellen sluit donderdag 20:00</div>
+              <div class="countdown" id="countdown"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="steps">
+        <div class="container">
+          <div class="steps-grid">
+            <div class="step">
+              <div class="step-number">01</div>
+              <h3>Kies je gerechten</h3>
+              <p>De weekkaart is kort en krachtig. Kies wat je wilt, kies wat je wilt herhalen.</p>
+            </div>
+            <div class="step">
+              <div class="step-number">02</div>
+              <h3>Betaal online</h3>
+              <p>Bestel eenvoudig, betaal veilig en ontvang direct je bevestiging met je ophaaltijd.</p>
+            </div>
+            <div class="step">
+              <div class="step-number">03</div>
+              <h3>Haal vrijdag op</h3>
+              <p>Vrijdag tussen 17:00 en 20:00 staat jouw bestelling warm en klaar voor je afhaalmoment.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="menu">
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow">Het weekmenu</p>
+            <h2>Gerechten die je echt terughaalt.</h2>
+            <p>We houden het klein, warm en goed. Verzamelde klassiekers, een paar specials en altijd een beetje ruimte voor de week die net weer anders ruikt.</p>
+          </div>
+          <div class="pills" id="categoryTabs"></div>
+          <div class="menu-grid" id="menuGrid"></div>
+        </div>
+      </section>
+
+      <section id="drop">
+        <div class="container">
+          <div class="special-wrap">
+            <div>
+              <p class="eyebrow">Weekly drop</p>
+              <h2>Deze week bij SWITI SPANG</h2>
+              <p><strong>Vrijdag = SWITI SPANG DAY.</strong> Bestellen kan tot donderdag 20:00. Daarna sluiten we en gaan we koken op basis van wat echt besteld is.</p>
+              <p style="margin-top: 16px;">Als iets uitverkocht is: uitverkocht. Dat is onderdeel van het gevoel. Een echte limited drop, geen eindeloze menukaart.</p>
+            </div>
+            <div class="special-panel">
+              <div class="script">Spang geregeld</div>
+              <ul>
+                <li><span>Deadline</span><strong>Donderdag 20:00</strong></li>
+                <li><span>Ophalen</span><strong>Vrijdag 17:00 – 20:00</strong></li>
+                <li><span>Beperkte oplage</span><strong>Week voor week</strong></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="story">
+        <div class="container story-grid">
+          <div>
+            <p class="eyebrow">Waarom SWITI SPANG?</p>
+            <h2>We koken zoals we thuis koken. Alleen maken we een beetje extra.</h2>
+            <p>Geen grote keuken. Geen massaproductie. Geen eindeloze menukaart. Het eten komt vanuit huis, met aandacht, met tijd, en met een beetje liefde in de pan.</p>
+            <p>Bij SWITI SPANG gaat het om de smaak die je herkent omdat het op een echte Surinaamse tafel thuishoort: warm, rijk, direct, ongedwongen. We knippen niet in porties of voor de massa. We koken voor de mensen die weer terugkomen omdat het goed is.</p>
+            <p class="sig">— SWITI SPANG</p>
+          </div>
+          <div class="quote-box">
+            <p>“We koken zoals we thuis koken. Alleen maak je deze week net een beetje extra.”</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow">Van de buurt</p>
+            <h2>Wat mensen terugbrengen</h2>
+          </div>
+          <div class="reviews">
+            <article class="review">
+              <div class="stars">★★★★★</div>
+              <p>De saoto voelt echt alsof ik het weer bij thuis eet. Warm, duidelijk, krachtig. Je merkt dat er aandacht in zit, niet alleen massa.</p>
+              <cite>Rayan · Almere Buiten</cite>
+            </article>
+            <article class="review">
+              <div class="stars">★★★★★</div>
+              <p>Ik bestel altijd op donderdag. Als iets op is, is het op. Dat werkt juist goed, want alles voelt exclusief en vers.</p>
+              <cite>Sandra · Almere Haven</cite>
+            </article>
+            <article class="review">
+              <div class="stars">★★★★★</div>
+              <p>Het voelt niet als een snackbar. Het voelt als “je kent iemand die echt lekker kookt” en je haalt het vrijdag op.</p>
+              <cite>Jules · Almere Poort</cite>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="faq">
+        <div class="container">
+          <div class="section-head">
+            <p class="eyebrow">Praktisch</p>
+            <h2>De dingen die je wilt weten</h2>
+          </div>
+          <div class="faq">
+            <details open>
+              <summary>Waar haal ik mijn bestelling op?</summary>
+              <p>Je haalt je bestelling op in Almere tijdens het vaste afhaalmoment van vrijdag. Het exacte adres ontvang je in je bestelbevestiging.</p>
+            </details>
+            <details>
+              <summary>Wanneer kan ik bestellen?</summary>
+              <p>De bestelling sluit donderdag om 20:00. Daarna wordt er gekookt op basis van wat echt is besteld.</p>
+            </details>
+            <details>
+              <summary>Waarom is er soms iets uitverkocht?</summary>
+              <p>Omdat we in beperkte oplage koken. De drop is bewust klein. Als iets op is, is het op — dat maakt het een echte weekly drop.</p>
+            </details>
+            <details>
+              <summary>Is het alleen afhalen?</summary>
+              <p>Ja. SWITI SPANG werkt met vooraf bestellen en afhalen. Dat is het volledige model, zodat de kwaliteit en versheid blijven.</p>
+            </details>
+            <details>
+              <summary>Hoe werkt de betaling?</summary>
+              <p>De website is voorbereid voor Mollie. De checkout stroomt naar online betaling, met duidelijke orderstatus, bevestiging en ophaalinstructies.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div>
+            <div class="brand" style="margin-bottom: 12px;">SWITI <span>SPANG</span></div>
+            <p>Authentiek Surinaams & Caribisch home-food. Vers bereid in beperkte oplage en klaar voor afhalen in Almere.</p>
+          </div>
+          <div>
+            <h4>Menu</h4>
+            <ul>
+              <li><a href="#menu">Weekmenu</a></li>
+              <li><a href="#drop">Weekly drop</a></li>
+              <li><a href="#story">Ons verhaal</a></li>
+              <li><a href="#faq">Praktisch</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4>Contact</h4>
+            <ul>
+              <li><a href="mailto:hallo@switispang.nl">hallo@switispang.nl</a></li>
+              <li><a href="https://instagram.com" target="_blank" rel="noreferrer">Instagram</a></li>
+              <li><a href="contact.html">Contact</a></li>
+              <li><a href="allergenen.html">Allergenen</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2026 SWITI SPANG • Afhalen alleen</span>
+          <span><a href="voorwaarden.html">Algemene voorwaarden</a> · <a href="privacy.html">Privacy</a></span>
+        </div>
+      </div>
+    </footer>
+
+    <div class="scrim" id="scrim"></div>
+
+    <aside class="drawer" id="cartDrawer" aria-label="Winkelmand">
+      <div class="drawer-header">
+        <h3>Jouw bestelling</h3>
+        <button class="close-btn" id="closeCartBtn" aria-label="Sluiten">✕</button>
+      </div>
+      <div class="drawer-body" id="drawerBody"></div>
+      <div class="drawer-footer" id="drawerFooter"></div>
+    </aside>
+
+    <div class="sticky-cart" id="stickyCart">
+      <button class="sticky-btn" id="stickyCartBtn">Bekijk bestelling · <span id="stickyTotal">€0,00</span></button>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+      const switiSpangConfig = {
+        brand: 'SWITI SPANG',
+        slogan: 'Switi eten. Spang geregeld.',
+        orderDeadline: 'donderdag 20:00',
+        pickupDay: 'vrijdag',
+        pickupStart: '17:00',
+        pickupEnd: '20:00',
+        location: 'Almere',
+        cashless: true,
+        mollieReady: true,
+        stockWarningThreshold: 4,
+        weeklyCategory: 'weekmenu',
+        images: {
+          hero: '/images/hero.jpg',
+          saoto: '/images/saoto.jpg',
+          nasi: '/images/nasi.jpg',
+          bami: '/images/bami.jpg',
+          tjauwmin: '/images/tjauwmin.jpg',
+          pom: '/images/pom.jpg',
+          roti: '/images/roti.jpg'
+        }
+      };
+
+      const products = [
+        { id: 'saoto', category: 'soep', name: 'Saoto', price: 9.5, stock: 20, sold: 12, signature: true, desc: 'Heldere Surinaamse kippensoep met kip, taugé, ei, vermicelli en verse toppings.', allergens: 'Ei, soja, gluten', extras: [{name: 'Extra kip', price: 3.5}, {name: 'Sambal', price: 0.75}] },
+        { id: 'nasi', category: 'hoofdgerecht', name: 'Surinaamse Nasi', price: 12.5, stock: 16, sold: 8, signature: true, desc: 'Rijst, kip, saté, bami, groente en heerlijke house sambal. Een ware crowd-pleaser.', allergens: 'Soja, gluten', extras: [{name: 'Extra kip', price: 4.0}, {name: 'Zuur', price: 1.5}] },
+        { id: 'bami', category: 'hoofdgerecht', name: 'Surinaamse Bami', price: 11.5, stock: 14, sold: 9, desc: 'Wok-gerechten met kip, kool, taugé en een lichte ketjap-smaak die diep en warm blijft hangen.', allergens: 'Gluten, soja, ei', extras: [{name: 'Gebakken ei', price: 1.5}, {name: 'Extra kip', price: 3.5}] },
+        { id: 'tjauwmin', category: 'hoofdgerecht', name: 'Tjauwmin', price: 10.5, stock: 12, sold: 7, desc: 'Rundvlees in een rijke, diepe saus met groenten en het bekende Surinaamse comfortgevoel.', allergens: 'Soja, gluten', extras: [{name: 'Extra rundvlees', price: 4.0}, {name: 'Zuur', price: 1.5}] },
+        { id: 'pom', category: 'special', name: 'SWITI SPANG POM', price: 13.0, stock: 8, sold: 5, signature: true, desc: 'Geraspte pomtajer met kip, kruiden en citrus, langzaam gebakken voor die perfecte rijke bite.', allergens: 'Ei, citrus', extras: [{name: 'Extra portie', price: 6.0}] },
+        { id: 'roti-doks', category: 'special', name: 'ROTI DOKS', price: 14.5, stock: 6, sold: 4, desc: 'Deze week een beperkte special: roti met doksvlees, verse kruiden en een warme, zachte finish.', allergens: 'Gluten, ei', extras: [{name: 'Extra roti', price: 2.5}, {name: 'Sambal', price: 0.75}] },
+        { id: 'gember', category: 'drink', name: 'Huisgemaakte gemberdrank', price: 3.5, stock: 25, sold: 10, desc: 'Verse gember, citroen en rietsuiker. Helder, fris en bijpassend bij de spice.', allergens: '—' },
+        { id: 'bojo', category: 'dessert', name: 'Bojo cake', price: 4.5, stock: 18, sold: 8, desc: 'Zachte cassavecake met kokos, warm en licht zoet voor na de maaltijd.', allergens: 'Ei, gluten, kokos' },
+        { id: 'zuur', category: 'bijgerecht', name: 'Komkommer in zuur', price: 2.0, stock: 30, sold: 12, desc: 'Verse komkommer in zuur met ui en lichte pit.', allergens: '—' }
+      ];
+
+      const categoryMap = [
+        { id: 'alles', label: 'Alles' },
+        { id: 'soep', label: 'Soep' },
+        { id: 'hoofdgerecht', label: 'Hoofdgerechten' },
+        { id: 'special', label: 'Specials' },
+        { id: 'drink', label: 'Dranken' },
+        { id: 'dessert', label: 'Dessert' },
+        { id: 'bijgerecht', label: 'Bijgerechten' }
+      ];
+
+      const state = {
+        cart: [],
+        activeCategory: 'alles',
+        selectedSlot: null,
+        orderPlaced: false
+      };
+
+      const boardList = document.getElementById('boardList');
+      const menuGrid = document.getElementById('menuGrid');
+      const tabs = document.getElementById('categoryTabs');
+      const cartCount = document.getElementById('cartCount');
+      const stickyTotal = document.getElementById('stickyTotal');
+      const toast = document.getElementById('toast');
+
+      function formatMoney(value) {
+        return `€${value.toFixed(2).replace('.', ',')}`;
+      }
+
+      function getRemaining(item) {
+        const inCart = state.cart.filter(entry => entry.id === item.id).reduce((sum, entry) => sum + entry.qty, 0);
+        return Math.max(0, item.stock - item.sold - inCart);
+      }
+
+      function isSoldOut(item) {
+        return getRemaining(item) <= 0;
+      }
+
+      function getCountdownParts() {
+        const deadline = new Date();
+        deadline.setHours(20, 0, 0, 0);
+        const today = new Date();
+        const day = today.getDay();
+        const target = new Date(today);
+        if (day === 4 && today.getHours() >= 20) {
+          target.setDate(today.getDate() + 3);
+        } else {
+          const daysUntilThursday = (4 - day + 7) % 7 || 7;
+          target.setDate(today.getDate() + daysUntilThursday);
+        }
+        target.setHours(20, 0, 0, 0);
+        const diff = target.getTime() - today.getTime();
+        const totalSeconds = Math.max(0, Math.floor(diff / 1000));
+        return {
+          days: Math.floor(totalSeconds / 86400),
+          hours: Math.floor((totalSeconds % 86400) / 3600),
+          minutes: Math.floor((totalSeconds % 3600) / 60),
+          seconds: totalSeconds % 60
+        };
+      }
+
+      function renderCountdown() {
+        const parts = getCountdownParts();
+        const countdown = document.getElementById('countdown');
+        if (parts.days === 0 && parts.hours === 0 && parts.minutes === 0 && parts.seconds === 0) {
+          countdown.innerHTML = '<div class="box"><strong>Gesloten</strong><span>Voor deze week</span></div>';
+          return;
+        }
+        countdown.innerHTML = [
+          { name: 'Dagen', value: parts.days },
+          { name: 'Uur', value: parts.hours },
+          { name: 'Min', value: parts.minutes },
+          { name: 'Sec', value: parts.seconds }
+        ].map(item => `
+          <div class="box">
+            <strong>${String(item.value).padStart(2, '0')}</strong>
+            <span>${item.name}</span>
+          </div>
+        `).join('');
+      }
+
+      function renderBoard() {
+        const featured = ['saoto', 'nasi', 'bami', 'pom', 'roti-doks'];
+        boardList.innerHTML = featured.map(id => {
+          const item = products.find(product => product.id === id);
+          const remaining = getRemaining(item);
+          const statusClass = remaining === 0 ? 'out' : remaining <= 4 ? 'low' : '';
+          const statusText = remaining === 0 ? 'Uitverkocht' : `Nog ${remaining}`;
+          return `
+            <li>
+              <span class="board-item-name">${item.name}</span>
+              <span class="board-item-stock ${statusClass}">${statusText}</span>
+            </li>
+          `;
+        }).join('');
+        document.getElementById('dropDate').textContent = 'Vrijdag 17:00 – 20:00';
+      }
+
+      function renderTabs() {
+        tabs.innerHTML = categoryMap.map(category => `
+          <button class="pill ${state.activeCategory === category.id ? 'active' : ''}" data-category="${category.id}">${category.label}</button>
+        `).join('');
+
+        tabs.querySelectorAll('.pill').forEach(button => {
+          button.addEventListener('click', () => {
+            state.activeCategory = button.dataset.category;
+            renderTabs();
+            renderMenu();
+          });
+        });
+      }
+
+      function renderMenu() {
+        const visible = state.activeCategory === 'alles'
+          ? products
+          : products.filter(product => product.category === state.activeCategory);
+
+        menuGrid.innerHTML = visible.map(product => {
+          const remaining = getRemaining(product);
+          const out = remaining <= 0;
+          const low = remaining > 0 && remaining <= 4;
+          const percent = Math.max(12, Math.round((remaining / Math.max(product.stock, 1)) * 100));
+          const currentQty = 1;
+
+          return `
+            <article class="dish ${out ? 'soldout' : ''}" data-id="${product.id}">
+              <div class="dish-top">
+                <h3>${product.name}</h3>
+                <span class="price">${formatMoney(product.price)}</span>
+              </div>
+              <p class="dish-desc">${product.desc}</p>
+              <div class="meta-row">
+                ${product.signature ? '<span class="chip accent">Signature</span>' : ''}
+                <span class="chip">Vers bereid</span>
+                ${product.category === 'special' ? '<span class="chip accent">Deze week</span>' : ''}
+              </div>
+              <div class="stock ${out ? 'out' : low ? 'low' : ''}">${out ? 'Uitverkocht' : `Nog ${remaining} beschikbaar`}</div>
+              <div class="bar ${low ? 'low' : ''}"><span style="width:${percent}%"></span></div>
+              ${product.extras ? `
+                <details class="dish-details">
+                  <summary>Extra's</summary>
+                  <div class="options">
+                    ${product.extras.map((extra, index) => `
+                      <label class="option">
+                        <span>${extra.name}</span>
+                        <b>+${formatMoney(extra.price)}</b>
+                      </label>
+                    `).join('')}
+                  </div>
+                </details>
+              ` : ''}
+              <div class="dish-actions">
+                ${out ? `
+                  <button class="waitlist-btn" data-waitlist="${product.id}">Zet me op de wachtlijst</button>
+                ` : `
+                  <div class="qty-picker">
+                    <button type="button" data-qty-change="-1" data-id="${product.id}">−</button>
+                    <span data-qty-for="${product.id}">${currentQty}</span>
+                    <button type="button" data-qty-change="1" data-id="${product.id}">+</button>
+                  </div>
+                  <button class="add-btn" type="button" data-add="${product.id}">Toevoegen</button>
+                `}
+              </div>
+            </article>
+          `;
+        }).join('');
+
+        Array.from(document.querySelectorAll('[data-add]')).forEach(button => {
+          button.addEventListener('click', () => addToCart(button.dataset.add));
+        });
+
+        Array.from(document.querySelectorAll('[data-qty-change]')).forEach(button => {
+          button.addEventListener('click', () => changeQty(button.dataset.id, Number(button.dataset.qtyChange)));
+        });
+
+        Array.from(document.querySelectorAll('[data-waitlist]')).forEach(button => {
+          button.addEventListener('click', () => {
+            const product = products.find(item => item.id === button.dataset.waitlist);
+            showToast(`Je staat op de wachtlijst voor ${product.name}`);
+          });
+        });
+      }
+
+      function changeQty(productId, delta) {
+        const product = products.find(item => item.id === productId);
+        const qtyNode = document.querySelector(`[data-qty-for="${productId}"]`);
+        if (!qtyNode) return;
+
+        let qty = Number(qtyNode.textContent);
+        qty = Math.max(1, qty + delta);
+        const remaining = getRemaining(product);
+        qty = Math.min(qty, remaining || 1);
+        qtyNode.textContent = String(qty);
+      }
+
+      function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add('show');
+        clearTimeout(showToast.timeoutId);
+        showToast.timeoutId = setTimeout(() => toast.classList.remove('show'), 2200);
+      }
+
+      function addToCart(productId) {
+        const product = products.find(item => item.id === productId);
+        const qtyNode = document.querySelector(`[data-qty-for="${productId}"]`);
+        const qty = qtyNode ? Number(qtyNode.textContent) : 1;
+        const remaining = getRemaining(product);
+
+        if (qty > remaining || remaining <= 0) {
+          showToast('Er zijn niet meer genoeg porties beschikbaar.');
+          return;
+        }
+
+        const existing = state.cart.find(item => item.id === productId);
+        if (existing) {
+          existing.qty += qty;
+        } else {
+          state.cart.push({ id: product.id, name: product.name, price: product.price, qty, extras: [] });
+        }
+
+        showToast(`${qty} x ${product.name} toegevoegd`);
+        renderCart();
+      }
+
+      function renderCart() {
+        const drawerBody = document.getElementById('drawerBody');
+        const drawerFooter = document.getElementById('drawerFooter');
+        cartCount.textContent = String(state.cart.reduce((sum, item) => sum + item.qty, 0));
+        stickyTotal.textContent = formatMoney(getSubtotal());
+
+        if (state.orderPlaced) {
+          drawerBody.innerHTML = `
+            <div class="empty-state">
+              <span class="script">✓</span>
+              <h3>SWITI SPANG is geregeld</h3>
+              <p style="margin-top: 10px; color: var(--muted);">Je bestelnummer is <strong>SW-2026-${String(Math.floor(Math.random() * 9000) + 1000)}</strong>.</p>
+              <p style="margin-top: 18px;">Haal vrijdag jouw bestelling op tussen 17:00 en 20:00.</p>
+            </div>
+          `;
+          drawerFooter.innerHTML = `<button class="checkout-btn" id="newOrderBtn">Nog een bestelling</button>`;
+          document.getElementById('newOrderBtn').addEventListener('click', () => {
+            state.orderPlaced = false;
+            state.cart = [];
+            state.selectedSlot = null;
+            renderCart();
+            closeCart();
+          });
+          return;
+        }
+
+        if (!state.cart.length) {
+          drawerBody.innerHTML = `
+            <div class="empty-state">
+              <span class="script">🛒</span>
+              <h3>Nog niets in je mandje</h3>
+              <p>Kies je favoriete gerechten uit het weekmenu en kom terug als je bent klaar.</p>
+            </div>
+          `;
+          drawerFooter.innerHTML = '';
+          document.getElementById('stickyCart').classList.toggle('show', false);
+          return;
+        }
+
+        drawerBody.innerHTML = `
+          ${state.cart.map((item, index) => `
+            <div class="cart-item">
+              <div>
+                <strong>${item.name}</strong>
+                <small>${formatMoney(item.price)} per stuk</small>
+              </div>
+              <div class="cart-meta">
+                <strong>${formatMoney(item.price * item.qty)}</strong>
+                <div class="qty-adjust">
+                  <button type="button" data-cart-change="-1" data-index="${index}">−</button>
+                  <span>${item.qty}</span>
+                  <button type="button" data-cart-change="1" data-index="${index}">+</button>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+
+          <div class="cart-upsell">
+            <strong>Vergeet je niets?</strong>
+            <div class="chip-row">
+              <button class="small-chip" type="button" data-upsert="gember">Gemberdrank · €3,50</button>
+              <button class="small-chip" type="button" data-upsert="bojo">Bojo cake · €4,50</button>
+              <button class="small-chip" type="button" data-upsert="zuur">Zuur · €2,00</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Kies je ophaaltijd</label>
+            <div class="slot-grid">
+              ${['17:00','17:30','18:00','18:30','19:00','19:30'].map(slot => `
+                <button type="button" class="slot-button ${state.selectedSlot === slot ? 'active' : ''}" data-slot="${slot}">${slot}</button>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Naam</label>
+            <input type="text" placeholder="Voor- en achternaam" />
+          </div>
+          <div class="field">
+            <label>E-mail</label>
+            <input type="email" placeholder="voor je bevestiging" />
+          </div>
+          <div class="field">
+            <label>Telefoon</label>
+            <input type="tel" placeholder="voor als er iets is" />
+          </div>
+        `;
+
+        drawerFooter.innerHTML = `
+          <div class="totals">
+            <div class="line-total"><span>Subtotaal</span><strong>${formatMoney(getSubtotal())}</strong></div>
+            <div class="line-total"><span>Afhalen</span><strong>Gratis</strong></div>
+            <div class="line-total"><span>Totaal</span><strong>${formatMoney(getSubtotal())}</strong></div>
+          </div>
+          <button class="checkout-btn" type="button" id="checkoutBtn" ${!state.selectedSlot ? 'disabled' : ''}>Betalen met Mollie</button>
+          <div class="drawer-note">${state.selectedSlot ? `Je haalt op om ${state.selectedSlot} op vrijdag.` : 'Kies eerst een ophaaltijd.'}</div>
+        `;
+
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        if (checkoutBtn) {
+          checkoutBtn.addEventListener('click', () => {
+            state.orderPlaced = true;
+            renderCart();
+            showToast('Bestelling geplaatst');
+          });
+        }
+
+        document.querySelectorAll('[data-cart-change]').forEach(button => {
+          button.addEventListener('click', () => updateCartItem(Number(button.dataset.index), Number(button.dataset.cartChange)));
+        });
+
+        document.querySelectorAll('[data-slot]').forEach(button => {
+          button.addEventListener('click', () => {
+            state.selectedSlot = button.dataset.slot;
+            renderCart();
+          });
+        });
+
+        document.querySelectorAll('[data-upsert]').forEach(button => {
+          button.addEventListener('click', () => {
+            const id = button.dataset.upsert;
+            const item = products.find(product => product.id === id);
+            if (!item) return;
+            const index = state.cart.findIndex(entry => entry.id === id);
+            if (index >= 0) {
+              state.cart[index].qty += 1;
+            } else {
+              state.cart.push({ id: item.id, name: item.name, price: item.price, qty: 1, extras: [] });
+            }
+            renderCart();
+          });
+        });
+
+        document.getElementById('stickyCart').classList.toggle('show', state.cart.length > 0 && !state.orderPlaced);
+      }
+
+      function updateCartItem(index, delta) {
+        const item = state.cart[index];
+        if (!item) return;
+
+        item.qty += delta;
+        if (item.qty <= 0) {
+          state.cart.splice(index, 1);
+        }
+        renderCart();
+      }
+
+      function getSubtotal() {
+        return state.cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+      }
+
+      function openCart() {
+        document.getElementById('cartDrawer').classList.add('open');
+        document.getElementById('scrim').classList.add('show');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeCart() {
+        document.getElementById('cartDrawer').classList.remove('open');
+        document.getElementById('scrim').classList.remove('show');
+        document.body.style.overflow = '';
+      }
+
+      document.getElementById('openCartBtn').addEventListener('click', openCart);
+      document.getElementById('stickyCartBtn').addEventListener('click', openCart);
+      document.getElementById('closeCartBtn').addEventListener('click', closeCart);
+      document.getElementById('scrim').addEventListener('click', closeCart);
+
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') closeCart();
+      });
+
+      renderCountdown();
+      setInterval(renderCountdown, 1000);
+      renderTabs();
+      renderBoard();
+      renderMenu();
+      renderCart();
+    </script>
+  </body>
+</html>

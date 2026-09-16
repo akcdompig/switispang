@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privacy | SWITI SPANG</title>
+    <meta name="description" content="Privacyverklaring en persoonsgegevensbeleid van SWITI SPANG." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <a href="index.html" class="brand">SWITI <span>SPANG</span></a>
+        <nav>
+          <a href="index.html#menu">Weekmenu</a>
+          <a href="index.html#drop">Weekly drop</a>
+          <a href="index.html#story">Waarom SWITI SPANG?</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <div class="mini-status"><span class="dot"></span> Bestellen open</div>
+        <button class="cart-trigger" id="openCartBtn">Bestelling <span class="cart-count" id="cartCount">0</span></button>
+      </div>
+    </header>
+
+    <main class="container page-shell">
+      <div class="title-wrap">
+        <p class="eyebrow">Privacy</p>
+        <h1>Privacyverklaring</h1>
+      </div>
+
+      <div class="info-card">
+        <h3>Persoonsgegevens</h3>
+        <p>SWITI SPANG verwerkt alleen de gegevens die nodig zijn voor het verwerken van een bestelling, zakelijke communicatie en het leveren van een goede service.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>Gebruik van gegevens</h3>
+        <p>De gegevens worden gebruikt om bestellingen te bevestigen, contact te onderhouden, betalingen te verwerken en de kwaliteit van onze service te verbeteren. Deze gegevens worden niet onevenredig gedeeld buiten de noodzakelijke partners en betalingsproviders.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>Bewaren</h3>
+        <p>Persoonsgegevens worden alleen bewaard zolang dat nodig is voor de bestelling, wettelijke verplichtingen of interne administratie.</p>
+      </div>
+    </main>
+
+    <div class="scrim" id="scrim"></div>
+    <aside class="drawer" id="cartDrawer" aria-label="Winkelmand">
+      <div class="drawer-header">
+        <h3>Jouw bestelling</h3>
+        <button class="close-btn" id="closeCartBtn" aria-label="Sluiten">✕</button>
+      </div>
+      <div class="drawer-body" id="drawerBody"></div>
+      <div class="drawer-footer" id="drawerFooter"></div>
+    </aside>
+
+    <div class="sticky-cart" id="stickyCart">
+      <button class="sticky-btn" id="stickyCartBtn">Bekijk bestelling · <span id="stickyTotal">€0,00</span></button>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>

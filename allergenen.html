@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Allergenen | SWITI SPANG</title>
+    <meta name="description" content="Informatie over allergenen en ingrediënten bij SWITI SPANG." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <a href="index.html" class="brand">SWITI <span>SPANG</span></a>
+        <nav>
+          <a href="index.html#menu">Weekmenu</a>
+          <a href="index.html#drop">Weekly drop</a>
+          <a href="index.html#story">Waarom SWITI SPANG?</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <div class="mini-status"><span class="dot"></span> Bestellen open</div>
+        <button class="cart-trigger" id="openCartBtn">Bestelling <span class="cart-count" id="cartCount">0</span></button>
+      </div>
+    </header>
+
+    <main class="container page-shell">
+      <div class="title-wrap">
+        <p class="eyebrow">Voedselinformatie</p>
+        <h1>Allergenen & ingrediënten</h1>
+      </div>
+
+      <div class="info-card">
+        <h3>Belangrijke informatie</h3>
+        <p>SWITI SPANG bereidt gerechten met ingrediënten zoals tarwe, soja, ei, kokos, citroen, sambal en verschillende kruiden. Omdat veel gerechten met thuisgemaakte recepten worden bereid, kan er kleine variatie in ingrediënten plaatsvinden.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>Meest voorkomende allergenen</h3>
+        <ul>
+          <li>Gluten</li>
+          <li>Soja</li>
+          <li>Ei</li>
+          <li>Citrus</li>
+          <li>Kokos</li>
+        </ul>
+      </div>
+
+      <div class="info-card">
+        <h3>Controle</h3>
+        <p>Voor de officiële verkoopstart moeten de allergenenlabels, productinformatie en processtappen nog worden gecontroleerd in samenwerking met de juiste lokale instanties en relevante voedselregelgeving.</p>
+      </div>
+    </main>
+
+    <div class="scrim" id="scrim"></div>
+    <aside class="drawer" id="cartDrawer" aria-label="Winkelmand">
+      <div class="drawer-header">
+        <h3>Jouw bestelling</h3>
+        <button class="close-btn" id="closeCartBtn" aria-label="Sluiten">✕</button>
+      </div>
+      <div class="drawer-body" id="drawerBody"></div>
+      <div class="drawer-footer" id="drawerFooter"></div>
+    </aside>
+
+    <div class="sticky-cart" id="stickyCart">
+      <button class="sticky-btn" id="stickyCartBtn">Bekijk bestelling · <span id="stickyTotal">€0,00</span></button>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
