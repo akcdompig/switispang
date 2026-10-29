@@ -1,0 +1,71 @@
+<template>
+  <style>
+    @font-face { font-family: "Manrope"; src: url("assets/fonts/manrope-latin-500-normal.woff2") format("woff2"); font-weight: 500; }
+    @font-face { font-family: "Manrope"; src: url("assets/fonts/manrope-latin-800-normal.woff2") format("woff2"); font-weight: 800; }
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 40%, #2a1f14 0%, #17120f 60%);
+      font-family: "Manrope", sans-serif;
+      color: #f6efe5;
+    }
+    #e-stack {
+      position: absolute;
+      left: 0;
+      top: 300px;
+      width: 1920px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #e-eyebrow { color: #e0ae42; font-size: 28px; font-weight: 800; letter-spacing: 0.18em; }
+    #e-mark {
+      margin-top: 30px;
+      font-family: "Playfair Display", serif;
+      font-weight: 800;
+      font-size: 128px;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+    .e-l { display: inline-block; }
+    #e-spang { display: inline-block; color: #e0ae42; }
+    #e-cta {
+      margin-top: 56px;
+      height: 100px;
+      padding: 0 64px;
+      border-radius: 999px;
+      background: #e0ae42;
+      color: #1a120d;
+      display: flex;
+      align-items: center;
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    #e-sub { margin-top: 34px; color: #cab99f; font-size: 32px; font-weight: 500; }
+  </style>
+  <div id="root" data-composition-id="end" data-width="1920" data-height="1080">
+    <div id="e-stack">
+      <div id="e-eyebrow">SURINAAMS HOME-FOOD IN ALMERE</div>
+      <div id="e-mark"><span class="e-l">S</span><span class="e-l">W</span><span class="e-l">I</span><span class="e-l">T</span><span class="e-l">I</span> <span id="e-spang">SPANG</span></div>
+      <div id="e-cta" data-var-text="cta">Bekijk het weekmenu</div>
+      <div id="e-sub">Bestellen sluit donderdag 20:00</div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      gsap.set(["#e-eyebrow", "#e-cta", "#e-sub"], { opacity: 0 });
+      // SWITI types in letter by letter, then SPANG wipes in gold on the riser's hit.
+      gsap.utils.toArray("#e-mark .e-l").forEach((el, i) =>
+        tl.fromTo(el, { opacity: 0.0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.14, ease: "power4.out" }, 0.15 + i * 0.09));
+      tl.fromTo("#e-spang", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 0.4, ease: "power3.inOut" }, 0.55);
+      tl.fromTo("#e-eyebrow", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out" }, 1.05);
+      tl.fromTo("#e-cta", { opacity: 0, scale: 0.92, filter: "blur(8px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.5, ease: "expo.out" }, 1.25);
+      tl.fromTo("#e-sub", { opacity: 0 }, { opacity: 1, duration: 0.25, ease: "power2.out" }, 1.5);
+      window.__timelines["end"] = tl;
+    })();
+  </script>
+</template>

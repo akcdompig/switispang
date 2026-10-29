@@ -1,0 +1,160 @@
+<template>
+  <style>
+    @font-face { font-family: "Manrope"; src: url("assets/fonts/manrope-latin-500-normal.woff2") format("woff2"); font-weight: 500; }
+    @font-face { font-family: "Manrope"; src: url("assets/fonts/manrope-latin-800-normal.woff2") format("woff2"); font-weight: 800; }
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: radial-gradient(circle at 20% 15%, #2a1f14 0%, #17120f 55%);
+      font-family: "Manrope", sans-serif;
+    }
+    #b-cam {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1920px;
+      height: 1080px;
+      transform-origin: 0 0;
+    }
+    #b-card {
+      position: absolute;
+      left: 460px;
+      top: 110px;
+      width: 1000px;
+      height: 770px;
+      background: #f6efe5;
+      color: #1a120d;
+      border-radius: 34px;
+      box-shadow: 0 40px 90px rgba(0, 0, 0, 0.45);
+      transform: rotate(-1.5deg);
+      padding: 56px 56px 0;
+    }
+    .b-tape {
+      position: absolute;
+      top: -20px;
+      width: 190px;
+      height: 36px;
+      background: rgba(224, 174, 66, 0.55);
+    }
+    #b-tape-l { left: 30px; transform: rotate(-18deg); }
+    #b-tape-r { right: 30px; transform: rotate(16deg); }
+    #b-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      height: 104px;
+      border-bottom: 3px solid rgba(26, 18, 13, 0.8);
+    }
+    #b-script {
+      font-family: "Playfair Display", serif;
+      font-style: italic;
+      font-weight: 600;
+      font-size: 64px;
+      color: #33261c;
+    }
+    #b-date {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      color: rgba(26, 18, 13, 0.78);
+    }
+    #b-list { margin-top: 14px; }
+    .b-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+      border-bottom: 2px dashed rgba(26, 18, 13, 0.25);
+      font-size: 30px;
+      font-weight: 800;
+    }
+    .b-row:last-child { border-bottom: none; }
+    .b-badge {
+      padding: 6px 16px;
+      border-radius: 999px;
+      background: rgba(102, 129, 91, 0.14);
+      color: #3d5d36;
+      font-size: 26px;
+      letter-spacing: 0.08em;
+    }
+    .b-badge.low { background: rgba(224, 174, 66, 0.2); color: #7a5d1d; }
+    #b-foot {
+      margin-top: 14px;
+      padding-top: 22px;
+      border-top: 3px solid rgba(26, 18, 13, 0.8);
+    }
+    #b-label {
+      font-size: 25px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      color: rgba(26, 18, 13, 0.72);
+    }
+    #b-tiles { display: flex; gap: 18px; margin-top: 18px; }
+    .b-tile {
+      width: 150px;
+      height: 150px;
+      border-radius: 22px;
+      background: #1a120d;
+      color: #f6efe5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .b-tile strong { font-size: 76px; font-weight: 800; line-height: 1; }
+    .b-tile span { margin-top: 8px; font-size: 22px; font-weight: 800; letter-spacing: 0.12em; }
+  </style>
+  <div id="root" data-composition-id="board" data-width="1920" data-height="1080">
+    <div id="b-cam" data-layout-allow-overflow>
+      <div id="b-card" data-layout-allow-overflow>
+        <div class="b-tape" id="b-tape-l"></div>
+        <div class="b-tape" id="b-tape-r"></div>
+        <div id="b-head">
+          <span id="b-script">Deze week</span>
+          <span id="b-date">VRIJDAG 17:00 – 20:00</span>
+        </div>
+        <div id="b-list">
+          <div class="b-row"><span>Saoto</span><span class="b-badge">NOG 8</span></div>
+          <div class="b-row"><span>Surinaamse Nasi</span><span class="b-badge">NOG 8</span></div>
+          <div class="b-row"><span>Surinaamse Bami</span><span class="b-badge">NOG 5</span></div>
+          <div class="b-row"><span>SWITI SPANG POM</span><span class="b-badge low">NOG 3</span></div>
+          <div class="b-row"><span>ROTI DOKS</span><span class="b-badge low" id="b-roti">NOG 2</span></div>
+        </div>
+        <div id="b-foot">
+          <div id="b-label">BESTELLEN SLUIT DONDERDAG 20:00</div>
+          <div id="b-tiles">
+            <div class="b-tile"><strong>00</strong><span data-layout-ignore>D</span></div>
+            <div class="b-tile"><strong>00</strong><span data-layout-ignore>H</span></div>
+            <div class="b-tile"><strong>04</strong><span data-layout-ignore>M</span></div>
+            <div class="b-tile"><strong id="b-sec">59</strong><span data-layout-ignore>S</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      // Camera: tight on the countdown tiles, then pull back to the whole board.
+      const S = 2.3, cx = 850, cy = 790;
+      const tight = { scale: S, x: 960 - cx * S, y: 540 - cy * S };
+      tl.fromTo("#b-cam", { scale: S * 1.06, x: 960 - cx * S * 1.06, y: 540 - cy * S * 1.06 },
+        { ...tight, duration: 0.7, ease: "expo.out" }, 0);
+      tl.fromTo("#b-cam", tight, { scale: 1.12, x: -115, y: -14, duration: 1.1, ease: "power2.inOut", immediateRender: false }, 2.5);
+
+      // Seconds tick down.
+      ["58", "57", "56", "55", "54", "53"].forEach((v, i) => tl.set("#b-sec", { textContent: v }, 0.9 + i));
+
+      // Someone else just ordered: ROTI DOKS 2 -> 1.
+      tl.set("#b-roti", { textContent: "NOG 1" }, 4.4);
+      tl.fromTo("#b-roti", { backgroundColor: "rgba(224,174,66,0.2)", color: "#7a5d1d" },
+        { backgroundColor: "rgba(160,79,45,0.16)", color: "#8e4328", duration: 0.2, ease: "power2.out" }, 4.4);
+      tl.fromTo("#b-roti", { scale: 1.35 }, { scale: 1, duration: 0.5, ease: "back.out(2)", immediateRender: false }, 4.4);
+
+      // Whip up into the title.
+      tl.to("#b-cam", { y: -1250, filter: "blur(18px)", duration: 0.4, ease: "power3.in" }, 6.15);
+      window.__timelines["board"] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,111 @@
+<!doctype html>
+<html
+  lang="nl"
+  data-composition-variables='[
+    {"id":"color-ground","type":"color","label":"Background","default":"#17120f"},
+    {"id":"color-paper","type":"color","label":"Paper","default":"#f6efe5"},
+    {"id":"color-ink","type":"color","label":"Ink on paper","default":"#1a120d"},
+    {"id":"color-accent","type":"color","label":"Accent","default":"#e0ae42"},
+    {"id":"cta","type":"string","label":"Call to action","default":"Bekijk het weekmenu"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      :root {
+        --color-ground: #17120f;
+        --color-paper: #f6efe5;
+        --color-ink: #1a120d;
+        --color-accent: #e0ae42;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--color-ground);
+      }
+      #root {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="31.2"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div id="board" data-composition-id="board" data-composition-src="compositions/board.html"
+        data-start="0" data-duration="6.6" data-track-index="1" data-track-kind="graphics"
+        data-width="1920" data-height="1080"></div>
+      <div id="title" data-composition-id="title" data-composition-src="compositions/title.html"
+        data-start="6.6" data-duration="3" data-track-index="1" data-track-kind="graphics"
+        data-width="1920" data-height="1080"></div>
+      <div id="kies" data-composition-id="kies" data-composition-src="compositions/kies.html"
+        data-start="9.6" data-duration="5" data-track-index="1" data-track-kind="graphics"
+        data-width="1920" data-height="1080"></div>
+      <div id="betaal" data-composition-id="betaal" data-composition-src="compositions/betaal.html"
+        data-start="14.6" data-duration="4.2" data-track-index="1" data-track-kind="graphics"
+        data-width="1920" data-height="1080"></div>
+      <div id="dicht" data-composition-id="dicht" data-composition-src="compositions/dicht.html"
+        data-start="18.8" data-duration="3" data-track-index="1" data-track-kind="graphics"
+        data-width="1920" data-height="1080"></div>
+      <div id="ophalen" data-composition-id="ophalen" data-composition-src="compositions/ophalen.html"
+        data-start="21.8" data-duration="5.8" data-track-index="1" data-track-kind="graphics"
+        data-width="1920" data-height="1080"></div>
+      <div id="end" data-composition-id="end" data-composition-src="compositions/end.html"
+        data-start="27.6" data-duration="3.6" data-track-index="1" data-track-kind="graphics"
+        data-width="1920" data-height="1080"></div>
+
+      <!-- Countdown ticks: board 58..53, dicht 02..00 -->
+      <audio id="tick-1" class="clip" src="assets/sfx/tick.mp3" data-start="0.86" data-duration="0.43" data-track-index="2" data-volume="0.7"></audio>
+      <audio id="tick-2" class="clip" src="assets/sfx/tick.mp3" data-start="1.86" data-duration="0.43" data-track-index="2" data-volume="0.7"></audio>
+      <audio id="tick-3" class="clip" src="assets/sfx/tick.mp3" data-start="2.86" data-duration="0.43" data-track-index="2" data-volume="0.7"></audio>
+      <audio id="tick-4" class="clip" src="assets/sfx/tick.mp3" data-start="3.86" data-duration="0.43" data-track-index="2" data-volume="0.6"></audio>
+      <audio id="tick-5" class="clip" src="assets/sfx/tick.mp3" data-start="4.86" data-duration="0.43" data-track-index="2" data-volume="0.6"></audio>
+      <audio id="tick-6" class="clip" src="assets/sfx/tick.mp3" data-start="5.86" data-duration="0.43" data-track-index="2" data-volume="0.6"></audio>
+      <audio id="tick-7" class="clip" src="assets/sfx/tick.mp3" data-start="19.06" data-duration="0.43" data-track-index="2" data-volume="0.8"></audio>
+      <audio id="tick-8" class="clip" src="assets/sfx/tick.mp3" data-start="19.46" data-duration="0.43" data-track-index="7" data-volume="0.8"></audio>
+      <audio id="tick-9" class="clip" src="assets/sfx/tick.mp3" data-start="19.86" data-duration="0.43" data-track-index="2" data-volume="0.9"></audio>
+
+      <!-- Pops: badge NOG 1, cart count, total, Gesloten -->
+      <audio id="pop-1" class="clip" src="assets/sfx/pop.mp3" data-start="4.2" data-duration="1.5" data-track-index="3" data-volume="0.8"></audio>
+      <audio id="pop-2" class="clip" src="assets/sfx/pop.mp3" data-start="11.95" data-duration="1.5" data-track-index="3" data-volume="0.8"></audio>
+      <audio id="pop-3" class="clip" src="assets/sfx/pop.mp3" data-start="16.15" data-duration="1.5" data-track-index="3" data-volume="0.7"></audio>
+      <audio id="pop-4" class="clip" src="assets/sfx/pop.mp3" data-start="20.0" data-duration="1.5" data-track-index="3" data-volume="0.9"></audio>
+
+      <!-- Cursor clicks -->
+      <audio id="click-1" class="clip" src="assets/sfx/click.mp3" data-start="11.76" data-duration="0.37" data-track-index="4" data-volume="1"></audio>
+      <audio id="click-2" class="clip" src="assets/sfx/click.mp3" data-start="14.06" data-duration="0.37" data-track-index="4" data-volume="1"></audio>
+      <audio id="click-3" class="clip" src="assets/sfx/click.mp3" data-start="16.16" data-duration="0.37" data-track-index="4" data-volume="1"></audio>
+      <audio id="click-4" class="clip" src="assets/sfx/click.mp3" data-start="17.16" data-duration="0.37" data-track-index="4" data-volume="1"></audio>
+      <audio id="click-5" class="clip" src="assets/sfx/click.mp3" data-start="18.16" data-duration="0.37" data-track-index="4" data-volume="1"></audio>
+
+      <!-- Whooshes: whip, drawer, iris, colour flood (two takes) -->
+      <audio id="whoosh-1" class="clip" src="assets/sfx/whoosh.mp3" data-start="6.22" data-duration="0.57" data-track-index="5" data-volume="0.8"></audio>
+      <audio id="whoosh-2" class="clip" src="assets/sfx/whoosh-long.mp3" data-start="14.2" data-media-start="2.0" data-duration="1.2" data-track-index="5" data-volume="0.6" data-fade-out="0.3"></audio>
+      <audio id="whoosh-3" class="clip" src="assets/sfx/whoosh.mp3" data-start="18.27" data-duration="0.57" data-track-index="5" data-volume="0.8"></audio>
+      <audio id="whoosh-4" class="clip" src="assets/sfx/whoosh-long.mp3" data-start="20.9" data-media-start="2.0" data-duration="1.2" data-track-index="5" data-volume="0.5" data-fade-out="0.3"></audio>
+
+      <!-- Riser into the mark -->
+      <audio id="riser" class="clip" src="assets/sfx/riser.mp3" data-start="26.53" data-media-start="1.5" data-duration="4.6" data-track-index="6" data-volume="0.8" data-fade-in="1" data-fade-out="1"></audio>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

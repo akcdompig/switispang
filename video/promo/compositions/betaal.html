@@ -1,0 +1,132 @@
+<template>
+  <style>
+    @font-face { font-family: "Manrope"; src: url("assets/fonts/manrope-latin-500-normal.woff2") format("woff2"); font-weight: 500; }
+    @font-face { font-family: "Manrope"; src: url("assets/fonts/manrope-latin-800-normal.woff2") format("woff2"); font-weight: 800; }
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: radial-gradient(circle at 20% 15%, #2a1f14 0%, #17120f 55%);
+      font-family: "Manrope", sans-serif;
+      color: #f6efe5;
+    }
+    #p-left { position: absolute; left: 120px; top: 330px; width: 660px; }
+    #p-h { font-family: "Playfair Display", serif; font-weight: 800; font-size: 104px; line-height: 1.05; letter-spacing: -0.03em; }
+    #p-p { margin-top: 28px; color: #cab99f; font-size: 36px; font-weight: 500; line-height: 1.4; }
+    #p-drawer {
+      position: absolute;
+      left: 840px;
+      top: 0;
+      width: 1080px;
+      height: 1080px;
+      background: #1c1511;
+      border-left: 2px solid rgba(255, 255, 255, 0.08);
+      box-shadow: -40px 0 90px rgba(0, 0, 0, 0.45);
+    }
+    .p-abs { position: absolute; left: 56px; right: 56px; }
+    #p-head { top: 0; height: 120px; border-bottom: 2px solid rgba(255, 255, 255, 0.08); display: flex; align-items: center; justify-content: space-between; }
+    #p-title { font-family: "Playfair Display", serif; font-weight: 800; font-size: 58px; letter-spacing: -0.03em; }
+    #p-close { width: 60px; height: 60px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.14); display: flex; align-items: center; justify-content: center; font-size: 26px; }
+    .p-item { height: 100px; border-bottom: 2px solid rgba(255, 255, 255, 0.08); }
+    .p-item-name { position: absolute; left: 0; top: 4px; font-size: 34px; font-weight: 800; }
+    .p-item-sub { position: absolute; left: 0; top: 52px; font-size: 28px; font-weight: 500; color: #cab99f; }
+    .p-item-price { position: absolute; right: 0; top: 4px; font-size: 34px; font-weight: 800; }
+    #p-i1 { top: 142px; }
+    #p-i2 { top: 252px; }
+    #p-lower { position: absolute; left: 0; top: 0; width: 1080px; height: 1080px; }
+    #p-upsell { top: 372px; height: 164px; border: 2px dashed rgba(224, 174, 66, 0.55); border-radius: 22px; background: rgba(224, 174, 66, 0.05); }
+    #p-upsell-label { position: absolute; left: 28px; top: 20px; color: #e0ae42; font-size: 26px; font-weight: 800; letter-spacing: 0.12em; }
+    #p-chips { position: absolute; left: 24px; top: 72px; display: flex; gap: 10px; }
+    .p-chip { height: 62px; padding: 0 15px; border-radius: 999px; border: 2px solid rgba(255, 255, 255, 0.14); display: flex; align-items: center; font-size: 28px; font-weight: 500; white-space: nowrap; }
+    .p-label { font-size: 26px; font-weight: 800; letter-spacing: 0.12em; color: #cab99f; }
+    #p-slot-label { top: 558px; }
+    #p-slots { top: 598px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px 14px; }
+    .p-slot { height: 64px; border-radius: 16px; border: 2px solid rgba(255, 255, 255, 0.14); display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 500; }
+    #p-s1 { background: #e0ae42; color: #1a120d; border-color: #e0ae42; }
+    .p-line { display: flex; justify-content: space-between; font-size: 30px; font-weight: 500; color: #cab99f; }
+    .p-line strong { color: #f6efe5; font-weight: 800; }
+    #p-afh { top: 762px; }
+    #p-tot { top: 806px; font-size: 34px; color: #f6efe5; }
+    #p-btn { top: 870px; height: 96px; border-radius: 999px; background: #e0ae42; color: #1a120d; display: flex; align-items: center; justify-content: center; font-size: 34px; font-weight: 800; letter-spacing: 0.12em; }
+    #p-note { top: 990px; font-size: 28px; font-weight: 500; color: #cab99f; }
+    #p-cursor { position: absolute; left: 0; top: 0; width: 72px; height: 72px; }
+    #p-iris { position: absolute; inset: 0; background: #f6efe5; clip-path: circle(0px at 1380px 918px); }
+  </style>
+  <div id="root" data-composition-id="betaal" data-width="1920" data-height="1080">
+    <div id="p-left">
+      <div id="p-h">Betaal online</div>
+      <div id="p-p">Bestel eenvoudig, betaal veilig en ontvang direct je bevestiging met je ophaaltijd.</div>
+    </div>
+    <div id="p-drawer">
+      <div class="p-abs" id="p-head"><span id="p-title">Jouw bestelling</span><span id="p-close">✕</span></div>
+      <div class="p-abs p-item" id="p-i1">
+        <span class="p-item-name">Saoto</span><span class="p-item-sub">€9,50 per stuk</span><span class="p-item-price">€9,50</span>
+      </div>
+      <div class="p-abs p-item" id="p-i2">
+        <span class="p-item-name">Huisgemaakte gemberdrank</span><span class="p-item-sub">€3,50 per stuk</span><span class="p-item-price">€3,50</span>
+      </div>
+      <div id="p-lower">
+        <div class="p-abs" id="p-upsell">
+          <span id="p-upsell-label">VERGEET JE NIETS?</span>
+          <div id="p-chips">
+            <span class="p-chip" id="p-chip-g">Gemberdrank · €3,50</span>
+            <span class="p-chip">Bojo cake · €4,50</span>
+            <span class="p-chip">Zuur · €2,00</span>
+          </div>
+        </div>
+        <div class="p-abs p-label" id="p-slot-label">KIES JE OPHAALTIJD</div>
+        <div class="p-abs" id="p-slots">
+          <span class="p-slot" id="p-s1">17:00</span><span class="p-slot">17:30</span><span class="p-slot" id="p-s3">18:00</span>
+          <span class="p-slot">18:30</span><span class="p-slot">19:00</span><span class="p-slot">19:30</span>
+        </div>
+        <div class="p-abs p-line" id="p-afh"><span>Afhalen</span><strong>Gratis</strong></div>
+        <div class="p-abs p-line" id="p-tot"><span>Totaal</span><strong id="p-total">€9,50</strong></div>
+        <div class="p-abs" id="p-btn">BETALEN MET MOLLIE</div>
+        <div class="p-abs" id="p-note">Je haalt op om <span id="p-note-slot">17:00</span> op vrijdag.</div>
+      </div>
+    </div>
+    <svg id="p-cursor" viewBox="0 0 24 24" data-layout-ignore>
+      <path d="M3 2 L3 20 L8 15.5 L11.5 22.5 L14.5 21 L11 14 L18 14 Z" fill="#111" stroke="#fff" stroke-width="1.4" stroke-linejoin="round" />
+    </svg>
+    <div id="p-iris" data-layout-ignore></div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const at = (x, y) => ({ x: x - 9, y: y - 6 });
+      const click = (sel, t) => {
+        tl.to("#p-cursor", { scale: 0.88, duration: 0.07, yoyo: true, repeat: 1, transformOrigin: "12% 8%" }, t);
+        tl.to(sel, { scale: 0.95, duration: 0.07, yoyo: true, repeat: 1 }, t);
+      };
+
+      // Drawer slides in, like the site.
+      tl.fromTo("#p-drawer", { x: 1080 }, { x: 0, duration: 0.6, ease: "expo.out" }, 0);
+      gsap.set("#p-lower", { y: -110 });
+      gsap.set("#p-i2", { opacity: 0 });
+      tl.fromTo("#p-h", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out" }, 0.3);
+      tl.fromTo("#p-p", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out" }, 0.5);
+
+      // Add a gemberdrank from the upsell.
+      tl.fromTo("#p-cursor", at(1560, 160), { ...at(1085, 365), duration: 0.8, ease: "power3.inOut" }, 0.7);
+      click("#p-chip-g", 1.57);
+      tl.to("#p-lower", { y: 0, duration: 0.45, ease: "expo.out" }, 1.65);
+      tl.to("#p-cursor", { y: "+=110", duration: 0.45, ease: "expo.out" }, 1.65);
+      tl.fromTo("#p-i2", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.25, ease: "power4.out" }, 1.7);
+      tl.set("#p-total", { textContent: "€13,00" }, 1.75);
+      tl.fromTo("#p-tot", { scale: 1.06 }, { scale: 1, duration: 0.4, ease: "power3.out", immediateRender: false }, 1.75);
+
+      // Pick 18:00.
+      tl.to("#p-cursor", { ...at(1706, 630), duration: 0.5, ease: "power3.inOut" }, 2.1);
+      click("#p-s3", 2.57);
+      tl.to("#p-s1", { backgroundColor: "rgba(0,0,0,0)", color: "#f6efe5", borderColor: "rgba(255,255,255,0.14)", duration: 0.15 }, 2.62);
+      tl.to("#p-s3", { backgroundColor: "#e0ae42", color: "#1a120d", borderColor: "#e0ae42", duration: 0.15 }, 2.62);
+      tl.set("#p-note-slot", { textContent: "18:00" }, 2.65);
+
+      // Pay, and the paper opens from the click.
+      tl.to("#p-cursor", { ...at(1380, 918), duration: 0.6, ease: "power3.inOut" }, 3.0);
+      click("#p-btn", 3.57);
+      tl.to("#p-iris", { clipPath: "circle(2300px at 1380px 918px)", duration: 0.5, ease: "power3.in" }, 3.7);
+      window.__timelines["betaal"] = tl;
+    })();
+  </script>
+</template>

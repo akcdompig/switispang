@@ -1,0 +1,92 @@
+<template>
+  <style>
+    @font-face { font-family: "Manrope"; src: url("assets/fonts/manrope-latin-800-normal.woff2") format("woff2"); font-weight: 800; }
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      font-family: "Manrope", sans-serif;
+    }
+    #d-ground { position: absolute; inset: 0; background: #f6efe5; }
+    #d-label {
+      position: absolute;
+      left: 226px;
+      top: 296px;
+      font-size: 52px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      color: rgba(26, 18, 13, 0.72);
+    }
+    #d-tiles { position: absolute; left: 226px; top: 390px; display: flex; gap: 36px; }
+    .d-tile {
+      width: 340px;
+      height: 360px;
+      border-radius: 48px;
+      background: #1a120d;
+      color: #f6efe5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .d-tile strong { font-size: 190px; font-weight: 800; line-height: 1; }
+    .d-tile span { margin-top: 16px; font-size: 42px; font-weight: 800; letter-spacing: 0.12em; }
+    #d-closed {
+      position: absolute;
+      left: 226px;
+      top: 390px;
+      width: 1468px;
+      height: 360px;
+      border-radius: 48px;
+      background: #1a120d;
+      transform-origin: 0 50%;
+      opacity: 0;
+    }
+    #d-closed-text {
+      position: absolute;
+      left: 226px;
+      top: 390px;
+      width: 1468px;
+      height: 360px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #f6efe5;
+    }
+    #d-closed-text strong { font-size: 180px; font-weight: 800; line-height: 1; }
+    #d-closed-text span { margin-top: 16px; font-size: 42px; font-weight: 800; letter-spacing: 0.12em; color: #cab99f; }
+  </style>
+  <div id="root" data-composition-id="dicht" data-width="1920" data-height="1080">
+    <div id="d-ground"></div>
+    <div id="d-label">BESTELLEN SLUIT DONDERDAG 20:00</div>
+    <div id="d-tiles">
+      <div class="d-tile" id="d-t1"><strong>00</strong><span>D</span></div>
+      <div class="d-tile" id="d-t2"><strong>00</strong><span>H</span></div>
+      <div class="d-tile" id="d-t3"><strong>00</strong><span>M</span></div>
+      <div class="d-tile" id="d-t4"><strong id="d-sec">&#8203;03</strong><span>S</span></div>
+    </div>
+    <div id="d-closed"></div>
+    <div id="d-closed-text" data-layout-allow-overlap><strong id="d-closed-word">Gesloten</strong><span id="d-closed-sub">VOOR DEZE WEEK</span></div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#d-tiles", { scale: 1.05 }, { scale: 1, duration: 0.6, ease: "expo.out", transformOrigin: "50% 50%" }, 0);
+      gsap.set("#d-closed-text", { opacity: 0 });
+      ["\u200B02", "\u200B01", "\u200B00"].forEach((v, i) => tl.set("#d-sec", { textContent: v }, 0.3 + i * 0.4));
+
+      // The four tiles become one: Gesloten.
+      tl.set("#d-closed", { opacity: 1, scaleX: 340 / 1468 }, 1.38);
+      tl.to(["#d-t2", "#d-t3", "#d-t4"], { opacity: 0, duration: 0.1 }, 1.38);
+      tl.set("#d-t1", { opacity: 0 }, 1.39);
+      tl.to("#d-closed", { scaleX: 1, duration: 0.35, ease: "power3.out" }, 1.4);
+      tl.fromTo("#d-closed-text", { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out" }, 1.48);
+
+      // Colour flood: the paper goes brown, the dark box stays.
+      tl.to("#d-label", { opacity: 0, duration: 0.2 }, 2.4);
+      tl.to("#d-ground", { backgroundColor: "#1a120d", duration: 0.45, ease: "power2.inOut" }, 2.45);
+      window.__timelines["dicht"] = tl;
+    })();
+  </script>
+</template>

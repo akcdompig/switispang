@@ -1,0 +1,48 @@
+<template>
+  <style>
+    @font-face { font-family: "Manrope"; src: url("assets/fonts/manrope-latin-800-normal.woff2") format("woff2"); font-weight: 800; }
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: radial-gradient(circle at 20% 15%, #2a1f14 0%, #17120f 55%);
+      font-family: "Manrope", sans-serif;
+    }
+    #t-wrap { position: absolute; left: 200px; top: 250px; }
+    #t-eyebrow {
+      color: #e0ae42;
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+    }
+    .t-line {
+      font-family: "Playfair Display", serif;
+      font-weight: 800;
+      font-size: 200px;
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+      color: #f6efe5;
+      white-space: nowrap;
+    }
+    #t-line2 { color: #e0ae42; }
+    .t-word { display: inline-block; }
+  </style>
+  <div id="root" data-composition-id="title" data-width="1920" data-height="1080">
+    <div id="t-wrap">
+      <div id="t-eyebrow">SURINAAMS HOME-FOOD IN ALMERE</div>
+      <div class="t-line" id="t-line1"><span class="t-word" id="t-w1">Switi</span> <span class="t-word" id="t-w2">eten.</span></div>
+      <div class="t-line" id="t-line2"><span class="t-word" id="t-w3">Spang</span> <span class="t-word" id="t-w4">geregeld.</span></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#t-eyebrow", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power4.out" }, 0);
+      [["#t-w1", 0.08], ["#t-w2", 0.15], ["#t-w3", 0.62], ["#t-w4", 0.69]].forEach(([id, at]) =>
+        tl.fromTo(id, { opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.16, ease: "power4.out" }, at));
+      // Blur swap out into the dish card.
+      tl.to("#t-wrap", { opacity: 0, filter: "blur(10px)", duration: 0.2, ease: "power2.in" }, 2.75);
+      window.__timelines["title"] = tl;
+    })();
+  </script>
+</template>
