@@ -273,6 +273,10 @@ section { padding: 84px 0; }
   color: #1a120d;
   border-color: var(--paper);
 }
+.menu-groups { display: grid; gap: 48px; }
+.menu-group-head { margin-bottom: 18px; max-width: 640px; }
+.menu-group-head h3 { font-size: clamp(1.6rem, 3vw, 2.1rem); }
+.menu-group-head p { color: var(--muted); margin-top: 6px; }
 .menu-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
