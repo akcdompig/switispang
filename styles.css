@@ -772,3 +772,6 @@ body.prelaunch { overflow: hidden; }
 
 .rep-card li.priced { display: flex; gap: 10px; justify-content: space-between; }
 .rep-card li.priced b { color: var(--accent-2); white-space: nowrap; font-weight: 700; }
+
+.rep-note { margin-top: 16px; padding: 14px 18px; border: 1px solid rgba(224,174,66,.45); border-radius: 14px; background: rgba(224,174,66,.08); color: var(--paper); font-size: .92rem; }
+.rep-note a { color: var(--accent); }
