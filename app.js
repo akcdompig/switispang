@@ -31,18 +31,19 @@ const CONFIG = {
 const MENU = [
   {
     id: 'roti',
-    name: 'Roti kip',
+    name: 'Roti',
     portions: 10,
     image: 'img/roti-kip.jpg',
     origin: 'India → Suriname · 1873',
-    desc: 'Zachte roti met dhal, kip in masala met jeera, aardappel, kousenband en ei. Zoals het in de familie al generaties gemaakt wordt.',
+    desc: 'Zachte roti met kip in masala met jeera, aardappel, kousenband en ei. Kies kippenbout, kipfilet of vega (zonder kip). Zoals het in de familie al generaties gemaakt wordt.',
     story: 'Op 5 juni 1873 legde de Lalla Rookh aan in Suriname, met mensen uit India aan boord. Met hun kruiden en hun brood. Zo kwam roti naar Suriname, en werd hij van ons allemaal.',
-    allergens: 'Gluten, ei',
+    allergens: 'Gluten, ei, soja, selderij, mosterd',
     variants: [
-      { id: 'bout', name: 'met kippenbout', price: 15.5 },
-      { id: 'filet', name: 'met kipdijfilet (zonder bot)', price: 16.5 }
+      { id: 'bout', name: 'met kippenbout', price: 14.5 },
+      { id: 'filet', name: 'met kipfilet', price: 15.5 },
+      { id: 'vega', name: 'vega (zonder kip) 🌱', price: 12.5 }
     ],
-    extras: [{ id: 'roti', name: 'Extra roti', price: 2.5 }]
+    extras: [{ id: 'roti', name: 'Extra roti', price: 3.0 }]
   },
   {
     id: 'gritibana',
@@ -50,10 +51,10 @@ const MENU = [
     portions: 10,
     image: 'img/gritibana.jpg',
     origin: 'Creoolse keuken · Afrikaanse wortels',
-    desc: 'Soep van geraspte groene bakbanaan en cassave, met kipdij, riblap en een vleugje zoutvlees. Met witte rijst.',
+    desc: 'Soep van geraspte groene banaan en cassave, met kippendij, halal zoutvlees, krontomirki en kokosmelk. Met witte rijst.',
     story: 'Griti = raspen, bana = banaan. De banaan wordt met de hand geraspt en tot balletjes gedraaid. Echte oso nyan: wat je bij oma kreeg als het koud was.',
-    allergens: 'Ei',
-    variants: [{ id: 'std', name: '', price: 15.0 }],
+    allergens: 'Gluten, selderij, schaaldieren (krontomirki)',
+    variants: [{ id: 'std', name: 'met rijst', price: 16.5 }],
     extras: []
   }
 ];
@@ -138,7 +139,7 @@ function renderMenu() {
         <div class="dish-top"><h3>${d.name}</h3><span class="price">${d.variants.length > 1 ? 'vanaf ' : ''}${money(Math.min(...d.variants.map(v => v.price)))}</span></div>
         <p class="dish-desc">${d.desc}</p>
         <div class="meta-row"><span class="chip accent">${d.origin}</span><span class="chip">100% halal</span><span class="chip">Max. ${d.portions} porties</span></div>
-        <details class="dish-details"><summary>Het verhaal</summary><p class="story-text">${d.story}</p><p class="allergen">Allergenen: ${d.allergens}</p></details>
+        <details class="dish-details"><summary>Het verhaal</summary><p class="story-text">${d.story}</p><p class="allergen">Allergenen: ${d.allergens}. Alles halal; sporen van andere allergenen mogelijk.</p></details>
         ${d.variants.length > 1 ? `
           <div class="choice" role="radiogroup" aria-label="Kies je vlees">
             ${d.variants.map((v, i) => `
