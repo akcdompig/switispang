@@ -85,9 +85,9 @@ const MENU = [
     portions: 10,
     image: 'img/saoto.jpg',
     origin: 'Javaanse keuken · 1890',
-    desc: 'Onze basissoep, altijd te bestellen. Een volle maaltijdsoep: heldere, kruidige kippensoep met kip, taugé, gebakken aardappel, ei en gebakken uitjes. Met witte rijst, sambal apart.',
+    desc: 'Onze basissoep, altijd te bestellen. Een volle maaltijdsoep: heldere, kruidige kippensoep met kip, taugé, gebakken aardappel en ei. Met witte rijst; sambal, ketjap en gebakken uitjes apart.',
     story: 'Op 9 augustus 1890 kwamen de eerste Javaanse contractarbeiders aan in Suriname. Uit hun soto ayam groeide saoto, met Surinaamse ingrediënten. Nu is het de soep van heel Suriname.',
-    allergens: 'Ei, soja, gluten, selderij',
+    allergens: 'Ei, gluten, selderij. Ketjap en gebakken uitjes (apart, optioneel): soja, gluten',
     variants: [{ id: 'std', name: 'met rijst', price: 10.5 }],
     extras: [
       { id: 'vulling', name: 'Extra vulling', hint: 'kip, taugé en gebakken aardappel', price: 3.0 },
