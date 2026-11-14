@@ -10,6 +10,10 @@ const CONFIG = {
   // Bestellijn: false = site staat online, maar bestellen opent binnenkort. Zet op true zodra alles goedgekeurd is.
   orderingOpen: false,
 
+  // Lancering: tot dit moment ziet de bezoeker een aftelpagina. Daarna verdwijnt die vanzelf.
+  // Testen vóór de lancering: zet ?preview achter de link.
+  launchAt: '2026-11-14T20:00:00+01:00',
+
   // Contact (staat in de footer en op de contactpagina)
   email: 'info@switispang.nl',
   phoneLabel: '06 24 58 48 54',
@@ -459,7 +463,31 @@ function toast(msg) {
 function openCart() { $('cartDrawer').classList.add('open'); $('scrim').classList.add('show'); document.body.style.overflow = 'hidden'; }
 function closeCart() { $('cartDrawer').classList.remove('open'); $('scrim').classList.remove('show'); document.body.style.overflow = ''; }
 
+function initLaunch() {
+  const el = $('launch');
+  if (!el) return;
+  const at = new Date(CONFIG.launchAt).getTime();
+  if (Date.now() >= at || location.search.includes('preview')) return;
+  el.hidden = false;
+  document.body.classList.add('prelaunch');
+  const tick = () => {
+    const diff = Math.max(0, Math.floor((at - Date.now()) / 1000));
+    if (!diff) {
+      el.classList.add('gone');
+      document.body.classList.remove('prelaunch');
+      setTimeout(() => { el.hidden = true; }, 900);
+      clearInterval(t);
+      return;
+    }
+    const parts = [['uur', Math.floor(diff / 3600)], ['min', Math.floor(diff % 3600 / 60)], ['sec', diff % 60]];
+    $('launchCount').innerHTML = parts.map(([l, v]) => `<div class="box"><strong>${String(v).padStart(2, '0')}</strong><span>${l}</span></div>`).join('');
+  };
+  const t = setInterval(tick, 1000);
+  tick();
+}
+
 function init() {
+  initLaunch();
   document.querySelectorAll('[data-ig]').forEach(a => { a.href = CONFIG.instagram; });
   document.querySelectorAll('[data-tt]').forEach(a => { a.href = CONFIG.tiktok; });
   document.querySelectorAll('[data-mail]').forEach(a => { a.href = 'mailto:' + CONFIG.email; a.textContent = CONFIG.email; });
