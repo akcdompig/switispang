@@ -111,12 +111,13 @@ const COMING = [
 ];
 
 // De Switi Spang-keuken: wat er de komende weken langskomt (geen prijzen, wisselt per week).
+// Items: tekst, of [tekst, prijs]. Prijzen incl. btw; formule: (kostprijs + ~€10) × 1,09, getoetst aan concurrenten in Almere.
 const REPERTOIRE = [
-  { icon: '🍲', title: 'Soepen', sub: 'Maaltijdsoepen met rijst · €13,50 · saoto (basis) €10,50', items: ['Gritibana', 'Saoto', 'Okersoep', 'Bravoe', 'Tayersoep', 'Pindasoep', 'Cassavesoep'] },
-  { icon: '🫓', title: 'Roti', sub: 'Met aardappel, kousenband en ei', items: ['Roti kip (kippenbout)', 'Roti kip (kippendijfilet)', 'Roti lams', 'Roti masala doks', 'Roti vega'] },
-  { icon: '🍛', title: 'Rijstgerechten', sub: 'Gestoofd of geroosterd, zoals thuis', items: ['Rijst met kip en antroewa', 'Rijst met kip en sopropo', 'Rijst met gestoofd rundvlees en Surinaamse zuurkool, met aardappel en kiprookworst', 'Witte rijst met kousenband, aardappel en garnalen', 'Masoesa moksi alesi met geroosterde kip', 'Chow mein met geroosterde kip'] },
-  { icon: '🥟', title: 'Buns', sub: 'Van traditie naar trendy', items: ['Garnalen bun: garnalen in pittige tomatenjus, extra spicy saus optioneel', 'Redi Fowru bun: geroosterde kip met rode kruiden en een lekker sausje', 'Met frisse toppings als prei en komkommer'] },
-  { icon: '🦀', title: 'Seafood boil · Paramaribo style', sub: 'Binnenkort', items: ['Krab, grote garnalen, rivierkreeft en spinkrab', 'Met krieltjes, maïs en worst', 'In masala en kokosmelk', 'Hoe pittig? Dat kies je zelf'] },
+  { icon: '🍲', title: 'Soepen', sub: 'Maaltijdsoepen, traditioneel, met rijst', items: [['Gritibana', 13.5], ['Okersoep', 13.5], ['Bravoe', 13.5], ['Tayersoep', 13.5], ['Pindasoep', 13.5], ['Cassavesoep', 13.5], ['Saoto (basis)', 10.5]] },
+  { icon: '🫓', title: 'Roti', sub: 'Met verse rotiplaat, aardappel, kousenband en ei', items: [['Roti kip (kippenbout)', 17.5], ['Roti kip (kippendijfilet)', 18.5], ['Roti lams', 19.5], ['Roti masala doks', 19.5], ['Roti vega', 15], ['Rotirol kippendijfilet', 11.95], ['Rotirol lams', 13.95]] },
+  { icon: '🍛', title: 'Rijstgerechten', sub: 'Gestoofd of geroosterd, zoals thuis', items: [['Rijst met kip en antroewa', 15.5], ['Rijst met kip en sopropo', 15.5], ['Rijst met gestoofd rundvlees en Surinaamse zuurkool, met aardappel en kiprookworst', 16.5], ['Witte rijst met kousenband, aardappel en garnalen', 15.5], ['Masoesa moksi alesi met geroosterde kip', 16.5], ['Nasi met geroosterde kip', 15.5], ['Bami met geroosterde kip', 15.5], ['Chow mein met geroosterde kip', 15.5]] },
+  { icon: '🥟', title: 'Buns', sub: 'Van traditie naar trendy · met frisse toppings als prei en komkommer', items: [['Garnalen bun: garnalen in pittige tomatenjus (2 stuks)', 9.5], ['Redi Fowru bun: geroosterde kip met rode kruiden (2 stuks)', 9.5], ['Mix van 3 buns', 13.5], 'Extra spicy saus? Kan erbij'] },
+  { icon: '🦀', title: 'Seafood boil · Paramaribo style', sub: 'Binnenkort', items: [['Per persoon, vanaf', 27.5], 'Krab, grote garnalen, rivierkreeft en spinkrab', 'Met krieltjes, maïs en worst in masala en kokosmelk', 'Hoe pittig? Dat kies je zelf'] },
   { icon: '✨', title: 'Weekend specials', sub: 'Surinaams in een ander jasje', items: ['Elke week een verrassing', 'Volg Instagram en onze WhatsApp-community'] },
   { icon: '🥤', title: 'Binnenkort te drinken', sub: 'Huisgemaakt', items: ['Gemberbier', 'Surinaamse cola (colasiroop)', 'Markoesa-sap'] }
 ];
@@ -264,7 +265,7 @@ function renderMenu() {
     <div class="rep-card">
       <h4><span aria-hidden="true">${r.icon}</span> ${r.title}</h4>
       <p class="rep-sub">${r.sub}</p>
-      <ul>${r.items.map(i => `<li>${i}</li>`).join('')}</ul>
+      <ul>${r.items.map(i => Array.isArray(i) ? `<li class="priced"><span>${i[0]}</span><b>${money(i[1])}</b></li>` : `<li>${i}</li>`).join('')}</ul>
     </div>`).join('');
 }
 

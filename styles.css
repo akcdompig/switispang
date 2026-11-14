@@ -769,3 +769,6 @@ body.prelaunch { overflow: hidden; }
 .launch-count .box { background: var(--paper); color: #1a120d; }
 .launch-foot { color: var(--muted); font-size: .92rem; }
 .launch-foot a { color: var(--accent); }
+
+.rep-card li.priced { display: flex; gap: 10px; justify-content: space-between; }
+.rep-card li.priced b { color: var(--accent-2); white-space: nowrap; font-weight: 700; }
