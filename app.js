@@ -13,7 +13,7 @@ const CONFIG = {
   // Contact (staat in de footer en op de contactpagina)
   email: 'info@switispang.nl',
   phoneLabel: '06 24 58 48 54',
-  kvk: '', // KvK-nummer Leef en Lach; leeg = niet tonen
+  kvk: '', // KvK-nummer; leeg = niet tonen
 
   drop: {
     label: 'Woensdag 18 november',
