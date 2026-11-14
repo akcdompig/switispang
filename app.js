@@ -35,20 +35,19 @@ const MENU = [
     portions: 10,
     image: 'img/roti-kip.jpg',
     origin: 'India → Suriname · 1873',
-    desc: 'De rotiplaat wordt vers met de hand gemaakt, en daar proef je het verschil. Alleen de rotiplaat zelf is al heerlijk om zo te eten. Met kip in masala met jeera, aardappel, kousenband en ei. Kies kippenbout, kippendijfilet of vega (zonder kip). Liever een rotirol? Kan met kippendijfilet.',
+    desc: 'De rotiplaat wordt vers met de hand gemaakt, en daar proef je het verschil. Alleen de rotiplaat zelf is al heerlijk om zo te eten. Met kip in masala met jeera, aardappel, kousenband en ei. Kies kippenbout, kippendijfilet of vega (zonder kip). Liever een rotirol? Kies "rotirol": kippendijfilet met aardappel, kousenband en ei, gerold in een verse rotiplaat. Makkelijk mee te nemen.',
     story: 'Op 5 juni 1873 legde de Lalla Rookh aan in Suriname, met mensen uit India aan boord. Met hun kruiden en hun brood. Zo kwam roti naar Suriname, en werd hij van ons allemaal.',
     allergens: 'Gluten, ei, soja, selderij, mosterd',
     variants: [
       { id: 'bout', name: 'met kippenbout', price: 17.5 },
       { id: 'filet', name: 'met kippendijfilet', price: 18.5 },
-      { id: 'vega', name: 'vega (zonder kip) 🌱', cart: 'Roti vega', price: 15.0 }
+      { id: 'vega', name: 'vega (zonder kip) 🌱', cart: 'Roti vega', price: 15.0 },
+      { id: 'rol', name: 'rotirol (kippendijfilet)', cart: 'Rotirol kippendijfilet', price: 11.95 }
     ],
     extras: [
-      // Rotirol alleen met kippendijfilet of lams (variant-id 'filet' of 'lams').
-      { id: 'rol', name: 'Maak er een rotirol van', cart: '(als rotirol)', price: 1.0, only: ['filet', 'lams'], hint: 'alleen met kippendijfilet of lams' },
       { id: 'extra', name: 'Roti kip extra', cart: '+ extra vlees en groente', price: 4.0, only: ['bout', 'filet', 'lams'], hint: 'extra stuk vlees en meer groente' },
       { id: 'ei', name: 'Extra ei', price: 1.5 },
-      { id: 'roti', name: 'Extra verse rotiplaat', price: 3.0 }
+      { id: 'roti', name: 'Extra verse rotiplaat', price: 3.0, only: ['bout', 'filet', 'vega', 'lams'] }
     ]
   },
   {
