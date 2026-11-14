@@ -189,7 +189,7 @@ function dishCard(d, closed) {
       <div class="dish-body">
         <div class="dish-top"><h3>${d.name}</h3><span class="price">${d.variants.length > 1 ? 'vanaf ' : ''}${money(Math.min(...d.variants.map(v => v.price)))}</span></div>
         <p class="dish-desc">${d.desc}</p>
-        <div class="meta-row">${d.fixed ? '<span class="chip accent">Altijd te bestellen</span>' : ''}<span class="chip accent">${d.origin}</span><span class="chip">100% halal</span><span class="chip">Max. ${d.portions} porties${own}</span></div>
+        <div class="meta-row">${d.fixed ? '<span class="chip accent">Basis · altijd te bestellen</span>' : ''}<span class="chip accent">${d.origin}</span><span class="chip">100% halal</span><span class="chip">Max. ${d.portions} porties${own}</span></div>
         <details class="dish-details"><summary>Het verhaal</summary><p class="story-text">${d.story}</p><p class="allergen">Allergenen: ${d.allergens}. Alles halal; sporen van andere allergenen mogelijk.</p></details>
         ${d.variants.length > 1 ? `
           <div class="choice" role="radiogroup" aria-label="Maak je keuze">
