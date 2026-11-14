@@ -35,13 +35,13 @@ const MENU = [
     portions: 10,
     image: 'img/roti-kip.jpg',
     origin: 'India → Suriname · 1873',
-    desc: 'Zachte roti met kip in masala met jeera, aardappel, kousenband en ei. Kies kippenbout, kipfilet of vega (zonder kip). Zoals het in de familie al generaties gemaakt wordt.',
+    desc: 'Zachte roti met kip in masala met jeera, aardappel, kousenband en ei. Kies kippenbout, kippendijfilet of vega (zonder kip). Zoals het in de familie al generaties gemaakt wordt.',
     story: 'Op 5 juni 1873 legde de Lalla Rookh aan in Suriname, met mensen uit India aan boord. Met hun kruiden en hun brood. Zo kwam roti naar Suriname, en werd hij van ons allemaal.',
     allergens: 'Gluten, ei, soja, selderij, mosterd',
     variants: [
-      { id: 'bout', name: 'met kippenbout', price: 14.5 },
-      { id: 'filet', name: 'met kipfilet', price: 15.5 },
-      { id: 'vega', name: 'vega (zonder kip) 🌱', price: 12.5 }
+      { id: 'bout', name: 'met kippenbout', price: 17.5 },
+      { id: 'filet', name: 'met kippendijfilet', price: 18.5 },
+      { id: 'vega', name: 'vega (zonder kip) 🌱', price: 15.0 }
     ],
     extras: [{ id: 'roti', name: 'Extra roti', price: 3.0 }]
   },
@@ -51,20 +51,37 @@ const MENU = [
     portions: 10,
     image: 'img/gritibana.jpg',
     origin: 'Creoolse keuken · Afrikaanse wortels',
-    desc: 'Soep van geraspte groene banaan en cassave, met kippendij, halal zoutvlees, krontomirki en kokosmelk. Met witte rijst.',
+    desc: 'Soep van geraspte groene banaan, met kippendij, halal zoutvlees en krontomirki (kokosmelk). Met witte rijst.',
     story: 'Griti = raspen, bana = banaan. De banaan wordt met de hand geraspt en tot balletjes gedraaid. Echte oso nyan: wat je bij oma kreeg als het koud was.',
-    allergens: 'Gluten, selderij, schaaldieren (krontomirki)',
-    variants: [{ id: 'std', name: 'met rijst', price: 16.5 }],
+    allergens: 'Gluten, selderij',
+    variants: [{ id: 'std', name: 'met rijst', price: 13.5 }],
     extras: []
   }
+];
+
+// Drankjes: altijd erbij te bestellen. Pas prijzen hier aan.
+const DRINKS = [
+  { id: 'spa', name: 'Spa blauw', portions: 99, variants: [{ id: 'std', name: '', price: 2.0 }], extras: [] },
+  { id: 'cola', name: 'Cola', portions: 99, variants: [{ id: 'std', name: '', price: 2.5 }], extras: [] },
+  { id: 'fernandes', name: 'Fernandes', note: 'alle smaken, zet je smaak bij opmerking', portions: 99, variants: [{ id: 'std', name: '', price: 2.5 }], extras: [] }
 ];
 
 const COMING = [
   { name: 'Okersoep', image: 'img/okersoep.jpg' },
   { name: 'Saoto', image: 'img/saoto.jpg' },
   { name: 'Bravoe', image: 'img/bravoe.jpg' },
-  { name: 'Tayersoep', image: 'img/tayersoep.jpg' },
-  { name: 'Bami', image: 'img/bami.jpg' }
+  { name: 'Tayersoep', image: 'img/tayersoep.jpg' }
+];
+
+// De Switi Spang-keuken: wat er de komende weken langskomt (geen prijzen, wisselt per week).
+const REPERTOIRE = [
+  { icon: '🍲', title: 'Soepen', sub: 'Traditioneel, met rijst', items: ['Gritibana', 'Saoto', 'Okersoep', 'Bravoe', 'Tayersoep', 'Pindasoep', 'Cassavesoep'] },
+  { icon: '🫓', title: 'Roti', sub: 'Met aardappel, kousenband en ei', items: ['Roti kip (kippenbout)', 'Roti kip (kippendijfilet)', 'Roti lams', 'Roti masala doks', 'Roti vega'] },
+  { icon: '🍛', title: 'Rijstgerechten', sub: 'Gestoofd of geroosterd, zoals thuis', items: ['Rijst met kip en antroewa', 'Rijst met kip en sopropo', 'Rijst met gestoofd rundvlees en Surinaamse zuurkool', 'Rijst met aardappel en rookworst', 'Witte rijst met kousenband, aardappel en garnalen', 'Moksi alesi met geroosterde kip', 'Chow mein met geroosterde kip'] },
+  { icon: '🥟', title: 'Buns', sub: 'Van traditie naar trendy', items: ['Bun met krokante garnalen', 'Redi Fowru bun: red roasted chicken'] },
+  { icon: '🦀', title: 'Seafood boil · Paramaribo style', sub: 'Binnenkort', items: ['Krab, grote garnalen, rivierkreeft en spinkrab', 'Met krieltjes, maïs en worst', 'In masala en kokosmelk', 'Hoe pittig? Dat kies je zelf'] },
+  { icon: '✨', title: 'Weekend specials', sub: 'Surinaams in een ander jasje', items: ['Elke week een verrassing', 'Volg Instagram en onze WhatsApp-community'] },
+  { icon: '🥤', title: 'Binnenkort te drinken', sub: 'Huisgemaakt', items: ['Gemberbier', 'Surinaamse cola (colasiroop)', 'Markoesa-sap'] }
 ];
 
 /* ============================================================ */
@@ -84,7 +101,7 @@ function isClosed() {
   return Date.now() > new Date(CONFIG.drop.deadline).getTime();
 }
 
-function dish(id) { return MENU.find(d => d.id === id); }
+function dish(id) { return MENU.find(d => d.id === id) || DRINKS.find(d => d.id === id); }
 
 function lineInfo(item) {
   const d = dish(item.dishId);
@@ -168,8 +185,33 @@ function renderMenu() {
   }));
   document.querySelectorAll('[data-add]').forEach(b => b.addEventListener('click', () => addToCart(b.dataset.add)));
 
+  $('drinksGrid').innerHTML = DRINKS.map(d => `
+    <div class="drink">
+      <div><strong>${d.name}</strong>${d.note ? `<small>${d.note}</small>` : ''}</div>
+      <b>${money(d.variants[0].price)}</b>
+      ${closed ? '' : `<button type="button" class="drink-add" data-drink="${d.id}" aria-label="${d.name} toevoegen">+</button>`}
+    </div>`).join('');
+  document.querySelectorAll('[data-drink]').forEach(b => b.addEventListener('click', () => addDrink(b.dataset.drink)));
+
   $('comingGrid').innerHTML = COMING.map(c => `
     <figure class="coming"><img src="${c.image}" alt="${c.name}" loading="lazy"/><figcaption>${c.name}</figcaption></figure>`).join('');
+
+  $('repertoire').innerHTML = REPERTOIRE.map(r => `
+    <div class="rep-card">
+      <h4><span aria-hidden="true">${r.icon}</span> ${r.title}</h4>
+      <p class="rep-sub">${r.sub}</p>
+      <ul>${r.items.map(i => `<li>${i}</li>`).join('')}</ul>
+    </div>`).join('');
+}
+
+function addDrink(id) {
+  const d = dish(id);
+  const key = id + '|std';
+  const found = state.cart.find(i => i.key === key);
+  if (found) found.qty += 1; else state.cart.push({ key, dishId: id, variantId: 'std', extras: [], qty: 1 });
+  state.sent = false;
+  toast(`${d.name} toegevoegd`);
+  renderCart();
 }
 
 function addToCart(dishId) {
