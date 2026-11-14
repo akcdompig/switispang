@@ -1,670 +1,351 @@
-const HF = 'https://d8j0ntlcm91z4.cloudfront.net/user_3JzqNSPzcBvxImvT5rkQXlGVhM9/';
+/* ============================================================
+   SWITI SPANG — instellingen voor deze week
+   Pas hier het menu, de prijzen en het WhatsApp-nummer aan.
+   ============================================================ */
+const CONFIG = {
+  // WhatsApp-nummer voor bestellingen, internationaal zonder + of 0 vooraan (06 12345678 -> '31612345678').
+  // Leeg = bestelknop staat uit.
+  whatsapp: '',
 
-const switiSpangConfig = {
-  brand: 'SWITI SPANG',
-  slogan: 'Switi eten. Spang geregeld.',
-  orderDeadline: 'donderdag 20:00',
-  pickupDay: 'vrijdag',
-  pickupStart: '17:00',
-  pickupEnd: '20:00',
-  location: 'Almere',
-  cashless: true,
-  mollieReady: true,
-  stockWarningThreshold: 4,
-  weeklyCategory: 'weekmenu',
-  images: {
-    saoto: HF + 'hf_20261104_065540_8e1097df-d42f-480c-a889-035cfe1d3a07.png',
-    rotiKip: HF + 'hf_20261104_101053_42471c8d-684c-4ae0-b996-8c3380cbe116.png',
-    rotiKipdij: HF + 'hf_20261104_152454_f8a296c8-32ea-4cc2-959d-85a0f2bf314d.png',
-    rotiDoks: HF + 'hf_20261104_131555_89ed6633-e6e7-40c0-bb66-74129d870887.png',
-    bami: HF + 'hf_20261104_183955_fdc46e3e-2d4e-4d08-acb9-2451b49e7115.png',
-    gritibana: HF + 'hf_20261104_070338_7975f782-7b76-4a98-88ab-9dfd5667b2eb.png',
-    oker: HF + 'hf_20261104_071706_ed335a11-6eb4-4421-b1a6-0a1fa2306056.png',
-    cassave: HF + 'hf_20261104_082131_a432bb97-b1e0-413d-b47d-a65e36dbab09.png',
-    bravoe: HF + 'hf_20261104_083225_5a75c1c2-4c34-4c2b-87bc-ecf6c238bbd1.png',
-    tayer: HF + 'hf_20261104_092606_49facc1b-f040-488b-8df8-e4fdde84c5e0.png'
-  }
+  drop: {
+    label: 'Woensdag 18 november',
+    dayShort: 'woensdag',
+    deadline: '2026-11-16T20:00:00+01:00', // bestellen sluit
+    deadlineLabel: 'maandag 16 november, 20:00'
+  },
+  next: 'Zaterdag 21 november: menu volgt woensdagavond op Instagram.',
+
+  pickup: {
+    area: 'Almere-Buiten',
+    slots: ['17:00', '17:30', '18:00', '18:30', '19:00', '19:30']
+  },
+  delivery: {
+    fee: 2.5,
+    freeFrom: 30,
+    slots: ['17:00 – 18:00', '18:00 – 19:00', '19:00 – 20:00']
+  },
+  instagram: 'https://www.instagram.com/switispang',
+  tiktok: 'https://www.tiktok.com/@switispang'
 };
 
-// category: 'vast' = vaste kaart (basisgerechten), 'weekend' = weekend specials (wisselen per week), 'extra' = erbij
-const products = [
+const MENU = [
   {
-    id: 'roti-doks',
-    category: 'vast',
-    name: 'Roti Doks',
-    price: 14.5,
-    stock: 6,
-    sold: 0,
-    signature: true,
-    origin: 'Hindostaans',
-    desc: 'Onze favoriet. Eend in kleine stukjes gehakt en traditioneel op de chula boven houtskool gegaard in donkere masala. Met zachte roti en masala-aardappel met kousenband.',
-    allergens: 'Gluten',
-    image: switiSpangConfig.images.rotiDoks,
-    extras: [{ name: 'Extra roti', price: 2.5 }, { name: 'Sambal', price: 0.75 }]
-  },
-  {
-    id: 'roti-kip',
-    category: 'vast',
-    name: 'Roti Kip',
-    price: 12.5,
-    stock: 15,
-    sold: 0,
-    origin: 'Hindostaans',
-    desc: 'Kippenbout in goudgele masala, masala-aardappel met kousenband, een in olie gebakken masala-ei en zachte, droge roti. Zoals de Hindostaanse oma het maakte.',
+    id: 'roti',
+    name: 'Roti kip',
+    portions: 10,
+    image: 'img/roti-kip.jpg',
+    origin: 'India → Suriname · 1873',
+    desc: 'Zachte roti met dhal, kip in masala met jeera, aardappel, kousenband en ei. Zoals het in de familie al generaties gemaakt wordt.',
+    story: 'Op 5 juni 1873 legde de Lalla Rookh aan in Suriname, met mensen uit India aan boord. Met hun kruiden en hun brood. Zo kwam roti naar Suriname, en werd hij van ons allemaal.',
     allergens: 'Gluten, ei',
-    image: switiSpangConfig.images.rotiKip,
-    extras: [{ name: 'Extra roti', price: 2.5 }, { name: 'Extra ei', price: 1.5 }, { name: 'Sambal', price: 0.75 }]
-  },
-  {
-    id: 'roti-kipdij',
-    category: 'vast',
-    name: 'Roti Kippendijfilet',
-    price: 13.0,
-    stock: 12,
-    sold: 0,
-    origin: 'Hindostaans',
-    desc: 'Liever geen bot? Sappige kippendijfilet in masala, met masala-aardappel, kousenband, masala-ei en zachte roti.',
-    allergens: 'Gluten, ei',
-    image: switiSpangConfig.images.rotiKipdij,
-    extras: [{ name: 'Extra roti', price: 2.5 }, { name: 'Extra ei', price: 1.5 }, { name: 'Sambal', price: 0.75 }]
-  },
-  {
-    id: 'saoto',
-    category: 'vast',
-    name: 'Saoto',
-    price: 9.5,
-    stock: 20,
-    sold: 0,
-    signature: true,
-    origin: 'Javaans',
-    desc: 'Heldere, kruidige kippensoep met kip, taugé, aardappelstengels, gebakken uitjes en ei. Met rijst, ketjap en sambal. Meegebracht door de Javaanse contractarbeiders.',
-    allergens: 'Ei, soja',
-    image: switiSpangConfig.images.saoto,
-    extras: [{ name: 'Extra kip', price: 3.5 }, { name: 'Sambal', price: 0.75 }]
-  },
-  {
-    id: 'bami',
-    category: 'vast',
-    name: 'Lipgloss Bami',
-    price: 11.5,
-    stock: 14,
-    sold: 0,
-    origin: 'Chinees-Javaans',
-    desc: 'Glanzende bami in ketjap met gestoofde ketjapkip, kort gebakken kousenband, zuur van komkommer en rode ui, en sambal.',
-    allergens: 'Gluten, soja',
-    image: switiSpangConfig.images.bami,
-    extras: [{ name: 'Extra kip', price: 3.5 }, { name: 'Sambal', price: 0.75 }]
+    variants: [
+      { id: 'bout', name: 'met kippenbout', price: 15.5 },
+      { id: 'filet', name: 'met kipdijfilet (zonder bot)', price: 16.5 }
+    ],
+    extras: [{ id: 'roti', name: 'Extra roti', price: 2.5 }]
   },
   {
     id: 'gritibana',
-    category: 'weekend',
-    name: 'Gritibana soep',
-    price: 10.5,
-    stock: 10,
-    sold: 0,
-    origin: 'Creools',
-    desc: 'Romige kokossoep met balletjes van geraspte groene banaan en cassave, gerookte krabbetjes, kip en zoutvlees. Familiekost die je bijna nergens meer vindt. Met rijst.',
+    name: 'Gritibana',
+    portions: 10,
+    image: 'img/gritibana.jpg',
+    origin: 'Creoolse keuken · Afrikaanse wortels',
+    desc: 'Soep van geraspte groene bakbanaan en cassave, met kipdij, riblap en een vleugje zoutvlees. Met witte rijst.',
+    story: 'Griti = raspen, bana = banaan. De banaan wordt met de hand geraspt en tot balletjes gedraaid. Echte oso nyan: wat je bij oma kreeg als het koud was.',
     allergens: 'Ei',
-    image: switiSpangConfig.images.gritibana
-  },
-  {
-    id: 'okersoep',
-    category: 'weekend',
-    name: 'Okersoep',
-    price: 10.5,
-    stock: 10,
-    sold: 0,
-    origin: 'Creools',
-    desc: 'Okersoep met tajerblad, antroewa, kip en zoutvlees. Smaken met Afrikaanse wortels. Met rijst.',
-    allergens: '—',
-    image: switiSpangConfig.images.oker
-  },
-  {
-    id: 'cassavesoep',
-    category: 'weekend',
-    name: 'Cassavesoep',
-    price: 10.5,
-    stock: 10,
-    sold: 0,
-    origin: 'Creools',
-    desc: 'Romige kokosbouillon met zachte cassave, gerookte krabbetjes, kip en zoutvlees. Met rijst.',
-    allergens: '—',
-    image: switiSpangConfig.images.cassave
-  },
-  {
-    id: 'bravoe',
-    category: 'weekend',
-    name: 'Bravoe soep',
-    price: 11.0,
-    stock: 10,
-    sold: 0,
-    origin: 'Creools',
-    desc: 'Volle maaltijdsoep met cassave, zoete patat, groene en rijpe bakbanaan, kip, tajerblad en oker.',
-    allergens: '—',
-    image: switiSpangConfig.images.bravoe
-  },
-  {
-    id: 'tayersoep',
-    category: 'weekend',
-    name: 'Tayersoep',
-    price: 10.5,
-    stock: 10,
-    sold: 0,
-    origin: 'Creools',
-    desc: 'Romige soep van Chinese tayer, met zoutvlees en kip. Zacht, vullend en echt van thuis. Met rijst.',
-    allergens: '—',
-    image: switiSpangConfig.images.tayer
-  },
-  {
-    id: 'gember',
-    category: 'extra',
-    name: 'Huisgemaakte gemberdrank',
-    price: 3.5,
-    stock: 25,
-    sold: 0,
-    desc: 'Verse gember, citroen en rietsuiker. Fris en lekker bij de pit.',
-    allergens: '—',
-    image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=900&q=80'
-  },
-  {
-    id: 'bojo',
-    category: 'extra',
-    name: 'Bojo cake',
-    price: 4.5,
-    stock: 18,
-    sold: 0,
-    desc: 'Zachte cassavecake met kokos, warm en licht zoet voor na het eten.',
-    allergens: 'Ei, kokos',
-    image: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=900&q=80'
-  },
-  {
-    id: 'zuur',
-    category: 'extra',
-    name: 'Komkommer in zuur',
-    price: 2.0,
-    stock: 30,
-    sold: 0,
-    desc: 'Komkommer met rode ui in zuur, met een lichte pit.',
-    allergens: '—',
-    image: 'https://images.unsplash.com/photo-1546094096-0df4bcaaa337?auto=format&fit=crop&w=900&q=80'
+    variants: [{ id: 'std', name: '', price: 15.0 }],
+    extras: []
   }
 ];
 
-const categoryMap = [
-  { id: 'alles', label: 'Alles' },
-  { id: 'vast', label: 'Vaste kaart' },
-  { id: 'weekend', label: 'Weekend specials' },
-  { id: 'extra', label: 'Erbij' }
+const COMING = [
+  { name: 'Okersoep', image: 'img/okersoep.jpg' },
+  { name: 'Saoto', image: 'img/saoto.jpg' },
+  { name: 'Bravoe', image: 'img/bravoe.jpg' },
+  { name: 'Tayersoep', image: 'img/tayersoep.jpg' },
+  { name: 'Bami', image: 'img/bami.jpg' }
 ];
 
-const categoryInfo = {
-  vast: {
-    title: 'Vaste kaart',
-    note: 'Onze basis: roti, saoto en bami. Elke week te bestellen.'
-  },
-  weekend: {
-    title: 'Weekend specials',
-    note: 'Wisselt elke week. Welke specials er dit weekend zijn, zie je in onze status en op Instagram. Hieronder een greep uit wat langskomt.'
-  },
-  extra: {
-    title: 'Erbij',
-    note: 'Drankje, zoetigheid of extra zuur erbij.'
-  }
-};
+/* ============================================================ */
 
 const state = {
-  cart: [],
-  activeCategory: 'alles',
-  selectedSlot: '17:00',
-  orderPlaced: false
+  cart: [], // { key, dishId, variantId, extras:[ids], qty }
+  mode: 'afhalen',
+  slot: '',
+  sent: false
 };
 
-function formatMoney(value) {
-  return `€${Number(value).toFixed(2).replace('.', ',')}`;
+const $ = id => document.getElementById(id);
+const money = v => `€${Number(v).toFixed(2).replace('.', ',')}`;
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+function isClosed() {
+  return Date.now() > new Date(CONFIG.drop.deadline).getTime();
 }
 
-function getRemaining(item) {
-  const inCart = state.cart.filter(entry => entry.id === item.id).reduce((sum, entry) => sum + entry.qty, 0);
-  return Math.max(0, item.stock - item.sold - inCart);
+function dish(id) { return MENU.find(d => d.id === id); }
+
+function lineInfo(item) {
+  const d = dish(item.dishId);
+  const v = d.variants.find(x => x.id === item.variantId);
+  const ex = d.extras.filter(e => item.extras.includes(e.id));
+  const unit = v.price + ex.reduce((s, e) => s + e.price, 0);
+  const label = [d.name, v.name, ...ex.map(e => '+ ' + e.name.toLowerCase())].filter(Boolean).join(' ');
+  return { d, v, ex, unit, label };
 }
 
-function isSoldOut(item) {
-  return getRemaining(item) <= 0;
+function qtyInCart(dishId) {
+  return state.cart.filter(i => i.dishId === dishId).reduce((s, i) => s + i.qty, 0);
 }
 
-function getCountdownParts() {
-  const now = new Date();
-  const target = new Date(now);
-  const day = now.getDay();
-  const daysUntilThursday = (4 - day + 7) % 7 || 7;
-  target.setDate(now.getDate() + daysUntilThursday);
-  target.setHours(20, 0, 0, 0);
+function subtotal() { return state.cart.reduce((s, i) => s + lineInfo(i).unit * i.qty, 0); }
+function deliveryFee() {
+  if (state.mode !== 'bezorgen') return 0;
+  return subtotal() >= CONFIG.delivery.freeFrom ? 0 : CONFIG.delivery.fee;
+}
 
-  const diff = target.getTime() - now.getTime();
-  const totalSeconds = Math.max(0, Math.floor(diff / 1000));
-
-  return {
-    days: Math.floor(totalSeconds / 86400),
-    hours: Math.floor((totalSeconds % 86400) / 3600),
-    minutes: Math.floor((totalSeconds % 3600) / 60),
-    seconds: totalSeconds % 60
-  };
+/* ---------- hero board + countdown ---------- */
+function renderBoard() {
+  $('dropDate').textContent = CONFIG.drop.label;
+  $('boardList').innerHTML = MENU.map(d => `
+    <li><span class="board-item-name">${d.name}</span><span class="board-item-stock">${d.portions} porties</span></li>
+  `).join('');
+  $('deadlineLabel').textContent = isClosed() ? 'Bestellen is gesloten voor deze ronde' : `Bestellen sluit ${CONFIG.drop.deadlineLabel}`;
+  document.querySelectorAll('[data-deadline]').forEach(n => { n.textContent = CONFIG.drop.deadlineLabel; });
+  document.querySelectorAll('[data-droplabel]').forEach(n => { n.textContent = CONFIG.drop.label; });
+  $('nextDrop').textContent = CONFIG.next;
+  $('statusText').textContent = isClosed() ? 'Bestellen gesloten' : 'Bestellen open';
+  $('statusDot').classList.toggle('off', isClosed());
 }
 
 function renderCountdown() {
-  const countdownEl = document.getElementById('countdown');
-  if (!countdownEl) return;
-
-  const parts = getCountdownParts();
-
-  if (parts.days === 0 && parts.hours === 0 && parts.minutes === 0 && parts.seconds === 0) {
-    countdownEl.innerHTML = '<div class="box"><strong>Gesloten</strong><span>Voor deze week</span></div>';
-    return;
-  }
-
-  countdownEl.innerHTML = [
-    { label: 'D', value: parts.days },
-    { label: 'H', value: parts.hours },
-    { label: 'M', value: parts.minutes },
-    { label: 'S', value: parts.seconds }
-  ].map(item => `
-    <div class="box">
-      <strong>${String(item.value).padStart(2, '0')}</strong>
-      <span>${item.label}</span>
-    </div>
-  `).join('');
+  const el = $('countdown');
+  const diff = Math.max(0, Math.floor((new Date(CONFIG.drop.deadline).getTime() - Date.now()) / 1000));
+  if (!diff) { el.innerHTML = '<div class="box"><strong>Gesloten</strong><span>deze ronde</span></div>'; return; }
+  const parts = [['D', Math.floor(diff / 86400)], ['U', Math.floor(diff % 86400 / 3600)], ['M', Math.floor(diff % 3600 / 60)], ['S', diff % 60]];
+  el.innerHTML = parts.map(([l, v]) => `<div class="box"><strong>${String(v).padStart(2, '0')}</strong><span>${l}</span></div>`).join('');
 }
 
-function renderBoard() {
-  const boardList = document.getElementById('boardList');
-  const dropDate = document.getElementById('dropDate');
-  if (!boardList) return;
-
-  const featured = ['roti-doks', 'roti-kip', 'saoto', 'bami', 'gritibana'];
-  boardList.innerHTML = featured.map(id => {
-    const item = products.find(product => product.id === id);
-    const remaining = getRemaining(item);
-    const statusClass = remaining === 0 ? 'out' : remaining <= 4 ? 'low' : '';
-    const statusText = remaining === 0 ? 'Uitverkocht' : `Nog ${remaining}`;
+/* ---------- menu ---------- */
+function renderMenu() {
+  const closed = isClosed();
+  $('menuGrid').innerHTML = MENU.map(d => {
+    const left = Math.max(0, d.portions - qtyInCart(d.id));
     return `
-      <li>
-        <span class="board-item-name">${item.name}</span>
-        <span class="board-item-stock ${statusClass}">${statusText}</span>
-      </li>
-    `;
+    <article class="dish">
+      <div class="dish-image"><img src="${d.image}" alt="${d.name}" loading="lazy" /></div>
+      <div class="dish-body">
+        <div class="dish-top"><h3>${d.name}</h3><span class="price">${d.variants.length > 1 ? 'vanaf ' : ''}${money(Math.min(...d.variants.map(v => v.price)))}</span></div>
+        <p class="dish-desc">${d.desc}</p>
+        <div class="meta-row"><span class="chip accent">${d.origin}</span><span class="chip">100% halal</span><span class="chip">Max. ${d.portions} porties</span></div>
+        <details class="dish-details"><summary>Het verhaal</summary><p class="story-text">${d.story}</p><p class="allergen">Allergenen: ${d.allergens}</p></details>
+        ${d.variants.length > 1 ? `
+          <div class="choice" role="radiogroup" aria-label="Kies je vlees">
+            ${d.variants.map((v, i) => `
+              <label class="choice-opt"><input type="radio" name="var-${d.id}" value="${v.id}" ${i === 0 ? 'checked' : ''}/><span>${v.name.replace(/^met /, '')}</span><b>${money(v.price)}</b></label>`).join('')}
+          </div>` : ''}
+        ${d.extras.map(e => `
+          <label class="choice-opt extra"><input type="checkbox" name="ex-${d.id}" value="${e.id}"/><span>${e.name}</span><b>+${money(e.price)}</b></label>`).join('')}
+        <div class="dish-actions">
+          ${closed ? '<button class="waitlist-btn" disabled>Bestellen gesloten</button>' : `
+          <div class="qty-picker">
+            <button type="button" data-q="-1" data-id="${d.id}" aria-label="Minder">−</button>
+            <span id="q-${d.id}">1</span>
+            <button type="button" data-q="1" data-id="${d.id}" aria-label="Meer">+</button>
+          </div>
+          <button class="add-btn" type="button" data-add="${d.id}" ${left ? '' : 'disabled'}>${left ? 'Toevoegen' : 'Max bereikt'}</button>`}
+        </div>
+      </div>
+    </article>`;
   }).join('');
 
-  if (dropDate) {
-    dropDate.textContent = 'Vrijdag 17:00 – 20:00';
-  }
+  document.querySelectorAll('[data-q]').forEach(b => b.addEventListener('click', () => {
+    const n = $('q-' + b.dataset.id);
+    const d = dish(b.dataset.id);
+    const max = Math.max(1, d.portions - qtyInCart(d.id));
+    n.textContent = String(Math.min(max, Math.max(1, Number(n.textContent) + Number(b.dataset.q))));
+  }));
+  document.querySelectorAll('[data-add]').forEach(b => b.addEventListener('click', () => addToCart(b.dataset.add)));
+
+  $('comingGrid').innerHTML = COMING.map(c => `
+    <figure class="coming"><img src="${c.image}" alt="${c.name}" loading="lazy"/><figcaption>${c.name}</figcaption></figure>`).join('');
 }
 
-function renderTabs() {
-  const tabs = document.getElementById('categoryTabs');
-  if (!tabs) return;
-
-  tabs.innerHTML = categoryMap.map(category => `
-    <button class="pill ${state.activeCategory === category.id ? 'active' : ''}" data-category="${category.id}">${category.label}</button>
-  `).join('');
-
-  tabs.querySelectorAll('.pill').forEach(button => {
-    button.addEventListener('click', () => {
-      state.activeCategory = button.dataset.category;
-      renderTabs();
-      renderMenu();
-    });
-  });
-}
-
-function renderDish(product) {
-  const remaining = getRemaining(product);
-  const out = remaining <= 0;
-  const low = remaining > 0 && remaining <= 4;
-  const percent = Math.max(12, Math.round((remaining / Math.max(product.stock, 1)) * 100));
-
-  return `
-    <article class="dish ${out ? 'soldout' : ''}">
-      <div class="dish-image">
-        <img src="${product.image}" alt="${product.name}" loading="lazy" />
-      </div>
-      <div class="dish-body">
-        <div class="dish-top">
-          <h3>${product.name}</h3>
-          <span class="price">${formatMoney(product.price)}</span>
-        </div>
-        <p class="dish-desc">${product.desc}</p>
-        <div class="meta-row">
-          ${product.signature ? '<span class="chip accent">Signature</span>' : ''}
-          ${product.origin ? `<span class="chip">${product.origin}</span>` : ''}
-          ${product.category === 'weekend' ? '<span class="chip accent">Weekend special</span>' : '<span class="chip">Vers bereid</span>'}
-        </div>
-        <div class="stock ${out ? 'out' : low ? 'low' : ''}">${out ? 'Uitverkocht' : `Nog ${remaining} beschikbaar`}</div>
-        <div class="bar ${low ? 'low' : ''}"><span style="width:${percent}%"></span></div>
-        ${product.extras ? `
-          <details class="dish-details">
-            <summary>Extra's</summary>
-            <div class="options">
-              ${product.extras.map(extra => `
-                <label class="option">
-                  <span>${extra.name}</span>
-                  <b>+${formatMoney(extra.price)}</b>
-                </label>
-              `).join('')}
-            </div>
-          </details>
-        ` : ''}
-        <div class="dish-actions">
-          ${out ? `
-            <button class="waitlist-btn" data-waitlist="${product.id}">Zet me op de wachtlijst</button>
-          ` : `
-            <div class="qty-picker">
-              <button type="button" data-qty-change="-1" data-id="${product.id}">−</button>
-              <span data-qty-for="${product.id}">1</span>
-              <button type="button" data-qty-change="1" data-id="${product.id}">+</button>
-            </div>
-            <button class="add-btn" type="button" data-add="${product.id}">Toevoegen</button>
-          `}
-        </div>
-      </div>
-    </article>
-  `;
-}
-
-function renderGroup(categoryId) {
-  const items = products.filter(product => product.category === categoryId);
-  if (!items.length) return '';
-  const info = categoryInfo[categoryId];
-  return `
-    <div class="menu-group">
-      <div class="menu-group-head">
-        <h3>${info.title}</h3>
-        <p>${info.note}</p>
-      </div>
-      <div class="menu-grid">${items.map(renderDish).join('')}</div>
-    </div>
-  `;
-}
-
-function renderMenu() {
-  const menuGrid = document.getElementById('menuGrid');
-  if (!menuGrid) return;
-
-  const groups = state.activeCategory === 'alles'
-    ? ['vast', 'weekend', 'extra']
-    : [state.activeCategory];
-
-  menuGrid.innerHTML = groups.map(renderGroup).join('');
-
-  menuGrid.querySelectorAll('[data-add]').forEach(button => {
-    button.addEventListener('click', () => addToCart(button.dataset.add));
-  });
-
-  menuGrid.querySelectorAll('[data-qty-change]').forEach(button => {
-    button.addEventListener('click', () => changeQty(button.dataset.id, Number(button.dataset.qtyChange)));
-  });
-
-  menuGrid.querySelectorAll('[data-waitlist]').forEach(button => {
-    button.addEventListener('click', () => {
-      const product = products.find(item => item.id === button.dataset.waitlist);
-      showToast(`Je staat op de wachtlijst voor ${product.name}`);
-    });
-  });
-}
-
-function changeQty(productId, delta) {
-  const product = products.find(item => item.id === productId);
-  const qtyNode = document.querySelector(`[data-qty-for="${productId}"]`);
-  if (!qtyNode) return;
-
-  let qty = Number(qtyNode.textContent);
-  qty = Math.max(1, qty + delta);
-  const remaining = getRemaining(product);
-  qty = Math.min(qty, remaining || 1);
-  qtyNode.textContent = String(qty);
-}
-
-function showToast(message) {
-  const toast = document.getElementById('toast');
-  if (!toast) return;
-  toast.textContent = message;
-  toast.classList.add('show');
-  clearTimeout(showToast.timeoutId);
-  showToast.timeoutId = setTimeout(() => toast.classList.remove('show'), 2200);
-}
-
-function addToCart(productId) {
-  const product = products.find(item => item.id === productId);
-  const qtyNode = document.querySelector(`[data-qty-for="${productId}"]`);
-  const qty = qtyNode ? Number(qtyNode.textContent) : 1;
-  const remaining = getRemaining(product);
-
-  if (qty > remaining || remaining <= 0) {
-    showToast('Er zijn niet meer genoeg porties beschikbaar.');
-    return;
-  }
-
-  const existing = state.cart.find(item => item.id === productId);
-  if (existing) {
-    existing.qty += qty;
-  } else {
-    state.cart.push({ id: product.id, name: product.name, price: product.price, qty, extras: [] });
-  }
-
-  showToast(`${qty} x ${product.name} toegevoegd`);
-  renderCart();
-}
-
-function updateCartItem(index, delta) {
-  const item = state.cart[index];
-  if (!item) return;
-
-  item.qty += delta;
-  if (item.qty <= 0) {
-    state.cart.splice(index, 1);
-  }
-
-  renderCart();
-}
-
-function getSubtotal() {
-  return state.cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-}
-
-function renderCart() {
-  const drawerBody = document.getElementById('drawerBody');
-  const drawerFooter = document.getElementById('drawerFooter');
-  const cartCount = document.getElementById('cartCount');
-  const stickyTotal = document.getElementById('stickyTotal');
-  const stickyCart = document.getElementById('stickyCart');
-
-  if (cartCount) {
-    cartCount.textContent = String(state.cart.reduce((sum, item) => sum + item.qty, 0));
-  }
-
-  if (stickyTotal) {
-    stickyTotal.textContent = formatMoney(getSubtotal());
-  }
-
-  if (!drawerBody || !drawerFooter) return;
-
-  if (state.orderPlaced) {
-    drawerBody.innerHTML = `
-      <div class="empty-state">
-        <span class="script">✓</span>
-        <h3>SWITI SPANG is geregeld</h3>
-        <p style="margin-top: 10px; color: var(--muted);">Je bestelnummer is <strong>SW-2026-${String(Math.floor(Math.random() * 9000) + 1000)}</strong>.</p>
-        <p style="margin-top: 18px;">Haal vrijdag jouw bestelling op tussen 17:00 en 20:00.</p>
-      </div>
-    `;
-    drawerFooter.innerHTML = '<button class="checkout-btn" id="newOrderBtn">Nog een bestelling</button>';
-    const newOrderBtn = document.getElementById('newOrderBtn');
-    if (newOrderBtn) {
-      newOrderBtn.addEventListener('click', () => {
-        state.orderPlaced = false;
-        state.cart = [];
-        state.selectedSlot = '17:00';
-        renderCart();
-        closeCart();
-      });
-    }
-    if (stickyCart) stickyCart.classList.toggle('show', false);
-    return;
-  }
-
-  if (!state.cart.length) {
-    drawerBody.innerHTML = `
-      <div class="empty-state">
-        <span class="script">🛒</span>
-        <h3>Nog niets in je mandje</h3>
-        <p>Kies je favoriete gerechten uit het weekmenu en kom terug als je bent klaar.</p>
-      </div>
-    `;
-    drawerFooter.innerHTML = '';
-    if (stickyCart) stickyCart.classList.toggle('show', false);
-    return;
-  }
-
-  drawerBody.innerHTML = `
-    ${state.cart.map((item, index) => `
-      <div class="cart-item">
-        <div>
-          <strong>${item.name}</strong>
-          <small>${formatMoney(item.price)} per stuk</small>
-        </div>
-        <div class="cart-meta">
-          <strong>${formatMoney(item.price * item.qty)}</strong>
-          <div class="qty-adjust">
-            <button type="button" data-cart-change="-1" data-index="${index}">−</button>
-            <span>${item.qty}</span>
-            <button type="button" data-cart-change="1" data-index="${index}">+</button>
-          </div>
-        </div>
-      </div>
-    `).join('')}
-
-    <div class="cart-upsell">
-      <strong>Vergeet je niets?</strong>
-      <div class="chip-row">
-        <button class="small-chip" type="button" data-upsert="gember">Gemberdrank · €3,50</button>
-        <button class="small-chip" type="button" data-upsert="bojo">Bojo cake · €4,50</button>
-        <button class="small-chip" type="button" data-upsert="zuur">Zuur · €2,00</button>
-      </div>
-    </div>
-
-    <div class="field">
-      <label>Kies je ophaaltijd</label>
-      <div class="slot-grid">
-        ${['17:00','17:30','18:00','18:30','19:00','19:30'].map(slot => `
-          <button type="button" class="slot-button ${state.selectedSlot === slot ? 'active' : ''}" data-slot="${slot}">${slot}</button>
-        `).join('')}
-      </div>
-    </div>
-
-    <div class="field">
-      <label>Naam</label>
-      <input type="text" placeholder="Voor- en achternaam" />
-    </div>
-    <div class="field">
-      <label>E-mail</label>
-      <input type="email" placeholder="voor je bevestiging" />
-    </div>
-    <div class="field">
-      <label>Telefoon</label>
-      <input type="tel" placeholder="voor als er iets is" />
-    </div>
-  `;
-
-  drawerFooter.innerHTML = `
-    <div class="totals">
-      <div class="line-total"><span>Subtotaal</span><strong>${formatMoney(getSubtotal())}</strong></div>
-      <div class="line-total"><span>Afhalen</span><strong>Gratis</strong></div>
-      <div class="line-total"><span>Totaal</span><strong>${formatMoney(getSubtotal())}</strong></div>
-    </div>
-    <button class="checkout-btn" type="button" id="checkoutBtn">Betalen met Mollie</button>
-    <div class="drawer-note">Je haalt op om ${state.selectedSlot} op vrijdag.</div>
-  `;
-
-  const checkoutBtn = document.getElementById('checkoutBtn');
-  if (checkoutBtn) {
-    checkoutBtn.addEventListener('click', () => {
-      state.orderPlaced = true;
-      renderCart();
-      showToast('Bestelling geplaatst');
-    });
-  }
-
-  drawerBody.querySelectorAll('[data-cart-change]').forEach(button => {
-    button.addEventListener('click', () => updateCartItem(Number(button.dataset.index), Number(button.dataset.cartChange)));
-  });
-
-  drawerBody.querySelectorAll('[data-slot]').forEach(button => {
-    button.addEventListener('click', () => {
-      state.selectedSlot = button.dataset.slot;
-      renderCart();
-    });
-  });
-
-  drawerBody.querySelectorAll('[data-upsert]').forEach(button => {
-    button.addEventListener('click', () => {
-      const id = button.dataset.upsert;
-      const item = products.find(product => product.id === id);
-      if (!item) return;
-      const index = state.cart.findIndex(entry => entry.id === id);
-      if (index >= 0) {
-        state.cart[index].qty += 1;
-      } else {
-        state.cart.push({ id: item.id, name: item.name, price: item.price, qty: 1, extras: [] });
-      }
-      renderCart();
-    });
-  });
-
-  if (stickyCart) stickyCart.classList.toggle('show', state.cart.length > 0 && !state.orderPlaced);
-}
-
-function openCart() {
-  const cartDrawer = document.getElementById('cartDrawer');
-  const scrim = document.getElementById('scrim');
-  if (!cartDrawer || !scrim) return;
-  cartDrawer.classList.add('open');
-  scrim.classList.add('show');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeCart() {
-  const cartDrawer = document.getElementById('cartDrawer');
-  const scrim = document.getElementById('scrim');
-  if (!cartDrawer || !scrim) return;
-  cartDrawer.classList.remove('open');
-  scrim.classList.remove('show');
-  document.body.style.overflow = '';
-}
-
-function initHomePage() {
-  const openCartBtn = document.getElementById('openCartBtn');
-  const stickyCartBtn = document.getElementById('stickyCartBtn');
-  const closeCartBtn = document.getElementById('closeCartBtn');
-  const scrim = document.getElementById('scrim');
-
-  if (openCartBtn) openCartBtn.addEventListener('click', openCart);
-  if (stickyCartBtn) stickyCartBtn.addEventListener('click', openCart);
-  if (closeCartBtn) closeCartBtn.addEventListener('click', closeCart);
-  if (scrim) scrim.addEventListener('click', closeCart);
-
-  document.addEventListener('keydown', event => {
-    if (event.key === 'Escape') closeCart();
-  });
-
-  renderCountdown();
-  setInterval(renderCountdown, 1000);
-  renderTabs();
-  renderBoard();
+function addToCart(dishId) {
+  const d = dish(dishId);
+  const qty = Number($('q-' + dishId).textContent);
+  const variantEl = document.querySelector(`input[name="var-${dishId}"]:checked`);
+  const variantId = variantEl ? variantEl.value : d.variants[0].id;
+  const extras = [...document.querySelectorAll(`input[name="ex-${dishId}"]:checked`)].map(e => e.value);
+  if (qtyInCart(dishId) + qty > d.portions) { toast(`Er zijn maximaal ${d.portions} porties ${d.name}.`); return; }
+  const key = [dishId, variantId, ...extras.sort()].join('|');
+  const found = state.cart.find(i => i.key === key);
+  if (found) found.qty += qty; else state.cart.push({ key, dishId, variantId, extras, qty });
+  state.sent = false;
+  toast(`${qty}× ${d.name} toegevoegd`);
   renderMenu();
   renderCart();
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initHomePage);
-} else {
-  initHomePage();
+/* ---------- cart + checkout ---------- */
+function readForm() {
+  const v = id => ($(id) ? $(id).value.trim() : '');
+  return { name: v('fName'), phone: v('fPhone'), street: v('fStreet'), postcode: v('fPostcode').toUpperCase().replace(/\s+/g, ''), note: v('fNote') };
 }
+
+function renderCart() {
+  const count = state.cart.reduce((s, i) => s + i.qty, 0);
+  $('cartCount').textContent = String(count);
+  $('stickyTotal').textContent = money(subtotal() + deliveryFee());
+  $('stickyCart').classList.toggle('show', count > 0 && !state.sent);
+
+  const body = $('drawerBody');
+  const foot = $('drawerFooter');
+
+  if (state.sent) {
+    body.innerHTML = `
+      <div class="empty-state">
+        <span class="script">✓</span>
+        <h3>Bijna klaar!</h3>
+        <p style="margin-top:12px">Je bestelling staat in WhatsApp. <strong>Druk daar op verzenden</strong>, anders komt hij niet bij ons aan.</p>
+        <p style="margin-top:12px;color:var(--muted)">Je krijgt van ons een bevestiging en een betaalverzoek. Pas na betaling staat je bestelling vast.</p>
+      </div>`;
+    foot.innerHTML = '<button class="checkout-btn" id="resendBtn">WhatsApp opnieuw openen</button><button class="ghost-btn" id="newOrderBtn">Nieuwe bestelling</button>';
+    $('resendBtn').addEventListener('click', openWhatsApp);
+    $('newOrderBtn').addEventListener('click', () => { state.cart = []; state.sent = false; renderCart(); renderMenu(); closeCart(); });
+    return;
+  }
+
+  if (!count) {
+    body.innerHTML = `<div class="empty-state"><span class="script">🍲</span><h3>Nog niets gekozen</h3><p>Kies je gerechten uit het menu van ${esc(CONFIG.drop.label.toLowerCase())}.</p></div>`;
+    foot.innerHTML = '';
+    return;
+  }
+
+  const prev = readForm();
+  const slots = state.mode === 'bezorgen' ? CONFIG.delivery.slots : CONFIG.pickup.slots;
+  if (!slots.includes(state.slot)) state.slot = '';
+
+  body.innerHTML = `
+    ${state.cart.map((i, idx) => {
+      const L = lineInfo(i);
+      return `<div class="cart-item"><div><strong>${esc(L.label)}</strong><small>${money(L.unit)} per stuk</small></div>
+        <div class="cart-meta"><strong>${money(L.unit * i.qty)}</strong>
+        <div class="qty-adjust"><button type="button" data-c="-1" data-i="${idx}">−</button><span>${i.qty}</span><button type="button" data-c="1" data-i="${idx}">+</button></div></div></div>`;
+    }).join('')}
+
+    <div class="field"><label>Afhalen of bezorgen?</label>
+      <div class="toggle">
+        <button type="button" class="${state.mode === 'afhalen' ? 'active' : ''}" data-mode="afhalen">Afhalen</button>
+        <button type="button" class="${state.mode === 'bezorgen' ? 'active' : ''}" data-mode="bezorgen">Bezorgen</button>
+      </div>
+      <p class="hint">${state.mode === 'afhalen'
+        ? `Afhalen in ${CONFIG.pickup.area}. Het adres krijg je bij je bevestiging.`
+        : `Alleen binnen Almere. Bezorgen ${money(CONFIG.delivery.fee)}, gratis vanaf ${money(CONFIG.delivery.freeFrom)}.`}</p>
+    </div>
+
+    <div class="field"><label>${state.mode === 'afhalen' ? 'Ophaaltijd' : 'Tijdvak'} op ${esc(CONFIG.drop.dayShort)}</label>
+      <div class="slot-grid">${slots.map(s => `<button type="button" class="slot-button ${state.slot === s ? 'active' : ''}" data-slot="${s}">${s}</button>`).join('')}</div>
+    </div>
+
+    <div class="field"><label for="fName">Naam</label><input id="fName" type="text" autocomplete="name" placeholder="Voor- en achternaam" value="${esc(prev.name)}"/></div>
+    <div class="field"><label for="fPhone">Telefoon</label><input id="fPhone" type="tel" autocomplete="tel" placeholder="Voor als er iets is" value="${esc(prev.phone)}"/></div>
+    ${state.mode === 'bezorgen' ? `
+      <div class="field"><label for="fStreet">Straat + huisnummer</label><input id="fStreet" type="text" autocomplete="street-address" value="${esc(prev.street)}"/></div>
+      <div class="field"><label for="fPostcode">Postcode</label><input id="fPostcode" type="text" autocomplete="postal-code" placeholder="13.. ..  (Almere)" value="${esc(prev.postcode)}"/></div>` : ''}
+    <div class="field"><label for="fNote">Opmerking of allergie (optioneel)</label><input id="fNote" type="text" value="${esc(prev.note)}"/></div>
+  `;
+
+  const fee = deliveryFee();
+  const ready = !!CONFIG.whatsapp;
+  foot.innerHTML = `
+    <div class="totals">
+      <div class="line-total"><span>Subtotaal</span><strong>${money(subtotal())}</strong></div>
+      <div class="line-total"><span>${state.mode === 'bezorgen' ? 'Bezorgen' : 'Afhalen'}</span><strong>${fee ? money(fee) : 'Gratis'}</strong></div>
+      <div class="line-total total"><span>Totaal</span><strong>${money(subtotal() + fee)}</strong></div>
+    </div>
+    <button class="checkout-btn wa" type="button" id="checkoutBtn" ${ready ? '' : 'disabled'}>${ready ? 'Bestelling versturen via WhatsApp' : 'Bestellen opent binnenkort'}</button>
+    <div class="drawer-note">Je betaalt via een betaalverzoek dat je na je bestelling van ons krijgt.</div>
+  `;
+
+  body.querySelectorAll('[data-c]').forEach(b => b.addEventListener('click', () => {
+    const i = state.cart[Number(b.dataset.i)];
+    const d = dish(i.dishId);
+    const delta = Number(b.dataset.c);
+    if (delta > 0 && qtyInCart(d.id) >= d.portions) { toast(`Maximaal ${d.portions} porties ${d.name}.`); return; }
+    i.qty += delta;
+    if (i.qty <= 0) state.cart.splice(Number(b.dataset.i), 1);
+    renderCart(); renderMenu();
+  }));
+  body.querySelectorAll('[data-mode]').forEach(b => b.addEventListener('click', () => { state.mode = b.dataset.mode; renderCart(); }));
+  body.querySelectorAll('[data-slot]').forEach(b => b.addEventListener('click', () => { state.slot = b.dataset.slot; renderCart(); }));
+  const cb = $('checkoutBtn');
+  if (cb) cb.addEventListener('click', checkout);
+}
+
+function buildMessage(f) {
+  const lines = [];
+  lines.push(`Bestelling Switi Spang – ${CONFIG.drop.label}`);
+  lines.push('');
+  state.cart.forEach(i => { const L = lineInfo(i); lines.push(`${i.qty}× ${L.label} – ${money(L.unit * i.qty)}`); });
+  lines.push('');
+  const fee = deliveryFee();
+  if (state.mode === 'bezorgen') lines.push(`Bezorgen: ${fee ? money(fee) : 'gratis'}`);
+  lines.push(`Totaal: ${money(subtotal() + fee)}`);
+  lines.push('');
+  lines.push(state.mode === 'bezorgen' ? `Bezorgen tussen ${state.slot}` : `Afhalen om ${state.slot}`);
+  if (state.mode === 'bezorgen') lines.push(`Adres: ${f.street}, ${f.postcode} Almere`);
+  lines.push(`Naam: ${f.name}`);
+  lines.push(`Telefoon: ${f.phone}`);
+  if (f.note) lines.push(`Opmerking: ${f.note}`);
+  return lines.join('\n');
+}
+
+function checkout() {
+  const f = readForm();
+  if (!state.slot) return toast(state.mode === 'bezorgen' ? 'Kies een tijdvak.' : 'Kies een ophaaltijd.');
+  if (!f.name) return toast('Vul je naam in.');
+  if (f.phone.replace(/\D/g, '').length < 9) return toast('Vul je telefoonnummer in.');
+  if (state.mode === 'bezorgen') {
+    if (!f.street) return toast('Vul je straat en huisnummer in.');
+    const pc = Number(f.postcode.slice(0, 4));
+    if (!/^\d{4}[A-Z]{2}$/.test(f.postcode) || pc < 1311 || pc > 1364) return toast('We bezorgen alleen in Almere (postcode 1311–1364).');
+  }
+  state.lastMessage = buildMessage(f);
+  openWhatsApp();
+  state.sent = true;
+  renderCart();
+}
+
+function openWhatsApp() {
+  if (!CONFIG.whatsapp || !state.lastMessage) return;
+  window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(state.lastMessage)}`, '_blank');
+}
+
+/* ---------- ui helpers ---------- */
+function toast(msg) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toast.t);
+  toast.t = setTimeout(() => t.classList.remove('show'), 2400);
+}
+function openCart() { $('cartDrawer').classList.add('open'); $('scrim').classList.add('show'); document.body.style.overflow = 'hidden'; }
+function closeCart() { $('cartDrawer').classList.remove('open'); $('scrim').classList.remove('show'); document.body.style.overflow = ''; }
+
+function init() {
+  document.querySelectorAll('[data-ig]').forEach(a => { a.href = CONFIG.instagram; });
+  document.querySelectorAll('[data-tt]').forEach(a => { a.href = CONFIG.tiktok; });
+  $('openCartBtn').addEventListener('click', openCart);
+  $('stickyCartBtn').addEventListener('click', openCart);
+  $('closeCartBtn').addEventListener('click', closeCart);
+  $('scrim').addEventListener('click', closeCart);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCart(); });
+  renderBoard();
+  renderCountdown();
+  setInterval(renderCountdown, 1000);
+  renderMenu();
+  renderCart();
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();

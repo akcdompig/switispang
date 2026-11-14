@@ -650,3 +650,63 @@ footer {
   .countdown { gap: 6px; }
   .countdown .box { min-width: auto; flex: 1; }
 }
+
+/* ---------- Switi Spang launch (wo/za, bezorgen, WhatsApp) ---------- */
+.brand { display: inline-flex; align-items: center; gap: 10px; }
+.brand-logo { width: 42px; height: 42px; object-fit: contain; }
+.mini-status .dot.off { background: #c0563a; }
+.badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.menu-grid.two { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.dish-image { height: 260px; }
+.story-text { color: var(--paper); margin-top: 10px; font-size: 0.95rem; }
+.allergen { color: var(--muted); font-size: 0.82rem; margin-top: 8px; }
+.choice { display: grid; gap: 8px; margin-top: 16px; }
+.choice-opt {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 14px; border: 1px solid var(--line); border-radius: 14px;
+  background: rgba(255,255,255,0.03); cursor: pointer;
+}
+.choice-opt.extra { margin-top: 8px; }
+.choice-opt span { flex: 1; }
+.choice-opt b { color: var(--accent-2); }
+.choice-opt input { accent-color: var(--accent); width: 18px; height: 18px; }
+.choice-opt:has(input:checked) { border-color: rgba(224,174,66,0.6); background: rgba(224,174,66,0.08); }
+.add-btn:disabled, .waitlist-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.next-drop { margin-top: 22px; color: var(--muted); font-size: 0.95rem; }
+.coming-wrap { margin-top: 56px; }
+.coming-wrap h3 { font-size: clamp(1.5rem, 3vw, 2rem); }
+.coming-wrap > p { color: var(--muted); margin-top: 6px; }
+.coming-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
+.coming { margin: 0; position: relative; border-radius: 14px; overflow: hidden; aspect-ratio: 4 / 5; }
+.coming img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.8); }
+.coming figcaption {
+  position: absolute; left: 0; right: 0; bottom: 0; padding: 26px 12px 12px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.85));
+  font-family: "Playfair Display", serif; font-weight: 700; font-size: 1.05rem;
+}
+.toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.toggle button {
+  padding: 12px; border-radius: 999px; border: 1px solid var(--line);
+  background: transparent; color: var(--paper); font-weight: 800; cursor: pointer;
+}
+.toggle button.active { background: var(--accent); color: #1a120d; border-color: var(--accent); }
+.hint { color: var(--muted); font-size: 0.82rem; margin-top: 8px; }
+.line-total.total { color: var(--paper); font-weight: 800; }
+.checkout-btn.wa { background: #25d366; color: #0b2a17; }
+.checkout-btn:disabled { background: #4a3f37; color: var(--muted); cursor: not-allowed; }
+.ghost-btn {
+  width: 100%; margin-top: 10px; padding: 14px; border-radius: 999px;
+  border: 1px solid var(--line); background: transparent; color: var(--paper); font-weight: 800; cursor: pointer;
+}
+@media (max-width: 760px) {
+  .coming-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .mini-status { display: none; }
+  .brand { font-size: 1.15rem; }
+}
+.cart-trigger { white-space: nowrap; }
+.checkout-btn.wa { letter-spacing: 0.04em; }
+@media (max-width: 760px) {
+  .topbar-inner { gap: 12px; min-height: 64px; }
+  .cart-trigger { margin-left: auto; padding: 9px 14px; font-size: 0.72rem; letter-spacing: 0.06em; }
+  .brand-logo { width: 34px; height: 34px; }
+}
