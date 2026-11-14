@@ -94,7 +94,7 @@ const COMING = [
 
 // De Switi Spang-keuken: wat er de komende weken langskomt (geen prijzen, wisselt per week).
 const REPERTOIRE = [
-  { icon: '🍲', title: 'Soepen', sub: 'Traditioneel, met rijst', items: ['Gritibana', 'Saoto', 'Okersoep', 'Bravoe', 'Tayersoep', 'Pindasoep', 'Cassavesoep'] },
+  { icon: '🍲', title: 'Soepen', sub: 'Traditioneel, met rijst · maaltijdsoep €13,50 · saoto (basis) €10,50', items: ['Gritibana', 'Saoto', 'Okersoep', 'Bravoe', 'Tayersoep', 'Pindasoep', 'Cassavesoep'] },
   { icon: '🫓', title: 'Roti', sub: 'Met aardappel, kousenband en ei', items: ['Roti kip (kippenbout)', 'Roti kip (kippendijfilet)', 'Roti lams', 'Roti masala doks', 'Roti vega'] },
   { icon: '🍛', title: 'Rijstgerechten', sub: 'Gestoofd of geroosterd, zoals thuis', items: ['Rijst met kip en antroewa', 'Rijst met kip en sopropo', 'Rijst met gestoofd rundvlees en Surinaamse zuurkool, met aardappel en kiprookworst', 'Witte rijst met kousenband, aardappel en garnalen', 'Masoesa moksi alesi met geroosterde kip', 'Chow mein met geroosterde kip'] },
   { icon: '🥟', title: 'Buns', sub: 'Van traditie naar trendy', items: ['Garnalen bun: garnalen in pittige tomatenjus, extra spicy saus optioneel', 'Redi Fowru bun: geroosterde kip met rode kruiden en een lekker sausje', 'Met frisse toppings als prei en komkommer'] },
