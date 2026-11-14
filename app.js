@@ -77,7 +77,7 @@ const COMING = [
 const REPERTOIRE = [
   { icon: '🍲', title: 'Soepen', sub: 'Traditioneel, met rijst', items: ['Gritibana', 'Saoto', 'Okersoep', 'Bravoe', 'Tayersoep', 'Pindasoep', 'Cassavesoep'] },
   { icon: '🫓', title: 'Roti', sub: 'Met aardappel, kousenband en ei', items: ['Roti kip (kippenbout)', 'Roti kip (kippendijfilet)', 'Roti lams', 'Roti masala doks', 'Roti vega'] },
-  { icon: '🍛', title: 'Rijstgerechten', sub: 'Gestoofd of geroosterd, zoals thuis', items: ['Rijst met kip en antroewa', 'Rijst met kip en sopropo', 'Rijst met gestoofd rundvlees en Surinaamse zuurkool, met aardappel en kiprookworst', 'Witte rijst met kousenband, aardappel en garnalen', 'Moksi alesi met geroosterde kip', 'Chow mein met geroosterde kip'] },
+  { icon: '🍛', title: 'Rijstgerechten', sub: 'Gestoofd of geroosterd, zoals thuis', items: ['Rijst met kip en antroewa', 'Rijst met kip en sopropo', 'Rijst met gestoofd rundvlees en Surinaamse zuurkool, met aardappel en kiprookworst', 'Witte rijst met kousenband, aardappel en garnalen', 'Masoesa moksi alesi met geroosterde kip', 'Chow mein met geroosterde kip'] },
   { icon: '🥟', title: 'Buns', sub: 'Van traditie naar trendy', items: ['Garnalen bun: garnalen in pittige tomatenjus, extra spicy saus optioneel', 'Redi Fowru bun: geroosterde kip met rode kruiden en een lekker sausje', 'Met frisse toppings als prei en komkommer'] },
   { icon: '🦀', title: 'Seafood boil · Paramaribo style', sub: 'Binnenkort', items: ['Krab, grote garnalen, rivierkreeft en spinkrab', 'Met krieltjes, maïs en worst', 'In masala en kokosmelk', 'Hoe pittig? Dat kies je zelf'] },
   { icon: '✨', title: 'Weekend specials', sub: 'Surinaams in een ander jasje', items: ['Elke week een verrassing', 'Volg Instagram en onze WhatsApp-community'] },
