@@ -7,6 +7,9 @@ const CONFIG = {
   // Leeg = bestelknop staat uit.
   whatsapp: '31624584854',
 
+  // Bestellijn: false = site staat online, maar bestellen opent binnenkort. Zet op true zodra alles goedgekeurd is.
+  orderingOpen: false,
+
   drop: {
     label: 'Woensdag 18 november',
     dayShort: 'woensdag',
@@ -71,7 +74,7 @@ const MENU = [
     portions: 10,
     image: 'img/saoto.jpg',
     origin: 'Javaanse keuken · 1890',
-    desc: 'Onze basissoep, altijd te bestellen. Heldere, kruidige kippensoep met kip, taugé, gebakken aardappel, ei en gebakken uitjes. Met witte rijst, sambal apart.',
+    desc: 'Onze basissoep, altijd te bestellen. Een volle maaltijdsoep: heldere, kruidige kippensoep met kip, taugé, gebakken aardappel, ei en gebakken uitjes. Met witte rijst, sambal apart.',
     story: 'Op 9 augustus 1890 kwamen de eerste Javaanse contractarbeiders aan in Suriname. Uit hun soto ayam groeide saoto, met Surinaamse ingrediënten. Nu is het de soep van heel Suriname.',
     allergens: 'Ei, soja, gluten, selderij',
     variants: [{ id: 'std', name: 'met rijst', price: 10.5 }],
@@ -94,7 +97,7 @@ const COMING = [
 
 // De Switi Spang-keuken: wat er de komende weken langskomt (geen prijzen, wisselt per week).
 const REPERTOIRE = [
-  { icon: '🍲', title: 'Soepen', sub: 'Traditioneel, met rijst · maaltijdsoep €13,50 · saoto (basis) €10,50', items: ['Gritibana', 'Saoto', 'Okersoep', 'Bravoe', 'Tayersoep', 'Pindasoep', 'Cassavesoep'] },
+  { icon: '🍲', title: 'Soepen', sub: 'Maaltijdsoepen met rijst · €13,50 · saoto (basis) €10,50', items: ['Gritibana', 'Saoto', 'Okersoep', 'Bravoe', 'Tayersoep', 'Pindasoep', 'Cassavesoep'] },
   { icon: '🫓', title: 'Roti', sub: 'Met aardappel, kousenband en ei', items: ['Roti kip (kippenbout)', 'Roti kip (kippendijfilet)', 'Roti lams', 'Roti masala doks', 'Roti vega'] },
   { icon: '🍛', title: 'Rijstgerechten', sub: 'Gestoofd of geroosterd, zoals thuis', items: ['Rijst met kip en antroewa', 'Rijst met kip en sopropo', 'Rijst met gestoofd rundvlees en Surinaamse zuurkool, met aardappel en kiprookworst', 'Witte rijst met kousenband, aardappel en garnalen', 'Masoesa moksi alesi met geroosterde kip', 'Chow mein met geroosterde kip'] },
   { icon: '🥟', title: 'Buns', sub: 'Van traditie naar trendy', items: ['Garnalen bun: garnalen in pittige tomatenjus, extra spicy saus optioneel', 'Redi Fowru bun: geroosterde kip met rode kruiden en een lekker sausje', 'Met frisse toppings als prei en komkommer'] },
@@ -116,8 +119,9 @@ const $ = id => document.getElementById(id);
 const money = v => `€${Number(v).toFixed(2).replace('.', ',')}`;
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
+function isSoon() { return !CONFIG.orderingOpen; }
 function isClosed() {
-  return Date.now() > new Date(CONFIG.drop.deadline).getTime();
+  return isSoon() || Date.now() > new Date(CONFIG.drop.deadline).getTime();
 }
 
 function extraAllowed(e, variantId) { return !e.only || e.only.includes(variantId); }
@@ -162,16 +166,17 @@ function renderBoard() {
     const own = d.variants.filter(v => v.portions).map(v => ` · ${v.portions} ${v.unit || 'stuks'}`).join('');
     return `<li><span class="board-item-name">${d.name}${d.fixed ? ' <small>(altijd)</small>' : ''}</span><span class="board-item-stock">${d.soldOut ? 'Uitverkocht' : `${d.portions} porties${own}`}</span></li>`;
   }).join('');
-  $('deadlineLabel').textContent = isClosed() ? 'Bestellen is gesloten voor deze ronde' : `Bestellen sluit ${CONFIG.drop.deadlineLabel}`;
+  $('deadlineLabel').textContent = isSoon() ? 'Bestellen opent binnenkort. Volg ons op Instagram en WhatsApp.' : isClosed() ? 'Bestellen is gesloten voor deze ronde' : `Bestellen sluit ${CONFIG.drop.deadlineLabel}`;
   document.querySelectorAll('[data-deadline]').forEach(n => { n.textContent = CONFIG.drop.deadlineLabel; });
   document.querySelectorAll('[data-droplabel]').forEach(n => { n.textContent = CONFIG.drop.label; });
   $('nextDrop').textContent = CONFIG.next;
-  $('statusText').textContent = isClosed() ? 'Bestellen gesloten' : 'Bestellen open';
+  $('statusText').textContent = isSoon() ? 'Bestellen opent binnenkort' : isClosed() ? 'Bestellen gesloten' : 'Bestellen open';
   $('statusDot').classList.toggle('off', isClosed());
 }
 
 function renderCountdown() {
   const el = $('countdown');
+  if (isSoon()) { el.innerHTML = '<div class="box"><strong>Binnenkort</strong><span>bestellen open</span></div>'; return; }
   const diff = Math.max(0, Math.floor((new Date(CONFIG.drop.deadline).getTime() - Date.now()) / 1000));
   if (!diff) { el.innerHTML = '<div class="box"><strong>Gesloten</strong><span>deze ronde</span></div>'; return; }
   const parts = [['D', Math.floor(diff / 86400)], ['U', Math.floor(diff % 86400 / 3600)], ['M', Math.floor(diff % 3600 / 60)], ['S', diff % 60]];
@@ -199,7 +204,7 @@ function dishCard(d, closed) {
         ${d.extras.map(e => `
           <label class="choice-opt extra" ${e.only ? `data-only="${e.only.join(',')}"` : ''}><input type="checkbox" name="ex-${d.id}" value="${e.id}"/><span>${e.name}${e.hint ? `<small class="opt-hint">${e.hint}</small>` : ''}</span><b>+${money(e.price)}</b></label>`).join('')}
         <div class="dish-actions">
-          ${closed ? '<button class="waitlist-btn" disabled>Bestellen gesloten</button>' : d.soldOut ? '<button class="waitlist-btn" disabled>Uitverkocht</button>' : `
+          ${closed ? `<button class="waitlist-btn" disabled>${isSoon() ? 'Bestellen opent binnenkort' : 'Bestellen gesloten'}</button>` : d.soldOut ? '<button class="waitlist-btn" disabled>Uitverkocht</button>' : `
           <div class="qty-picker">
             <button type="button" data-q="-1" data-id="${d.id}" aria-label="Minder">−</button>
             <span id="q-${d.id}">1</span>
@@ -365,7 +370,7 @@ function renderCart() {
   `;
 
   const fee = deliveryFee();
-  const ready = !!CONFIG.whatsapp;
+  const ready = !!CONFIG.whatsapp && !isClosed();
   foot.innerHTML = `
     <div class="totals">
       <div class="line-total"><span>Subtotaal</span><strong>${money(subtotal())}</strong></div>
