@@ -5,7 +5,7 @@
 const CONFIG = {
   // WhatsApp-nummer voor bestellingen, internationaal zonder + of 0 vooraan (06 12345678 -> '31612345678').
   // Leeg = bestelknop staat uit.
-  whatsapp: '',
+  whatsapp: '31624584854',
 
   drop: {
     label: 'Woensdag 18 november',
@@ -60,6 +60,19 @@ const MENU = [
     allergens: 'Gluten, selderij',
     variants: [{ id: 'std', name: 'met rijst', price: 13.5 }],
     extras: []
+  },
+  {
+    id: 'saoto',
+    name: 'Saoto',
+    fixed: true, // basissoep: altijd te bestellen, elke ronde
+    portions: 10,
+    image: 'img/saoto.jpg',
+    origin: 'Javaanse keuken · 1890',
+    desc: 'Onze basissoep, altijd te bestellen. Heldere, kruidige kippensoep met kip, taugé, gebakken aardappel, ei en gebakken uitjes. Met witte rijst, sambal apart.',
+    story: 'Op 9 augustus 1890 kwamen de eerste Javaanse contractarbeiders aan in Suriname. Uit hun soto ayam groeide saoto, met Surinaamse ingrediënten. Nu is het de soep van heel Suriname.',
+    allergens: 'Ei, soja, gluten, selderij',
+    variants: [{ id: 'std', name: 'met rijst', price: 10.5 }],
+    extras: []
   }
 ];
 
@@ -72,7 +85,6 @@ const DRINKS = [
 
 const COMING = [
   { name: 'Okersoep', image: 'img/okersoep.jpg' },
-  { name: 'Saoto', image: 'img/saoto.jpg' },
   { name: 'Bravoe', image: 'img/bravoe.jpg' },
   { name: 'Tayersoep', image: 'img/tayersoep.jpg' }
 ];
@@ -161,7 +173,7 @@ function renderMenu() {
       <div class="dish-body">
         <div class="dish-top"><h3>${d.name}</h3><span class="price">${d.variants.length > 1 ? 'vanaf ' : ''}${money(Math.min(...d.variants.map(v => v.price)))}</span></div>
         <p class="dish-desc">${d.desc}</p>
-        <div class="meta-row"><span class="chip accent">${d.origin}</span><span class="chip">100% halal</span><span class="chip">Max. ${d.portions} porties</span></div>
+        <div class="meta-row">${d.fixed ? '<span class="chip accent">Altijd te bestellen</span>' : ''}<span class="chip accent">${d.origin}</span><span class="chip">100% halal</span><span class="chip">Max. ${d.portions} porties</span></div>
         <details class="dish-details"><summary>Het verhaal</summary><p class="story-text">${d.story}</p><p class="allergen">Allergenen: ${d.allergens}. Alles halal; sporen van andere allergenen mogelijk.</p></details>
         ${d.variants.length > 1 ? `
           <div class="choice" role="radiogroup" aria-label="Kies je vlees">
