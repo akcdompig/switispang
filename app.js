@@ -31,7 +31,7 @@ const CONFIG = {
 const MENU = [
   {
     id: 'roti',
-    name: 'Roti',
+    name: 'Roti kip',
     portions: 10,
     image: 'img/roti-kip.jpg',
     origin: 'India → Suriname · 1873',
@@ -41,11 +41,13 @@ const MENU = [
     variants: [
       { id: 'bout', name: 'met kippenbout', price: 17.5 },
       { id: 'filet', name: 'met kippendijfilet', price: 18.5 },
-      { id: 'vega', name: 'vega (zonder kip) 🌱', price: 15.0 }
+      { id: 'vega', name: 'vega (zonder kip) 🌱', cart: 'Roti vega', price: 15.0 }
     ],
     extras: [
       // Rotirol alleen met kippendijfilet of lams (variant-id 'filet' of 'lams').
       { id: 'rol', name: 'Maak er een rotirol van', cart: '(als rotirol)', price: 1.0, only: ['filet', 'lams'], hint: 'alleen met kippendijfilet of lams' },
+      { id: 'extra', name: 'Roti kip extra', cart: '+ extra vlees en groente', price: 4.0, only: ['bout', 'filet', 'lams'], hint: 'extra stuk vlees en meer groente' },
+      { id: 'ei', name: 'Extra ei', price: 1.5 },
       { id: 'roti', name: 'Extra verse rotiplaat', price: 3.0 }
     ]
   },
@@ -126,7 +128,7 @@ function lineInfo(item) {
   const v = d.variants.find(x => x.id === item.variantId);
   const ex = d.extras.filter(e => item.extras.includes(e.id) && extraAllowed(e, item.variantId));
   const unit = v.price + ex.reduce((s, e) => s + e.price, 0);
-  const label = [d.name, v.name, ...ex.map(e => e.cart || '+ ' + e.name.toLowerCase())].filter(Boolean).join(' ');
+  const label = [v.cart || d.name, v.cart ? '' : v.name, ...ex.map(e => e.cart || '+ ' + e.name.toLowerCase())].filter(Boolean).join(' ');
   return { d, v, ex, unit, label };
 }
 
