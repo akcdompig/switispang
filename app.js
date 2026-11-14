@@ -180,7 +180,7 @@ function renderBoard() {
   $('dropDate').textContent = CONFIG.drop.label;
   $('boardList').innerHTML = MENU.map(d => {
     const own = d.variants.filter(v => v.portions).map(v => ` · ${v.portions} ${v.unit || 'stuks'}`).join('');
-    return `<li><span class="board-item-name">${d.name}${d.fixed ? ' <small>(altijd)</small>' : ''}</span><span class="board-item-stock">${d.soldOut ? 'Uitverkocht' : 'Beperkt'}</span></li>`;
+    return `<li><span class="board-item-name">${d.name}${d.fixed ? ' <small>(altijd)</small>' : ''}</span><span class="board-item-stock ${d.soldOut ? 'out' : ''}">${d.soldOut ? 'Uitverkocht' : `${d.variants.length > 1 ? 'vanaf ' : ''}${money(Math.min(...d.variants.map(v => v.price)))}`}</span></li>`;
   }).join('');
   $('deadlineLabel').textContent = isSoon() ? 'Bestellen opent binnenkort. Volg ons op Instagram en WhatsApp.' : isClosed() ? 'Bestellen is gesloten voor deze ronde' : `Bestellen sluit ${CONFIG.drop.deadlineLabel}`;
   document.querySelectorAll('[data-deadline]').forEach(n => { n.textContent = CONFIG.drop.deadlineLabel; });
@@ -210,7 +210,7 @@ function dishCard(d, closed) {
       <div class="dish-body">
         <div class="dish-top"><h3>${d.name}</h3><span class="price">${d.variants.length > 1 ? 'vanaf ' : ''}${money(Math.min(...d.variants.map(v => v.price)))}</span></div>
         <p class="dish-desc">${d.desc}</p>
-        <div class="meta-row">${d.fixed ? '<span class="chip accent">Basis · altijd te bestellen</span>' : ''}<span class="chip accent">${d.origin}</span><span class="chip">100% halal</span><span class="chip">Beperkt aantal porties</span></div>
+        <div class="meta-row">${d.fixed ? '<span class="chip accent">Basis · altijd te bestellen</span>' : ''}<span class="chip accent">${d.origin}</span><span class="chip">100% halal</span><span class="chip">Beperkt aantal beschikbaar</span></div>
         <p class="allergen visible"><b>Allergenen:</b> ${d.allergens}. <a href="allergenen.html">Meer info</a></p>
         <details class="dish-details"><summary>Het verhaal</summary><p class="story-text">${d.story}</p></details>
         ${d.variants.length > 1 ? `
