@@ -206,7 +206,8 @@ function dishCard(d, closed) {
         <div class="dish-top"><h3>${d.name}</h3><span class="price">${d.variants.length > 1 ? 'vanaf ' : ''}${money(Math.min(...d.variants.map(v => v.price)))}</span></div>
         <p class="dish-desc">${d.desc}</p>
         <div class="meta-row">${d.fixed ? '<span class="chip accent">Basis · altijd te bestellen</span>' : ''}<span class="chip accent">${d.origin}</span><span class="chip">100% halal</span><span class="chip">Max. ${d.portions} porties${own}</span></div>
-        <details class="dish-details"><summary>Het verhaal</summary><p class="story-text">${d.story}</p><p class="allergen">Allergenen: ${d.allergens}. Alles halal; sporen van andere allergenen mogelijk.</p></details>
+        <p class="allergen visible"><b>Allergenen:</b> ${d.allergens}. <a href="allergenen.html">Meer info</a></p>
+        <details class="dish-details"><summary>Het verhaal</summary><p class="story-text">${d.story}</p></details>
         ${d.variants.length > 1 ? `
           <div class="choice" role="radiogroup" aria-label="Maak je keuze">
             ${d.variants.map(v => `
@@ -388,8 +389,8 @@ function renderCart() {
       <div class="line-total"><span>${state.mode === 'bezorgen' ? 'Bezorgen' : 'Afhalen'}</span><strong>${fee ? money(fee) : 'Gratis'}</strong></div>
       <div class="line-total total"><span>Totaal</span><strong>${money(subtotal() + fee)}</strong></div>
     </div>
-    <button class="checkout-btn wa" type="button" id="checkoutBtn" ${ready ? '' : 'disabled'}>${ready ? 'Bestelling versturen via WhatsApp' : 'Bestellen opent binnenkort'}</button>
-    <div class="drawer-note">Je betaalt via een betaalverzoek dat je na je bestelling van ons krijgt.</div>
+    <button class="checkout-btn wa" type="button" id="checkoutBtn" ${ready ? '' : 'disabled'}>${ready ? 'Bestellen en betalen via WhatsApp' : 'Bestellen opent binnenkort'}</button>
+    <div class="drawer-note">Na je bestelling krijg je een betaalverzoek. Je bestelling staat vast na betaling. Door te bestellen ga je akkoord met onze <a href="voorwaarden.html" target="_blank">voorwaarden</a> en <a href="privacy.html" target="_blank">privacyverklaring</a>.</div>
   `;
 
   body.querySelectorAll('[data-c]').forEach(b => b.addEventListener('click', () => {

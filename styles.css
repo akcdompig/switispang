@@ -747,3 +747,6 @@ footer {
 @media (max-width: 760px) { #fixedGrid { grid-template-columns: 1fr; } }
 a.cart-trigger { display: inline-flex; align-items: center; text-decoration: none; }
 .info-card a, .faq a, footer a[data-wa], footer a[data-mail] { color: var(--accent); }
+
+.allergen.visible { margin-top: 12px; font-size: 0.82rem; }
+.allergen.visible a, .drawer-note a { color: var(--accent); }
