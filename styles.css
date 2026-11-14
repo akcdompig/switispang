@@ -738,3 +738,10 @@ footer {
 @media (max-width: 760px) { .coming-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .opt-hint { display: block; color: var(--muted); font-size: 0.75rem; }
 .choice-opt.disabled { opacity: 0.45; cursor: not-allowed; }
+
+.fixed-wrap { margin-top: 44px; }
+.fixed-wrap h3 { font-size: clamp(1.3rem, 2.6vw, 1.7rem); }
+.fixed-wrap > p { color: var(--muted); margin: 6px 0 16px; }
+.board-item-name small { color: #7a6a58; font-weight: 600; }
+#fixedGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 760px) { #fixedGrid { grid-template-columns: 1fr; } }

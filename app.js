@@ -28,6 +28,8 @@ const CONFIG = {
   tiktok: 'https://www.tiktok.com/@switispang'
 };
 
+// Uitverkocht? Zet soldOut: true bij een gerecht of bij een keuze (bv. de rotirol).
+// De teller telt per bestelling; houd zelf bij hoeveel er via WhatsApp binnen zijn.
 const MENU = [
   {
     id: 'roti',
@@ -42,7 +44,7 @@ const MENU = [
       { id: 'bout', name: 'met kippenbout', price: 17.5 },
       { id: 'filet', name: 'met kippendijfilet', price: 18.5 },
       { id: 'vega', name: 'vega (zonder kip) 🌱', cart: 'Roti vega', price: 15.0 },
-      { id: 'rol', name: 'rotirol (kippendijfilet)', cart: 'Rotirol kippendijfilet', price: 11.95 }
+      { id: 'rol', name: 'rotirol (kippendijfilet)', cart: 'Rotirol kippendijfilet', price: 11.95, portions: 10, unit: 'rotirollen' } // eigen teller
     ],
     extras: [
       { id: 'extra', name: 'Roti kip extra', cart: '+ extra vlees en groente', price: 4.0, only: ['bout', 'filet', 'lams'], hint: 'extra stuk vlees en meer groente' },
@@ -131,8 +133,20 @@ function lineInfo(item) {
   return { d, v, ex, unit, label };
 }
 
-function qtyInCart(dishId) {
-  return state.cart.filter(i => i.dishId === dishId).reduce((s, i) => s + i.qty, 0);
+// Porties: een keuze met eigen 'portions' (zoals de rotirol) heeft een eigen teller.
+function pool(d, variantId) {
+  const v = d.variants.find(x => x.id === variantId) || d.variants[0];
+  const own = !!v.portions;
+  const out = d.soldOut || v.soldOut;
+  return { key: own ? `${d.id}:${v.id}` : d.id, max: out ? 0 : (own ? v.portions : d.portions) };
+}
+function qtyInPool(key) {
+  return state.cart.filter(i => pool(dish(i.dishId), i.variantId).key === key).reduce((s, i) => s + i.qty, 0);
+}
+function leftFor(d, variantId) { const p = pool(d, variantId); return Math.max(0, p.max - qtyInPool(p.key)); }
+function selectedVariant(d) {
+  const el = document.querySelector(`input[name="var-${d.id}"]:checked`);
+  return el ? el.value : d.variants[0].id;
 }
 
 function subtotal() { return state.cart.reduce((s, i) => s + lineInfo(i).unit * i.qty, 0); }
@@ -144,9 +158,10 @@ function deliveryFee() {
 /* ---------- hero board + countdown ---------- */
 function renderBoard() {
   $('dropDate').textContent = CONFIG.drop.label;
-  $('boardList').innerHTML = MENU.map(d => `
-    <li><span class="board-item-name">${d.name}</span><span class="board-item-stock">${d.portions} porties</span></li>
-  `).join('');
+  $('boardList').innerHTML = MENU.map(d => {
+    const own = d.variants.filter(v => v.portions).map(v => ` · ${v.portions} ${v.unit || 'stuks'}`).join('');
+    return `<li><span class="board-item-name">${d.name}${d.fixed ? ' <small>(altijd)</small>' : ''}</span><span class="board-item-stock">${d.soldOut ? 'Uitverkocht' : `${d.portions} porties${own}`}</span></li>`;
+  }).join('');
   $('deadlineLabel').textContent = isClosed() ? 'Bestellen is gesloten voor deze ronde' : `Bestellen sluit ${CONFIG.drop.deadlineLabel}`;
   document.querySelectorAll('[data-deadline]').forEach(n => { n.textContent = CONFIG.drop.deadlineLabel; });
   document.querySelectorAll('[data-droplabel]').forEach(n => { n.textContent = CONFIG.drop.label; });
@@ -164,42 +179,47 @@ function renderCountdown() {
 }
 
 /* ---------- menu ---------- */
-function renderMenu() {
-  const closed = isClosed();
-  $('menuGrid').innerHTML = MENU.map(d => {
-    const left = Math.max(0, d.portions - qtyInCart(d.id));
-    return `
-    <article class="dish">
+function dishCard(d, closed) {
+  const firstOk = (d.variants.find(v => !v.soldOut) || d.variants[0]).id;
+  const left = leftFor(d, firstOk);
+  const own = d.variants.filter(v => v.portions).map(v => ` · ${v.portions} ${v.unit || 'stuks'}`).join('');
+  return `
+    <article class="dish ${d.soldOut ? 'soldout' : ''}">
       <div class="dish-image"><img src="${d.image}" alt="${d.name}" loading="lazy" /></div>
       <div class="dish-body">
         <div class="dish-top"><h3>${d.name}</h3><span class="price">${d.variants.length > 1 ? 'vanaf ' : ''}${money(Math.min(...d.variants.map(v => v.price)))}</span></div>
         <p class="dish-desc">${d.desc}</p>
-        <div class="meta-row">${d.fixed ? '<span class="chip accent">Altijd te bestellen</span>' : ''}<span class="chip accent">${d.origin}</span><span class="chip">100% halal</span><span class="chip">Max. ${d.portions} porties</span></div>
+        <div class="meta-row">${d.fixed ? '<span class="chip accent">Altijd te bestellen</span>' : ''}<span class="chip accent">${d.origin}</span><span class="chip">100% halal</span><span class="chip">Max. ${d.portions} porties${own}</span></div>
         <details class="dish-details"><summary>Het verhaal</summary><p class="story-text">${d.story}</p><p class="allergen">Allergenen: ${d.allergens}. Alles halal; sporen van andere allergenen mogelijk.</p></details>
         ${d.variants.length > 1 ? `
-          <div class="choice" role="radiogroup" aria-label="Kies je vlees">
-            ${d.variants.map((v, i) => `
-              <label class="choice-opt"><input type="radio" name="var-${d.id}" value="${v.id}" ${i === 0 ? 'checked' : ''}/><span>${v.name.replace(/^met /, '')}</span><b>${money(v.price)}</b></label>`).join('')}
+          <div class="choice" role="radiogroup" aria-label="Maak je keuze">
+            ${d.variants.map(v => `
+              <label class="choice-opt ${v.soldOut ? 'disabled' : ''}"><input type="radio" name="var-${d.id}" value="${v.id}" ${v.id === firstOk ? 'checked' : ''} ${v.soldOut ? 'disabled' : ''}/><span>${v.name.replace(/^met /, '')}${v.soldOut ? '<small class="opt-hint">uitverkocht</small>' : ''}</span><b>${money(v.price)}</b></label>`).join('')}
           </div>` : ''}
         ${d.extras.map(e => `
           <label class="choice-opt extra" ${e.only ? `data-only="${e.only.join(',')}"` : ''}><input type="checkbox" name="ex-${d.id}" value="${e.id}"/><span>${e.name}${e.hint ? `<small class="opt-hint">${e.hint}</small>` : ''}</span><b>+${money(e.price)}</b></label>`).join('')}
         <div class="dish-actions">
-          ${closed ? '<button class="waitlist-btn" disabled>Bestellen gesloten</button>' : `
+          ${closed ? '<button class="waitlist-btn" disabled>Bestellen gesloten</button>' : d.soldOut ? '<button class="waitlist-btn" disabled>Uitverkocht</button>' : `
           <div class="qty-picker">
             <button type="button" data-q="-1" data-id="${d.id}" aria-label="Minder">−</button>
             <span id="q-${d.id}">1</span>
             <button type="button" data-q="1" data-id="${d.id}" aria-label="Meer">+</button>
           </div>
-          <button class="add-btn" type="button" data-add="${d.id}" ${left ? '' : 'disabled'}>${left ? 'Toevoegen' : 'Max bereikt'}</button>`}
+          <button class="add-btn" type="button" id="add-${d.id}" data-add="${d.id}" ${left ? '' : 'disabled'}>${left ? 'Toevoegen' : 'Max bereikt'}</button>`}
         </div>
       </div>
     </article>`;
-  }).join('');
+}
+
+function renderMenu() {
+  const closed = isClosed();
+  $('menuGrid').innerHTML = MENU.filter(d => !d.fixed).map(d => dishCard(d, closed)).join('');
+  $('fixedGrid').innerHTML = MENU.filter(d => d.fixed).map(d => dishCard(d, closed)).join('');
 
   document.querySelectorAll('[data-q]').forEach(b => b.addEventListener('click', () => {
     const n = $('q-' + b.dataset.id);
     const d = dish(b.dataset.id);
-    const max = Math.max(1, d.portions - qtyInCart(d.id));
+    const max = Math.max(1, leftFor(d, selectedVariant(d)));
     n.textContent = String(Math.min(max, Math.max(1, Number(n.textContent) + Number(b.dataset.q))));
   }));
   document.querySelectorAll('[data-add]').forEach(b => b.addEventListener('click', () => addToCart(b.dataset.add)));
@@ -239,6 +259,15 @@ function addDrink(id) {
 
 function syncExtras(dishId) {
   const v = document.querySelector(`input[name="var-${dishId}"]:checked`);
+  const d = dish(dishId);
+  const btn = $('add-' + dishId);
+  if (btn && d) {
+    const left = leftFor(d, v ? v.value : d.variants[0].id);
+    btn.disabled = !left;
+    btn.textContent = left ? 'Toevoegen' : 'Max bereikt';
+    const q = $('q-' + dishId);
+    if (q) q.textContent = String(Math.max(1, Math.min(Number(q.textContent), left || 1)));
+  }
   document.querySelectorAll(`.choice-opt[data-only]`).forEach(label => {
     const input = label.querySelector(`input[name="ex-${dishId}"]`);
     if (!input) return;
@@ -255,7 +284,8 @@ function addToCart(dishId) {
   const variantEl = document.querySelector(`input[name="var-${dishId}"]:checked`);
   const variantId = variantEl ? variantEl.value : d.variants[0].id;
   const extras = [...document.querySelectorAll(`input[name="ex-${dishId}"]:checked`)].map(e => e.value).filter(id => extraAllowed(d.extras.find(x => x.id === id), variantId));
-  if (qtyInCart(dishId) + qty > d.portions) { toast(`Er zijn maximaal ${d.portions} porties ${d.name}.`); return; }
+  const p = pool(d, variantId);
+  if (qtyInPool(p.key) + qty > p.max) { toast(p.max ? `Er zijn er maximaal ${p.max} van.` : 'Helaas, dit is uitverkocht.'); return; }
   const key = [dishId, variantId, ...extras.sort()].join('|');
   const found = state.cart.find(i => i.key === key);
   if (found) found.qty += qty; else state.cart.push({ key, dishId, variantId, extras, qty });
@@ -350,7 +380,8 @@ function renderCart() {
     const i = state.cart[Number(b.dataset.i)];
     const d = dish(i.dishId);
     const delta = Number(b.dataset.c);
-    if (delta > 0 && qtyInCart(d.id) >= d.portions) { toast(`Maximaal ${d.portions} porties ${d.name}.`); return; }
+    const p = pool(d, i.variantId);
+    if (delta > 0 && qtyInPool(p.key) >= p.max) { toast(`Maximaal ${p.max} hiervan.`); return; }
     i.qty += delta;
     if (i.qty <= 0) state.cart.splice(Number(b.dataset.i), 1);
     renderCart(); renderMenu();
