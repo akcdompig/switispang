@@ -736,3 +736,5 @@ footer {
 .rep-foot { color: var(--muted); margin-top: 18px; font-size: 0.92rem; }
 .rep-foot a { color: var(--accent); }
 @media (max-width: 760px) { .coming-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.opt-hint { display: block; color: var(--muted); font-size: 0.75rem; }
+.choice-opt.disabled { opacity: 0.45; cursor: not-allowed; }

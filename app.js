@@ -35,7 +35,7 @@ const MENU = [
     portions: 10,
     image: 'img/roti-kip.jpg',
     origin: 'India → Suriname · 1873',
-    desc: 'De rotiplaat wordt vers met de hand gemaakt, en daar proef je het verschil. Alleen de rotiplaat zelf is al heerlijk om zo te eten. Met kip in masala met jeera, aardappel, kousenband en ei. Kies kippenbout, kippendijfilet of vega (zonder kip). Liever een rotirol? Kan bij elke roti.',
+    desc: 'De rotiplaat wordt vers met de hand gemaakt, en daar proef je het verschil. Alleen de rotiplaat zelf is al heerlijk om zo te eten. Met kip in masala met jeera, aardappel, kousenband en ei. Kies kippenbout, kippendijfilet of vega (zonder kip). Liever een rotirol? Kan met kippendijfilet.',
     story: 'Op 5 juni 1873 legde de Lalla Rookh aan in Suriname, met mensen uit India aan boord. Met hun kruiden en hun brood. Zo kwam roti naar Suriname, en werd hij van ons allemaal.',
     allergens: 'Gluten, ei, soja, selderij, mosterd',
     variants: [
@@ -44,7 +44,8 @@ const MENU = [
       { id: 'vega', name: 'vega (zonder kip) 🌱', price: 15.0 }
     ],
     extras: [
-      { id: 'rol', name: 'Maak er een rotirol van', cart: '(als rotirol)', price: 1.0 },
+      // Rotirol alleen met kippendijfilet of lams (variant-id 'filet' of 'lams').
+      { id: 'rol', name: 'Maak er een rotirol van', cart: '(als rotirol)', price: 1.0, only: ['filet', 'lams'], hint: 'alleen met kippendijfilet of lams' },
       { id: 'roti', name: 'Extra verse rotiplaat', price: 3.0 }
     ]
   },
@@ -104,12 +105,14 @@ function isClosed() {
   return Date.now() > new Date(CONFIG.drop.deadline).getTime();
 }
 
+function extraAllowed(e, variantId) { return !e.only || e.only.includes(variantId); }
+
 function dish(id) { return MENU.find(d => d.id === id) || DRINKS.find(d => d.id === id); }
 
 function lineInfo(item) {
   const d = dish(item.dishId);
   const v = d.variants.find(x => x.id === item.variantId);
-  const ex = d.extras.filter(e => item.extras.includes(e.id));
+  const ex = d.extras.filter(e => item.extras.includes(e.id) && extraAllowed(e, item.variantId));
   const unit = v.price + ex.reduce((s, e) => s + e.price, 0);
   const label = [d.name, v.name, ...ex.map(e => e.cart || '+ ' + e.name.toLowerCase())].filter(Boolean).join(' ');
   return { d, v, ex, unit, label };
@@ -166,7 +169,7 @@ function renderMenu() {
               <label class="choice-opt"><input type="radio" name="var-${d.id}" value="${v.id}" ${i === 0 ? 'checked' : ''}/><span>${v.name.replace(/^met /, '')}</span><b>${money(v.price)}</b></label>`).join('')}
           </div>` : ''}
         ${d.extras.map(e => `
-          <label class="choice-opt extra"><input type="checkbox" name="ex-${d.id}" value="${e.id}"/><span>${e.name}</span><b>+${money(e.price)}</b></label>`).join('')}
+          <label class="choice-opt extra" ${e.only ? `data-only="${e.only.join(',')}"` : ''}><input type="checkbox" name="ex-${d.id}" value="${e.id}"/><span>${e.name}${e.hint ? `<small class="opt-hint">${e.hint}</small>` : ''}</span><b>+${money(e.price)}</b></label>`).join('')}
         <div class="dish-actions">
           ${closed ? '<button class="waitlist-btn" disabled>Bestellen gesloten</button>' : `
           <div class="qty-picker">
@@ -187,6 +190,10 @@ function renderMenu() {
     n.textContent = String(Math.min(max, Math.max(1, Number(n.textContent) + Number(b.dataset.q))));
   }));
   document.querySelectorAll('[data-add]').forEach(b => b.addEventListener('click', () => addToCart(b.dataset.add)));
+  MENU.forEach(d => {
+    document.querySelectorAll(`input[name="var-${d.id}"]`).forEach(r => r.addEventListener('change', () => syncExtras(d.id)));
+    syncExtras(d.id);
+  });
 
   $('drinksGrid').innerHTML = DRINKS.map(d => `
     <div class="drink">
@@ -217,12 +224,24 @@ function addDrink(id) {
   renderCart();
 }
 
+function syncExtras(dishId) {
+  const v = document.querySelector(`input[name="var-${dishId}"]:checked`);
+  document.querySelectorAll(`.choice-opt[data-only]`).forEach(label => {
+    const input = label.querySelector(`input[name="ex-${dishId}"]`);
+    if (!input) return;
+    const ok = !v || label.dataset.only.split(',').includes(v.value);
+    input.disabled = !ok;
+    if (!ok) input.checked = false;
+    label.classList.toggle('disabled', !ok);
+  });
+}
+
 function addToCart(dishId) {
   const d = dish(dishId);
   const qty = Number($('q-' + dishId).textContent);
   const variantEl = document.querySelector(`input[name="var-${dishId}"]:checked`);
   const variantId = variantEl ? variantEl.value : d.variants[0].id;
-  const extras = [...document.querySelectorAll(`input[name="ex-${dishId}"]:checked`)].map(e => e.value);
+  const extras = [...document.querySelectorAll(`input[name="ex-${dishId}"]:checked`)].map(e => e.value).filter(id => extraAllowed(d.extras.find(x => x.id === id), variantId));
   if (qtyInCart(dishId) + qty > d.portions) { toast(`Er zijn maximaal ${d.portions} porties ${d.name}.`); return; }
   const key = [dishId, variantId, ...extras.sort()].join('|');
   const found = state.cart.find(i => i.key === key);
