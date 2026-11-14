@@ -35,7 +35,7 @@ const MENU = [
     portions: 10,
     image: 'img/roti-kip.jpg',
     origin: 'India → Suriname · 1873',
-    desc: 'Zachte roti met kip in masala met jeera, aardappel, kousenband en ei. Kies kippenbout, kippendijfilet of vega (zonder kip). Zoals het in de familie al generaties gemaakt wordt.',
+    desc: 'De rotiplaat wordt vers met de hand gemaakt, en daar proef je het verschil. Alleen de rotiplaat zelf is al heerlijk om zo te eten. Met kip in masala met jeera, aardappel, kousenband en ei. Kies kippenbout, kippendijfilet of vega (zonder kip). Liever een rotirol? Kan bij elke roti.',
     story: 'Op 5 juni 1873 legde de Lalla Rookh aan in Suriname, met mensen uit India aan boord. Met hun kruiden en hun brood. Zo kwam roti naar Suriname, en werd hij van ons allemaal.',
     allergens: 'Gluten, ei, soja, selderij, mosterd',
     variants: [
@@ -43,7 +43,10 @@ const MENU = [
       { id: 'filet', name: 'met kippendijfilet', price: 18.5 },
       { id: 'vega', name: 'vega (zonder kip) 🌱', price: 15.0 }
     ],
-    extras: [{ id: 'roti', name: 'Extra roti', price: 3.0 }]
+    extras: [
+      { id: 'rol', name: 'Maak er een rotirol van', cart: '(als rotirol)', price: 1.0 },
+      { id: 'roti', name: 'Extra verse rotiplaat', price: 3.0 }
+    ]
   },
   {
     id: 'gritibana',
@@ -108,7 +111,7 @@ function lineInfo(item) {
   const v = d.variants.find(x => x.id === item.variantId);
   const ex = d.extras.filter(e => item.extras.includes(e.id));
   const unit = v.price + ex.reduce((s, e) => s + e.price, 0);
-  const label = [d.name, v.name, ...ex.map(e => '+ ' + e.name.toLowerCase())].filter(Boolean).join(' ');
+  const label = [d.name, v.name, ...ex.map(e => e.cart || '+ ' + e.name.toLowerCase())].filter(Boolean).join(' ');
   return { d, v, ex, unit, label };
 }
 
