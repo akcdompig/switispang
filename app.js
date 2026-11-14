@@ -10,10 +10,10 @@ const CONFIG = {
   drop: {
     label: 'Woensdag 18 november',
     dayShort: 'woensdag',
-    deadline: '2026-11-16T20:00:00+01:00', // bestellen sluit
-    deadlineLabel: 'maandag 16 november, 20:00'
+    deadline: '2026-11-17T20:00:00+01:00', // bestellen sluit
+    deadlineLabel: 'dinsdag 17 november, 20:00'
   },
-  next: 'Zaterdag 21 november: menu volgt woensdagavond op Instagram.',
+  next: 'Zaterdag 21 november: menu volgt woensdagavond op Instagram. Bestellen kan tot vrijdag 17:00.',
 
   pickup: {
     area: 'Almere-Buiten',
@@ -77,8 +77,8 @@ const COMING = [
 const REPERTOIRE = [
   { icon: '🍲', title: 'Soepen', sub: 'Traditioneel, met rijst', items: ['Gritibana', 'Saoto', 'Okersoep', 'Bravoe', 'Tayersoep', 'Pindasoep', 'Cassavesoep'] },
   { icon: '🫓', title: 'Roti', sub: 'Met aardappel, kousenband en ei', items: ['Roti kip (kippenbout)', 'Roti kip (kippendijfilet)', 'Roti lams', 'Roti masala doks', 'Roti vega'] },
-  { icon: '🍛', title: 'Rijstgerechten', sub: 'Gestoofd of geroosterd, zoals thuis', items: ['Rijst met kip en antroewa', 'Rijst met kip en sopropo', 'Rijst met gestoofd rundvlees en Surinaamse zuurkool', 'Rijst met aardappel en rookworst', 'Witte rijst met kousenband, aardappel en garnalen', 'Moksi alesi met geroosterde kip', 'Chow mein met geroosterde kip'] },
-  { icon: '🥟', title: 'Buns', sub: 'Van traditie naar trendy', items: ['Bun met krokante garnalen', 'Redi Fowru bun: red roasted chicken'] },
+  { icon: '🍛', title: 'Rijstgerechten', sub: 'Gestoofd of geroosterd, zoals thuis', items: ['Rijst met kip en antroewa', 'Rijst met kip en sopropo', 'Rijst met gestoofd rundvlees en Surinaamse zuurkool, met aardappel en kiprookworst', 'Witte rijst met kousenband, aardappel en garnalen', 'Moksi alesi met geroosterde kip', 'Chow mein met geroosterde kip'] },
+  { icon: '🥟', title: 'Buns', sub: 'Van traditie naar trendy', items: ['Garnalen bun: garnalen in pittige tomatenjus, extra spicy saus optioneel', 'Redi Fowru bun: geroosterde kip met rode kruiden en een lekker sausje', 'Met frisse toppings als prei en komkommer'] },
   { icon: '🦀', title: 'Seafood boil · Paramaribo style', sub: 'Binnenkort', items: ['Krab, grote garnalen, rivierkreeft en spinkrab', 'Met krieltjes, maïs en worst', 'In masala en kokosmelk', 'Hoe pittig? Dat kies je zelf'] },
   { icon: '✨', title: 'Weekend specials', sub: 'Surinaams in een ander jasje', items: ['Elke week een verrassing', 'Volg Instagram en onze WhatsApp-community'] },
   { icon: '🥤', title: 'Binnenkort te drinken', sub: 'Huisgemaakt', items: ['Gemberbier', 'Surinaamse cola (colasiroop)', 'Markoesa-sap'] }
