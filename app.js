@@ -180,7 +180,7 @@ function renderBoard() {
   $('dropDate').textContent = CONFIG.drop.label;
   $('boardList').innerHTML = MENU.map(d => {
     const own = d.variants.filter(v => v.portions).map(v => ` · ${v.portions} ${v.unit || 'stuks'}`).join('');
-    return `<li><span class="board-item-name">${d.name}${d.fixed ? ' <small>(altijd)</small>' : ''}</span><span class="board-item-stock">${d.soldOut ? 'Uitverkocht' : `${d.portions} porties${own}`}</span></li>`;
+    return `<li><span class="board-item-name">${d.name}${d.fixed ? ' <small>(altijd)</small>' : ''}</span><span class="board-item-stock">${d.soldOut ? 'Uitverkocht' : 'Beperkt'}</span></li>`;
   }).join('');
   $('deadlineLabel').textContent = isSoon() ? 'Bestellen opent binnenkort. Volg ons op Instagram en WhatsApp.' : isClosed() ? 'Bestellen is gesloten voor deze ronde' : `Bestellen sluit ${CONFIG.drop.deadlineLabel}`;
   document.querySelectorAll('[data-deadline]').forEach(n => { n.textContent = CONFIG.drop.deadlineLabel; });
@@ -210,7 +210,7 @@ function dishCard(d, closed) {
       <div class="dish-body">
         <div class="dish-top"><h3>${d.name}</h3><span class="price">${d.variants.length > 1 ? 'vanaf ' : ''}${money(Math.min(...d.variants.map(v => v.price)))}</span></div>
         <p class="dish-desc">${d.desc}</p>
-        <div class="meta-row">${d.fixed ? '<span class="chip accent">Basis · altijd te bestellen</span>' : ''}<span class="chip accent">${d.origin}</span><span class="chip">100% halal</span><span class="chip">Max. ${d.portions} porties${own}</span></div>
+        <div class="meta-row">${d.fixed ? '<span class="chip accent">Basis · altijd te bestellen</span>' : ''}<span class="chip accent">${d.origin}</span><span class="chip">100% halal</span><span class="chip">Beperkt aantal porties</span></div>
         <p class="allergen visible"><b>Allergenen:</b> ${d.allergens}. <a href="allergenen.html">Meer info</a></p>
         <details class="dish-details"><summary>Het verhaal</summary><p class="story-text">${d.story}</p></details>
         ${d.variants.length > 1 ? `
@@ -307,7 +307,7 @@ function addToCart(dishId) {
   const variantId = variantEl ? variantEl.value : d.variants[0].id;
   const extras = [...document.querySelectorAll(`input[name="ex-${dishId}"]:checked`)].map(e => e.value).filter(id => extraAllowed(d.extras.find(x => x.id === id), variantId));
   const p = pool(d, variantId);
-  if (qtyInPool(p.key) + qty > p.max) { toast(p.max ? `Er zijn er maximaal ${p.max} van.` : 'Helaas, dit is uitverkocht.'); return; }
+  if (qtyInPool(p.key) + qty > p.max) { toast(p.max ? 'Meer kunnen we deze ronde niet maken. Op = op!' : 'Helaas, dit is uitverkocht.'); return; }
   const key = [dishId, variantId, ...extras.sort()].join('|');
   const found = state.cart.find(i => i.key === key);
   if (found) found.qty += qty; else state.cart.push({ key, dishId, variantId, extras, qty });
@@ -403,7 +403,7 @@ function renderCart() {
     const d = dish(i.dishId);
     const delta = Number(b.dataset.c);
     const p = pool(d, i.variantId);
-    if (delta > 0 && qtyInPool(p.key) >= p.max) { toast(`Maximaal ${p.max} hiervan.`); return; }
+    if (delta > 0 && qtyInPool(p.key) >= p.max) { toast('Meer kunnen we deze ronde niet maken. Op = op!'); return; }
     i.qty += delta;
     if (i.qty <= 0) state.cart.splice(Number(b.dataset.i), 1);
     renderCart(); renderMenu();
