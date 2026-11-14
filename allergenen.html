@@ -3,8 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Allergenen | SWITI SPANG</title>
-    <meta name="description" content="Informatie over allergenen en ingrediënten bij SWITI SPANG." />
+    <title>Allergenen | Switi Spang</title>
+    <meta name="description" content="Allergenen per gerecht bij Switi Spang." />
+    <meta name="theme-color" content="#1c140f" />
+    <link rel="icon" href="img/logo.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
@@ -13,15 +15,14 @@
   <body>
     <header class="topbar">
       <div class="container topbar-inner">
-        <a href="index.html" class="brand">SWITI <span>SPANG</span></a>
+        <a class="brand" href="index.html"><img src="img/logo.png" alt="" class="brand-logo" />SWITI <span>SPANG</span></a>
         <nav>
           <a href="index.html#menu">Menu</a>
           <a href="index.html#hoe">Zo werkt het</a>
           <a href="index.html#story">Ons verhaal</a>
           <a href="contact.html">Contact</a>
         </nav>
-        <div class="mini-status"><span class="dot"></span> Bestellen open</div>
-        <button class="cart-trigger" id="openCartBtn">Bestelling <span class="cart-count" id="cartCount">0</span></button>
+        <a class="cart-trigger" href="index.html#menu">Naar het menu</a>
       </div>
     </header>
 
@@ -34,36 +35,28 @@
       <div class="info-card">
         <h3>Menu woensdag 18 november</h3>
         <ul>
-          <li><b>Roti kip (kippenbout of kippendijfilet) en roti vega:</b> gluten, ei, soja, selderij, mosterd</li>
+          <li><b>Roti kip (kippenbout of kippendijfilet), rotirol en roti vega:</b> gluten, ei, soja, selderij, mosterd</li>
           <li><b>Gritibana met rijst:</b> gluten, selderij</li>
-          <li><b>Saoto met rijst (altijd te bestellen):</b> ei, soja, gluten, selderij</li>
+          <li><b>Saoto met rijst (basis, altijd te bestellen):</b> ei, soja, gluten, selderij</li>
           <li><b>Drankjes (Spa blauw, cola, Fernandes):</b> zie de verpakking</li>
         </ul>
       </div>
 
       <div class="info-card">
         <h3>Goed om te weten</h3>
-        <p>Alles is 100% halal. We koken in één keuken, dus sporen van andere allergenen (zoals schaaldieren, sesam, melk en ei) zijn mogelijk. Omdat we thuisgemaakte familierecepten gebruiken, kan er kleine variatie in ingrediënten zijn.</p>
-        <p>Allergie? Zet het bij je bestelling of app ons vóór je bestelt.</p>
+        <p>Alles is 100% halal. We koken in één keuken, dus sporen van andere allergenen (zoals schaaldieren, sesam, melk en ei) zijn mogelijk. Omdat we familierecepten gebruiken, kan er kleine variatie in ingrediënten zijn.</p>
+        <p>Allergie? Zet het bij je bestelling of app ons vóór je bestelt: <a data-wa href="#">06 24 58 48 54</a>.</p>
       </div>
-
     </main>
 
-    <div class="scrim" id="scrim"></div>
-    <aside class="drawer" id="cartDrawer" aria-label="Winkelmand">
-      <div class="drawer-header">
-        <h3>Jouw bestelling</h3>
-        <button class="close-btn" id="closeCartBtn" aria-label="Sluiten">✕</button>
+    <footer>
+      <div class="container">
+        <div class="footer-bottom">
+          <span>© 2026 Switi Spang · Almere-Buiten · handelsnaam van Leef en Lach<span data-kvk></span></span>
+          <span><a href="contact.html">Contact</a> · <a href="allergenen.html">Allergenen</a> · <a href="voorwaarden.html">Algemene voorwaarden</a> · <a href="privacy.html">Privacy</a></span>
+        </div>
       </div>
-      <div class="drawer-body" id="drawerBody"></div>
-      <div class="drawer-footer" id="drawerFooter"></div>
-    </aside>
-
-    <div class="sticky-cart" id="stickyCart">
-      <button class="sticky-btn" id="stickyCartBtn">Bekijk bestelling · <span id="stickyTotal">€0,00</span></button>
-    </div>
-
-    <div class="toast" id="toast"></div>
+    </footer>
 
     <script src="app.js" defer></script>
   </body>

@@ -745,3 +745,5 @@ footer {
 .board-item-name small { color: #7a6a58; font-weight: 600; }
 #fixedGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 @media (max-width: 760px) { #fixedGrid { grid-template-columns: 1fr; } }
+a.cart-trigger { display: inline-flex; align-items: center; text-decoration: none; }
+.info-card a, .faq a, footer a[data-wa], footer a[data-mail] { color: var(--accent); }

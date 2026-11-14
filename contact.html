@@ -3,8 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contact | SWITI SPANG</title>
-    <meta name="description" content="Contacteer SWITI SPANG voor bestellingen, vragen en afhaalinformatie." />
+    <title>Contact | Switi Spang</title>
+    <meta name="description" content="Contact met Switi Spang: Surinaamse familierecepten in Almere. WhatsApp, e-mail en Instagram." />
+    <meta name="theme-color" content="#1c140f" />
+    <link rel="icon" href="img/logo.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
@@ -13,15 +15,14 @@
   <body>
     <header class="topbar">
       <div class="container topbar-inner">
-        <a href="index.html" class="brand">SWITI <span>SPANG</span></a>
+        <a class="brand" href="index.html"><img src="img/logo.png" alt="" class="brand-logo" />SWITI <span>SPANG</span></a>
         <nav>
-          <a href="index.html#menu">Weekmenu</a>
-          <a href="index.html#drop">Weekly drop</a>
-          <a href="index.html#story">Waarom SWITI SPANG?</a>
+          <a href="index.html#menu">Menu</a>
+          <a href="index.html#hoe">Zo werkt het</a>
+          <a href="index.html#story">Ons verhaal</a>
           <a href="contact.html">Contact</a>
         </nav>
-        <div class="mini-status"><span class="dot"></span> Bestellen open</div>
-        <button class="cart-trigger" id="openCartBtn">Bestelling <span class="cart-count" id="cartCount">0</span></button>
+        <a class="cart-trigger" href="index.html#menu">Naar het menu</a>
       </div>
     </header>
 
@@ -32,36 +33,35 @@
       </div>
 
       <div class="info-card">
-        <h3>SWITI SPANG</h3>
-        <p>Voor vragen over bestellingen, allergenen, afhalen, bezorgen of het menu kun je contact opnemen.</p>
+        <h3>Switi Spang</h3>
+        <p>Vragen over je bestelling, allergenen, afhalen, bezorgen of het menu? Neem gerust contact op. Het snelst bereik je ons via WhatsApp.</p>
         <ul>
-                    <li>Instagram: <a href="https://www.instagram.com/switispang" target="_blank" rel="noreferrer">@switispang</a></li>
-          <li>Afhalen in Almere-Buiten of bezorgen binnen Almere, op woensdag en zaterdag</li>
-          <li>TikTok: <a href="https://www.tiktok.com/@switispang" target="_blank" rel="noreferrer">@switispang</a></li>
+          <li>WhatsApp / telefoon: <a data-wa href="#">06 24 58 48 54</a></li>
+          <li>E-mail: <a data-mail href="#">info@switispang.nl</a></li>
+          <li>Instagram: <a data-ig href="#" target="_blank" rel="noreferrer">@switispang</a></li>
+          <li>TikTok: <a data-tt href="#" target="_blank" rel="noreferrer">@switispang</a></li>
         </ul>
       </div>
 
       <div class="info-card">
-        <h3>Bestelvragen</h3>
-        <p>We verwerken bestellingen via de website. Je ontvangt daarna je bevestiging, ophaaltijd en instructies. Voor wijzigingen of bijzondere verzoeken kun je ons het liefst per e-mail of WhatsApp benaderen.</p>
+        <h3>Waar zitten we?</h3>
+        <p>We zijn gevestigd in Almere-Buiten. We koken op bestelling vanuit onze eigen keuken, we zijn geen restaurant of toko. Het afhaaladres krijg je bij de bevestiging van je bestelling. Bezorgen kan ook, binnen heel Almere.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>Bedrijfsgegevens</h3>
+        <p>Switi Spang is een handelsnaam van Leef en Lach, gevestigd in Almere<span data-kvk></span>.</p>
       </div>
     </main>
 
-    <div class="scrim" id="scrim"></div>
-    <aside class="drawer" id="cartDrawer" aria-label="Winkelmand">
-      <div class="drawer-header">
-        <h3>Jouw bestelling</h3>
-        <button class="close-btn" id="closeCartBtn" aria-label="Sluiten">✕</button>
+    <footer>
+      <div class="container">
+        <div class="footer-bottom">
+          <span>© 2026 Switi Spang · Almere-Buiten · handelsnaam van Leef en Lach<span data-kvk></span></span>
+          <span><a href="contact.html">Contact</a> · <a href="allergenen.html">Allergenen</a> · <a href="voorwaarden.html">Algemene voorwaarden</a> · <a href="privacy.html">Privacy</a></span>
+        </div>
       </div>
-      <div class="drawer-body" id="drawerBody"></div>
-      <div class="drawer-footer" id="drawerFooter"></div>
-    </aside>
-
-    <div class="sticky-cart" id="stickyCart">
-      <button class="sticky-btn" id="stickyCartBtn">Bekijk bestelling · <span id="stickyTotal">€0,00</span></button>
-    </div>
-
-    <div class="toast" id="toast"></div>
+    </footer>
 
     <script src="app.js" defer></script>
   </body>

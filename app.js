@@ -10,6 +10,11 @@ const CONFIG = {
   // Bestellijn: false = site staat online, maar bestellen opent binnenkort. Zet op true zodra alles goedgekeurd is.
   orderingOpen: false,
 
+  // Contact (staat in de footer en op de contactpagina)
+  email: 'info@switispang.nl',
+  phoneLabel: '06 24 58 48 54',
+  kvk: '', // KvK-nummer Leef en Lach; leeg = niet tonen
+
   drop: {
     label: 'Woensdag 18 november',
     dayShort: 'woensdag',
@@ -46,13 +51,13 @@ const MENU = [
     variants: [
       { id: 'bout', name: 'met kippenbout', price: 17.5 },
       { id: 'filet', name: 'met kippendijfilet', price: 18.5 },
-      { id: 'vega', name: 'vega (zonder kip) 🌱', cart: 'Roti vega', price: 15.0 },
-      { id: 'rol', name: 'rotirol (kippendijfilet)', cart: 'Rotirol kippendijfilet', price: 11.95, portions: 10, unit: 'rotirollen' } // eigen teller
+      { id: 'vega', name: 'vega 🌱', hint: 'aardappel, kousenband en ei', cart: 'Roti vega', price: 15.0 },
+      { id: 'rol', name: 'rotirol', hint: 'kippendijfilet gerold in een verse rotiplaat', cart: 'Rotirol kippendijfilet', price: 11.95, portions: 10, unit: 'rotirollen' } // eigen teller
     ],
     extras: [
-      { id: 'extra', name: 'Roti kip extra', cart: '+ extra vlees en groente', price: 4.0, only: ['bout', 'filet', 'lams'], hint: 'extra stuk vlees en meer groente' },
+      { id: 'groot', name: "Maak 'm groot", cart: '(groot)', price: 3.5, only: ['bout', 'filet', 'lams'], hint: 'extra stuk kip, meer aardappel en kousenband' },
       { id: 'ei', name: 'Extra ei', price: 1.5 },
-      { id: 'roti', name: 'Extra verse rotiplaat', price: 3.0, only: ['bout', 'filet', 'vega', 'lams'] }
+      { id: 'roti', name: 'Extra verse rotiplaat', hint: 'lekker om zo bij te eten', price: 3.0, only: ['bout', 'filet', 'vega', 'lams'] }
     ]
   },
   {
@@ -61,11 +66,13 @@ const MENU = [
     portions: 10,
     image: 'img/gritibana.jpg',
     origin: 'Creoolse keuken · Afrikaanse wortels',
-    desc: 'Soep van geraspte groene banaan, met kippendij, halal zoutvlees en krontomirki (kokosmelk). Met witte rijst.',
+    desc: 'Een volle maaltijdsoep van geraspte groene banaan, met kippendij, halal zoutvlees en krontomirki (kokosmelk). Met witte rijst, sambal apart.',
     story: 'Griti = raspen, bana = banaan. De banaan wordt met de hand geraspt en tot balletjes gedraaid. Echte oso nyan: wat je bij oma kreeg als het koud was.',
     allergens: 'Gluten, selderij',
     variants: [{ id: 'std', name: 'met rijst', price: 13.5 }],
-    extras: []
+    extras: [
+      { id: 'rijst', name: 'Extra rijst', price: 1.5 }
+    ]
   },
   {
     id: 'saoto',
@@ -78,7 +85,11 @@ const MENU = [
     story: 'Op 9 augustus 1890 kwamen de eerste Javaanse contractarbeiders aan in Suriname. Uit hun soto ayam groeide saoto, met Surinaamse ingrediënten. Nu is het de soep van heel Suriname.',
     allergens: 'Ei, soja, gluten, selderij',
     variants: [{ id: 'std', name: 'met rijst', price: 10.5 }],
-    extras: []
+    extras: [
+      { id: 'vulling', name: 'Extra vulling', hint: 'kip, taugé en gebakken aardappel', price: 3.0 },
+      { id: 'ei', name: 'Extra ei', price: 1.5 },
+      { id: 'rijst', name: 'Extra rijst', price: 1.5 }
+    ]
   }
 ];
 
@@ -199,7 +210,7 @@ function dishCard(d, closed) {
         ${d.variants.length > 1 ? `
           <div class="choice" role="radiogroup" aria-label="Maak je keuze">
             ${d.variants.map(v => `
-              <label class="choice-opt ${v.soldOut ? 'disabled' : ''}"><input type="radio" name="var-${d.id}" value="${v.id}" ${v.id === firstOk ? 'checked' : ''} ${v.soldOut ? 'disabled' : ''}/><span>${v.name.replace(/^met /, '')}${v.soldOut ? '<small class="opt-hint">uitverkocht</small>' : ''}</span><b>${money(v.price)}</b></label>`).join('')}
+              <label class="choice-opt ${v.soldOut ? 'disabled' : ''}"><input type="radio" name="var-${d.id}" value="${v.id}" ${v.id === firstOk ? 'checked' : ''} ${v.soldOut ? 'disabled' : ''}/><span>${v.name.replace(/^met /, '')}${v.soldOut ? '<small class="opt-hint">uitverkocht</small>' : v.hint ? `<small class="opt-hint">${v.hint}</small>` : ''}</span><b>${money(v.price)}</b></label>`).join('')}
           </div>` : ''}
         ${d.extras.map(e => `
           <label class="choice-opt extra" ${e.only ? `data-only="${e.only.join(',')}"` : ''}><input type="checkbox" name="ex-${d.id}" value="${e.id}"/><span>${e.name}${e.hint ? `<small class="opt-hint">${e.hint}</small>` : ''}</span><b>+${money(e.price)}</b></label>`).join('')}
@@ -450,6 +461,10 @@ function closeCart() { $('cartDrawer').classList.remove('open'); $('scrim').clas
 function init() {
   document.querySelectorAll('[data-ig]').forEach(a => { a.href = CONFIG.instagram; });
   document.querySelectorAll('[data-tt]').forEach(a => { a.href = CONFIG.tiktok; });
+  document.querySelectorAll('[data-mail]').forEach(a => { a.href = 'mailto:' + CONFIG.email; a.textContent = CONFIG.email; });
+  document.querySelectorAll('[data-wa]').forEach(a => { a.href = 'https://wa.me/' + CONFIG.whatsapp; a.textContent = CONFIG.phoneLabel; });
+  document.querySelectorAll('[data-kvk]').forEach(n => { if (CONFIG.kvk) n.textContent = ' · KvK ' + CONFIG.kvk; });
+  if (!$('menuGrid')) return; // subpagina's: alleen contactgegevens invullen
   $('openCartBtn').addEventListener('click', openCart);
   $('stickyCartBtn').addEventListener('click', openCart);
   $('closeCartBtn').addEventListener('click', closeCart);

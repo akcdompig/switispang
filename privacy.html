@@ -3,8 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Privacy | SWITI SPANG</title>
-    <meta name="description" content="Privacyverklaring en persoonsgegevensbeleid van SWITI SPANG." />
+    <title>Privacy | Switi Spang</title>
+    <meta name="description" content="Privacyverklaring van Switi Spang." />
+    <meta name="theme-color" content="#1c140f" />
+    <link rel="icon" href="img/logo.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
@@ -13,15 +15,14 @@
   <body>
     <header class="topbar">
       <div class="container topbar-inner">
-        <a href="index.html" class="brand">SWITI <span>SPANG</span></a>
+        <a class="brand" href="index.html"><img src="img/logo.png" alt="" class="brand-logo" />SWITI <span>SPANG</span></a>
         <nav>
-          <a href="index.html#menu">Weekmenu</a>
-          <a href="index.html#drop">Weekly drop</a>
-          <a href="index.html#story">Waarom SWITI SPANG?</a>
+          <a href="index.html#menu">Menu</a>
+          <a href="index.html#hoe">Zo werkt het</a>
+          <a href="index.html#story">Ons verhaal</a>
           <a href="contact.html">Contact</a>
         </nav>
-        <div class="mini-status"><span class="dot"></span> Bestellen open</div>
-        <button class="cart-trigger" id="openCartBtn">Bestelling <span class="cart-count" id="cartCount">0</span></button>
+        <a class="cart-trigger" href="index.html#menu">Naar het menu</a>
       </div>
     </header>
 
@@ -32,36 +33,39 @@
       </div>
 
       <div class="info-card">
-        <h3>Persoonsgegevens</h3>
-        <p>SWITI SPANG verwerkt alleen de gegevens die nodig zijn voor het verwerken van een bestelling, zakelijke communicatie en het leveren van een goede service.</p>
+        <h3>Welke gegevens</h3>
+        <p>Als je bestelt, gebruiken we je naam, telefoonnummer en je bestelling. Bij bezorgen ook je adres. Als je een allergie of opmerking doorgeeft, gebruiken we die alleen voor je bestelling.</p>
       </div>
 
       <div class="info-card">
-        <h3>Gebruik van gegevens</h3>
-        <p>De gegevens worden gebruikt om bestellingen te bevestigen, contact te onderhouden, betalingen te verwerken en de kwaliteit van onze service te verbeteren. Deze gegevens worden niet onevenredig gedeeld buiten de noodzakelijke partners en betalingsproviders.</p>
+        <h3>Waarvoor</h3>
+        <p>We gebruiken je gegevens alleen om je bestelling te verwerken, je te bevestigen wanneer en waar je kunt afhalen of wanneer we bezorgen, het betaalverzoek te sturen en contact met je op te nemen als er iets is. We verkopen je gegevens nooit aan anderen.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>WhatsApp en betalen</h3>
+        <p>Bestellingen lopen via WhatsApp (van Meta) en betalingen via een betaalprovider. Die partijen verwerken je gegevens volgens hun eigen privacyvoorwaarden.</p>
       </div>
 
       <div class="info-card">
         <h3>Bewaren</h3>
-        <p>Persoonsgegevens worden alleen bewaard zolang dat nodig is voor de bestelling, wettelijke verplichtingen of interne administratie.</p>
+        <p>We bewaren gegevens niet langer dan nodig. Gegevens die we voor onze administratie moeten bewaren, zoals betalingen, bewaren we zo lang als de wet dat vraagt.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>Jouw rechten</h3>
+        <p>Wil je weten welke gegevens we van je hebben, of wil je dat we ze aanpassen of verwijderen? Mail naar <a data-mail href="#">info@switispang.nl</a>.</p>
       </div>
     </main>
 
-    <div class="scrim" id="scrim"></div>
-    <aside class="drawer" id="cartDrawer" aria-label="Winkelmand">
-      <div class="drawer-header">
-        <h3>Jouw bestelling</h3>
-        <button class="close-btn" id="closeCartBtn" aria-label="Sluiten">✕</button>
+    <footer>
+      <div class="container">
+        <div class="footer-bottom">
+          <span>© 2026 Switi Spang · Almere-Buiten · handelsnaam van Leef en Lach<span data-kvk></span></span>
+          <span><a href="contact.html">Contact</a> · <a href="allergenen.html">Allergenen</a> · <a href="voorwaarden.html">Algemene voorwaarden</a> · <a href="privacy.html">Privacy</a></span>
+        </div>
       </div>
-      <div class="drawer-body" id="drawerBody"></div>
-      <div class="drawer-footer" id="drawerFooter"></div>
-    </aside>
-
-    <div class="sticky-cart" id="stickyCart">
-      <button class="sticky-btn" id="stickyCartBtn">Bekijk bestelling · <span id="stickyTotal">€0,00</span></button>
-    </div>
-
-    <div class="toast" id="toast"></div>
+    </footer>
 
     <script src="app.js" defer></script>
   </body>

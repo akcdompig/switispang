@@ -3,8 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Algemene voorwaarden | SWITI SPANG</title>
-    <meta name="description" content="Algemene voorwaarden voor bestellingen, afhalen en bezorgen bij Switi Spang." />
+    <title>Algemene voorwaarden | Switi Spang</title>
+    <meta name="description" content="Algemene voorwaarden voor bestellingen bij Switi Spang." />
+    <meta name="theme-color" content="#1c140f" />
+    <link rel="icon" href="img/logo.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
@@ -13,15 +15,14 @@
   <body>
     <header class="topbar">
       <div class="container topbar-inner">
-        <a href="index.html" class="brand">SWITI <span>SPANG</span></a>
+        <a class="brand" href="index.html"><img src="img/logo.png" alt="" class="brand-logo" />SWITI <span>SPANG</span></a>
         <nav>
-          <a href="index.html#menu">Weekmenu</a>
-          <a href="index.html#drop">Weekly drop</a>
-          <a href="index.html#story">Waarom SWITI SPANG?</a>
+          <a href="index.html#menu">Menu</a>
+          <a href="index.html#hoe">Zo werkt het</a>
+          <a href="index.html#story">Ons verhaal</a>
           <a href="contact.html">Contact</a>
         </nav>
-        <div class="mini-status"><span class="dot"></span> Bestellen open</div>
-        <button class="cart-trigger" id="openCartBtn">Bestelling <span class="cart-count" id="cartCount">0</span></button>
+        <a class="cart-trigger" href="index.html#menu">Naar het menu</a>
       </div>
     </header>
 
@@ -32,36 +33,59 @@
       </div>
 
       <div class="info-card">
-        <h3>1. Afhalen en bezorgen</h3>
-        <p>Bestellingen worden op woensdag of zaterdag afgehaald in Almere-Buiten of bezorgd binnen Almere, in het gekozen tijdvak. Het afhaaladres staat in de bevestiging. Een bestelling staat vast na betaling.</p>
+        <h3>1. Wie zijn wij</h3>
+        <p>Switi Spang is een handelsnaam van Leef en Lach, gevestigd in Almere-Buiten<span data-kvk></span>. Contact: <a data-mail href="#">info@switispang.nl</a> of WhatsApp <a data-wa href="#">06 24 58 48 54</a>.</p>
       </div>
 
       <div class="info-card">
-        <h3>2. Betaalverwerking</h3>
-        <p>Betalingen worden via een veilige online betaalprovider verwerkt. Een bestelling wordt pas definitief na succesvolle betaling, tenzij anders is vermeld.</p>
+        <h3>2. Bestellen</h3>
+        <p>Je bestelt via de website. Je bestelling gaat via WhatsApp naar ons. Daarna krijg je van ons een bevestiging en een betaalverzoek. Je bestelling staat pas vast als je betaald hebt.</p>
       </div>
 
       <div class="info-card">
-        <h3>3. Voorraad</h3>
-        <p>Voorraad is beperkt en kan per week verschillen. Als iets uitverkocht is, wordt dit in het menu duidelijk weergegeven.</p>
+        <h3>3. Bestelsluiting</h3>
+        <p>Voor woensdag kun je bestellen tot dinsdag 20:00. Voor zaterdag kun je bestellen tot vrijdag 17:00. Daarna sluit de bestellijn en koken we op basis van de bestellingen. Er is per gerecht een beperkt aantal porties: op = op.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>4. Prijzen en bezorgkosten</h3>
+        <p>Alle prijzen zijn in euro's en inclusief btw. Bezorgen kost €2,50 en is gratis bij bestellingen vanaf €30. We bezorgen alleen binnen Almere (postcode 1311–1364).</p>
+      </div>
+
+      <div class="info-card">
+        <h3>5. Afhalen en bezorgen</h3>
+        <p>Je haalt je bestelling op in het gekozen tijdvak. Het afhaaladres krijg je bij je bevestiging. Bij bezorgen zorg je dat er iemand thuis is in het gekozen tijdvak. Wordt een bestelling niet opgehaald of kan hij niet worden afgeleverd, dan kunnen we het bedrag niet terugbetalen, omdat het eten vers voor je is gemaakt.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>6. Annuleren en herroepingsrecht</h3>
+        <p>Je kunt je bestelling kosteloos annuleren tot de bestelsluiting. Daarna kan dat niet meer, omdat we dan inkopen en koken. Omdat het om vers bereide maaltijden gaat die snel bederven, geldt er geen wettelijk herroepingsrecht (bedenktijd).</p>
+      </div>
+
+      <div class="info-card">
+        <h3>7. Uitverkocht of niet leverbaar</h3>
+        <p>Kunnen we (een deel van) je bestelling onverhoopt niet leveren, dan laten we dat zo snel mogelijk weten en betalen we het bedrag voor dat deel volledig terug.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>8. Allergenen en halal</h3>
+        <p>Alles wat we maken is 100% halal. Per gerecht staan de allergenen vermeld, ook op de <a href="allergenen.html">allergenenpagina</a>. We koken in één keuken, dus sporen van andere allergenen zijn mogelijk. Heb je een allergie, laat het ons dan vóór je bestelt weten.</p>
+      </div>
+
+      <div class="info-card">
+        <h3>9. Klachten</h3>
+        <p>Niet tevreden? Laat het ons binnen 24 uur weten via WhatsApp of e-mail, het liefst met een foto. We zoeken samen met je naar een oplossing.</p>
       </div>
     </main>
 
-    <div class="scrim" id="scrim"></div>
-    <aside class="drawer" id="cartDrawer" aria-label="Winkelmand">
-      <div class="drawer-header">
-        <h3>Jouw bestelling</h3>
-        <button class="close-btn" id="closeCartBtn" aria-label="Sluiten">✕</button>
+    <footer>
+      <div class="container">
+        <div class="footer-bottom">
+          <span>© 2026 Switi Spang · Almere-Buiten · handelsnaam van Leef en Lach<span data-kvk></span></span>
+          <span><a href="contact.html">Contact</a> · <a href="allergenen.html">Allergenen</a> · <a href="voorwaarden.html">Algemene voorwaarden</a> · <a href="privacy.html">Privacy</a></span>
+        </div>
       </div>
-      <div class="drawer-body" id="drawerBody"></div>
-      <div class="drawer-footer" id="drawerFooter"></div>
-    </aside>
-
-    <div class="sticky-cart" id="stickyCart">
-      <button class="sticky-btn" id="stickyCartBtn">Bekijk bestelling · <span id="stickyTotal">€0,00</span></button>
-    </div>
-
-    <div class="toast" id="toast"></div>
+    </footer>
 
     <script src="app.js" defer></script>
   </body>
