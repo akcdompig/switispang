@@ -19,6 +19,9 @@ const CONFIG = {
   phoneLabel: '06 24 58 48 54',
   kvk: '', // KvK-nummer; leeg = niet tonen
 
+  // Online betalen via Mollie (iDEAL). Op de acceptatieversie staat dit altijd aan, op switispang.nl pas als dit true is.
+  payOnline: false,
+
   drop: {
     label: 'Woensdag 18 november',
     dayShort: 'woensdag',
@@ -131,11 +134,21 @@ const state = {
   sent: false
 };
 
+// Acceptatie = elke link die niet de echte site is (Vercel-previewlinks, localhost).
+const PROD_HOSTS = ['switispang.nl', 'www.switispang.nl', 'switispang.vercel.app'];
+const ACC = !PROD_HOSTS.includes(location.hostname) && !location.search.includes('prod'); // ?prod = test als echte site
+const PAY = CONFIG.payOnline || ACC;
+const store = {
+  get(k) { try { return JSON.parse(sessionStorage.getItem(k)); } catch (e) { return null; } },
+  set(k, v) { try { sessionStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* geen opslag: geen probleem */ } },
+  del(k) { try { sessionStorage.removeItem(k); } catch (e) { /* idem */ } }
+};
+
 const $ = id => document.getElementById(id);
 const money = v => `€${Number(v).toFixed(2).replace('.', ',')}`;
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-function isSoon() { return !CONFIG.orderingOpen; }
+function isSoon() { return !(CONFIG.orderingOpen || ACC); }
 function isClosed() {
   return isSoon() || Date.now() > new Date(CONFIG.drop.deadline).getTime();
 }
@@ -394,8 +407,8 @@ function renderCart() {
       <div class="line-total"><span>${state.mode === 'bezorgen' ? 'Bezorgen' : 'Afhalen'}</span><strong>${fee ? money(fee) : 'Gratis'}</strong></div>
       <div class="line-total total"><span>Totaal</span><strong>${money(subtotal() + fee)}</strong></div>
     </div>
-    <button class="checkout-btn wa" type="button" id="checkoutBtn" ${ready ? '' : 'disabled'}>${ready ? 'Bestellen en betalen via WhatsApp' : 'Bestellen opent binnenkort'}</button>
-    <div class="drawer-note">Na je bestelling krijg je een betaalverzoek. Je bestelling staat vast na betaling. Door te bestellen ga je akkoord met onze <a href="voorwaarden.html" target="_blank">voorwaarden</a> en <a href="privacy.html" target="_blank">privacyverklaring</a>.</div>
+    <button class="checkout-btn ${PAY ? '' : 'wa'}" type="button" id="checkoutBtn" ${ready ? '' : 'disabled'}>${!ready ? 'Bestellen opent binnenkort' : PAY ? `Betalen met iDEAL · ${money(subtotal() + fee)}` : 'Bestellen en betalen via WhatsApp'}</button>
+    <div class="drawer-note">${PAY ? 'Je betaalt veilig via Mollie. Daarna stuur je je bestelling met één tik naar ons via WhatsApp.' : 'Na je bestelling krijg je een betaalverzoek. Je bestelling staat vast na betaling.'} Door te bestellen ga je akkoord met onze <a href="voorwaarden.html" target="_blank">voorwaarden</a> en <a href="privacy.html" target="_blank">privacyverklaring</a>.</div>
   `;
 
   body.querySelectorAll('[data-c]').forEach(b => b.addEventListener('click', () => {
@@ -443,9 +456,45 @@ function checkout() {
     if (!/^\d{4}[A-Z]{2}$/.test(f.postcode) || pc < 1311 || pc > 1364) return toast('We bezorgen alleen in Almere (postcode 1311–1364).');
   }
   state.lastMessage = buildMessage(f);
+  if (PAY) return payOnline(f);
   openWhatsApp();
   state.sent = true;
   renderCart();
+}
+
+async function payOnline(f) {
+  const btn = $('checkoutBtn');
+  btn.disabled = true; btn.textContent = 'Even geduld…';
+  try {
+    const r = await fetch('/api/checkout', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ cart: state.cart.map(({ dishId, variantId, extras, qty }) => ({ dishId, variantId, extras, qty })), mode: state.mode, slot: state.slot, form: f })
+    });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok || !j.checkoutUrl) throw new Error(j.error || 'Betalen lukt even niet. Probeer het zo opnieuw.');
+    store.set('ss_order', { msg: state.lastMessage, id: j.id, cart: state.cart, mode: state.mode, slot: state.slot, form: f });
+    location.href = j.checkoutUrl;
+  } catch (e) {
+    toast(e.message);
+    renderCart();
+  }
+}
+
+// Terug van Mollie zonder te betalen: zet de winkelmand terug.
+function restoreAfterCancel() {
+  if (!location.search.includes('betaling=geannuleerd')) return;
+  const o = store.get('ss_order');
+  if (o && o.cart) { state.cart = o.cart; state.mode = o.mode; state.slot = o.slot; }
+  history.replaceState(null, '', location.pathname);
+  setTimeout(() => { toast('Betaling geannuleerd. Je bestelling staat nog in je mandje.'); if (state.cart.length) openCart(); }, 400);
+}
+
+function accBanner() {
+  if (!ACC) return;
+  const b = document.createElement('div');
+  b.className = 'acc-banner';
+  b.textContent = 'ACCEPTATIE · testversie, niet de echte site';
+  document.body.prepend(b);
 }
 
 function openWhatsApp() {
@@ -488,6 +537,7 @@ function initLaunch() {
 }
 
 function init() {
+  accBanner();
   initLaunch();
   document.querySelectorAll('[data-ig]').forEach(a => { a.href = CONFIG.instagram; });
   document.querySelectorAll('[data-tt]').forEach(a => { a.href = CONFIG.tiktok; });
@@ -495,6 +545,7 @@ function init() {
   document.querySelectorAll('[data-wa]').forEach(a => { a.href = 'https://wa.me/' + CONFIG.whatsapp; a.textContent = CONFIG.phoneLabel; });
   document.querySelectorAll('[data-kvk]').forEach(n => { if (CONFIG.kvk) n.textContent = ' · KvK ' + CONFIG.kvk; });
   if (!$('menuGrid')) return; // subpagina's: alleen contactgegevens invullen
+  restoreAfterCancel();
   $('openCartBtn').addEventListener('click', openCart);
   $('stickyCartBtn').addEventListener('click', openCart);
   $('closeCartBtn').addEventListener('click', closeCart);

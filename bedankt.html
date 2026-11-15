@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bedankt | Switi Spang</title>
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#1c140f" />
+    <link rel="icon" href="img/logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <a class="brand" href="index.html"><img src="img/logo.png" alt="" class="brand-logo" />SWITI <span>SPANG</span></a>
+        <nav>
+          <a href="index.html#menu">Menu</a>
+          <a href="index.html#hoe">Zo werkt het</a>
+          <a href="index.html#story">Ons verhaal</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <a class="cart-trigger" href="index.html#menu">Naar het menu</a>
+      </div>
+    </header>
+
+    <main class="container page-shell">
+      <div class="pay-status" id="payStatus">
+        <span class="big">⏳</span>
+        <h1>Even je betaling checken…</h1>
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="footer-bottom">
+          <span>© 2026 Switi Spang · Almere-Buiten<span data-kvk></span> · Foto's zijn serveersuggesties</span>
+          <span><a href="contact.html">Contact</a> · <a href="allergenen.html">Allergenen</a> · <a href="voorwaarden.html">Algemene voorwaarden</a> · <a href="privacy.html">Privacy</a></span>
+        </div>
+      </div>
+    </footer>
+
+    <script src="app.js" defer></script>
+  
+    <script>
+    (function () {
+      var WA = '31624584854';
+      var box = document.getElementById('payStatus');
+      var id = new URLSearchParams(location.search).get('id') || '';
+      var saved = null;
+      try { saved = JSON.parse(sessionStorage.getItem('ss_order')); } catch (e) {}
+      var tries = 0;
+      function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+      function show(icon, title, html) { box.innerHTML = '<span class="big">' + icon + '</span><h1>' + title + '</h1>' + (html || ''); }
+      function check() {
+        if (!/^tr_/.test(id)) return show('🤔', 'Geen betaling gevonden', '<p>Heb je al betaald? Stuur ons even een WhatsApp, dan zoeken we het uit.</p><a class="checkout-btn wa" href="https://wa.me/' + WA + '">WhatsApp ons</a>');
+        fetch('/api/status?id=' + encodeURIComponent(id)).then(function (r) { return r.json(); }).then(function (p) {
+          if (p.error) throw new Error(p.error);
+          var amount = '€' + Number(p.amount).toFixed(2).replace('.', ',');
+          if (p.status === 'paid') {
+            var msg = ((saved && saved.id === id && saved.msg) || p.order) + '\n\n✅ Betaald via Mollie: ' + amount + ' (' + p.id + (p.testmode ? ', TEST' : '') + ')';
+            var url = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(msg);
+            show('✅', 'Betaald, dank je wel!', '<p>We hebben ' + amount + ' ontvangen' + (p.testmode ? ' <strong>(testbetaling)</strong>' : '') + '. <strong>Laatste stap:</strong> stuur je bestelling naar ons via WhatsApp, dan bevestigen we hem.</p><pre>' + esc(msg) + '</pre><a class="checkout-btn wa" href="' + url + '" target="_blank" rel="noreferrer">Stuur bestelling via WhatsApp</a><p style="margin-top:16px"><a href="index.html">Terug naar de site</a></p>');
+            try { sessionStorage.removeItem('ss_order'); } catch (e) {}
+          } else if ((p.status === 'open' || p.status === 'pending' || p.status === 'authorized') && tries++ < 10) {
+            show('⏳', 'We wachten op je betaling…', '<p>Dit duurt meestal een paar seconden.</p>');
+            setTimeout(check, 3000);
+          } else if (p.status === 'open' || p.status === 'pending') {
+            show('⏳', 'Je betaling is nog niet binnen', '<p>Ververs deze pagina over een minuutje. Lukt het niet, stuur ons dan even een WhatsApp.</p><a class="checkout-btn wa" href="https://wa.me/' + WA + '">WhatsApp ons</a>');
+          } else {
+            show('❌', 'Betaling niet gelukt', '<p>Er is niets afgeschreven. Je bestelling staat nog klaar, probeer het gerust opnieuw.</p><a class="checkout-btn" href="index.html?betaling=geannuleerd">Terug naar mijn mandje</a>');
+          }
+        }).catch(function (e) {
+          show('⚠️', 'Even mis', '<p>' + esc(e.message) + '</p><a class="checkout-btn wa" href="https://wa.me/' + WA + '">WhatsApp ons</a>');
+        });
+      }
+      check();
+    })();
+    </script>
+  </body>
+</html>

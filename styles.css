@@ -776,3 +776,10 @@ body.prelaunch { overflow: hidden; }
 .rep-note { margin-top: 16px; padding: 14px 18px; border: 1px solid rgba(224,174,66,.45); border-radius: 14px; background: rgba(224,174,66,.08); color: var(--paper); font-size: .92rem; }
 .rep-note a { color: var(--accent); }
 .board-note { margin-top: 14px; font-weight: 700; color: #6b4a1e; font-size: .95rem; }
+
+/* Acceptatie (testversie) */
+.acc-banner { position: relative; z-index: 1; background: #c0392b; color: #fff; text-align: center; font: 800 0.75rem/1 Manrope, sans-serif; letter-spacing: 0.12em; padding: 8px 10px; }
+.pay-status { text-align: center; padding: 40px 0; }
+.pay-status .big { font-size: 3rem; display: block; margin-bottom: 12px; }
+.pay-status pre { text-align: left; white-space: pre-wrap; background: rgba(255,255,255,.04); border: 1px solid rgba(224,174,66,.25); border-radius: 14px; padding: 16px; margin: 20px auto; max-width: 520px; font: 0.9rem/1.5 Manrope, sans-serif; color: var(--muted); }
+.pay-status .checkout-btn { max-width: 420px; margin: 10px auto 0; display: block; }
