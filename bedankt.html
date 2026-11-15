@@ -60,9 +60,8 @@
           if (p.error) throw new Error(p.error);
           var amount = '€' + Number(p.amount).toFixed(2).replace('.', ',');
           if (p.status === 'paid') {
-            var msg = ((saved && saved.id === id && saved.msg) || p.order) + '\n\n✅ Betaald via Mollie: ' + amount + ' (' + p.id + (p.testmode ? ', TEST' : '') + ')';
-            var url = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(msg);
-            show('✅', 'Betaald, dank je wel!', '<p>We hebben ' + amount + ' ontvangen' + (p.testmode ? ' <strong>(testbetaling)</strong>' : '') + '. <strong>Laatste stap:</strong> stuur je bestelling naar ons via WhatsApp, dan bevestigen we hem.</p><pre>' + esc(msg) + '</pre><a class="checkout-btn wa" href="' + url + '" target="_blank" rel="noreferrer">Stuur bestelling via WhatsApp</a><p style="margin-top:16px"><a href="index.html">Terug naar de site</a></p>');
+            var msg = p.order || (saved && saved.id === id && saved.msg) || '';
+            show('✅', 'Bedankt voor je bestelling!', '<p>We hebben ' + amount + ' ontvangen' + (p.testmode ? ' <strong>(testbetaling)</strong>' : '') + '. Je bestelling is binnen en we gaan ermee aan de slag.' + (p.email ? ' Een bevestiging is onderweg naar <strong>' + esc(p.email) + '</strong>.' : '') + '</p><pre>' + esc(msg) + '</pre><p>Vragen of iets aanpassen? <a href="https://wa.me/' + WA + '" target="_blank" rel="noreferrer">App ons</a> op 06 24 58 48 54.</p><p style="margin-top:16px"><a href="index.html">Terug naar de site</a></p>');
             try { sessionStorage.removeItem('ss_order'); } catch (e) {}
           } else if ((p.status === 'open' || p.status === 'pending' || p.status === 'authorized') && tries++ < 10) {
             show('⏳', 'We wachten op je betaling…', '<p>Dit duurt meestal een paar seconden.</p>');

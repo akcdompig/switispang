@@ -333,7 +333,7 @@ function addToCart(dishId) {
 /* ---------- cart + checkout ---------- */
 function readForm() {
   const v = id => ($(id) ? $(id).value.trim() : '');
-  return { name: v('fName'), phone: v('fPhone'), street: v('fStreet'), postcode: v('fPostcode').toUpperCase().replace(/\s+/g, ''), note: v('fNote') };
+  return { name: v('fName'), phone: v('fPhone'), email: v('fEmail'), street: v('fStreet'), postcode: v('fPostcode').toUpperCase().replace(/\s+/g, ''), note: v('fNote') };
 }
 
 function renderCart() {
@@ -393,6 +393,7 @@ function renderCart() {
 
     <div class="field"><label for="fName">Naam</label><input id="fName" type="text" autocomplete="name" placeholder="Voor- en achternaam" value="${esc(prev.name)}"/></div>
     <div class="field"><label for="fPhone">Telefoon</label><input id="fPhone" type="tel" autocomplete="tel" placeholder="Voor als er iets is" value="${esc(prev.phone)}"/></div>
+    ${PAY ? `<div class="field"><label for="fEmail">E-mail</label><input id="fEmail" type="email" autocomplete="email" placeholder="Hier komt je bevestiging" value="${esc(prev.email)}"/></div>` : ''}
     ${state.mode === 'bezorgen' ? `
       <div class="field"><label for="fStreet">Straat + huisnummer</label><input id="fStreet" type="text" autocomplete="street-address" value="${esc(prev.street)}"/></div>
       <div class="field"><label for="fPostcode">Postcode</label><input id="fPostcode" type="text" autocomplete="postal-code" placeholder="13.. ..  (Almere)" value="${esc(prev.postcode)}"/></div>` : ''}
@@ -408,7 +409,7 @@ function renderCart() {
       <div class="line-total total"><span>Totaal</span><strong>${money(subtotal() + fee)}</strong></div>
     </div>
     <button class="checkout-btn ${PAY ? '' : 'wa'}" type="button" id="checkoutBtn" ${ready ? '' : 'disabled'}>${!ready ? 'Bestellen opent binnenkort' : PAY ? `Betalen met iDEAL · ${money(subtotal() + fee)}` : 'Bestellen en betalen via WhatsApp'}</button>
-    <div class="drawer-note">${PAY ? 'Je betaalt veilig via Mollie. Daarna stuur je je bestelling met één tik naar ons via WhatsApp.' : 'Na je bestelling krijg je een betaalverzoek. Je bestelling staat vast na betaling.'} Door te bestellen ga je akkoord met onze <a href="voorwaarden.html" target="_blank">voorwaarden</a> en <a href="privacy.html" target="_blank">privacyverklaring</a>.</div>
+    <div class="drawer-note">${PAY ? 'Je betaalt veilig via Mollie. Daarna krijg je meteen een bevestiging per e-mail.' : 'Na je bestelling krijg je een betaalverzoek. Je bestelling staat vast na betaling.'} Door te bestellen ga je akkoord met onze <a href="voorwaarden.html" target="_blank">voorwaarden</a> en <a href="privacy.html" target="_blank">privacyverklaring</a>.</div>
   `;
 
   body.querySelectorAll('[data-c]').forEach(b => b.addEventListener('click', () => {
@@ -450,6 +451,7 @@ function checkout() {
   if (!state.slot) return toast(state.mode === 'bezorgen' ? 'Kies een tijdvak.' : 'Kies een ophaaltijd.');
   if (!f.name) return toast('Vul je naam in.');
   if (f.phone.replace(/\D/g, '').length < 9) return toast('Vul je telefoonnummer in.');
+  if (PAY && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.email)) return toast('Vul een geldig e-mailadres in voor je bevestiging.');
   if (state.mode === 'bezorgen') {
     if (!f.street) return toast('Vul je straat en huisnummer in.');
     const pc = Number(f.postcode.slice(0, 4));

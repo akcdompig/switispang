@@ -11,8 +11,9 @@ module.exports = async (req, res) => {
       description: `Switi Spang ${o.CONFIG.drop.label} – ${o.form.name}`.slice(0, 255),
       redirectUrl: `${base}/bedankt.html`,
       cancelUrl: `${base}/?betaling=geannuleerd`,
+      webhookUrl: `${base}/api/webhook`,
       locale: 'nl_NL',
-      metadata: { order: fitMeta(o.msg) }
+      metadata: { order: fitMeta(o.msg), email: o.form.email }
     });
     // Nu we het betaal-ID hebben: stuur de klant na betalen terug naar een pagina die de status kan opvragen.
     await mollie('PATCH', `/payments/${p.id}`, { redirectUrl: `${base}/bedankt.html?id=${p.id}` });

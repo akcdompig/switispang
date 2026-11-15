@@ -48,9 +48,10 @@ function priceOrder(body) {
   if (!slots.includes(body.slot)) throw new Error('Kies een tijd.');
   const f = body.form || {};
   const clean = (s, n) => String(s || '').replace(/[\r\n]+/g, ' ').trim().slice(0, n);
-  const form = { name: clean(f.name, 80), phone: clean(f.phone, 30), street: clean(f.street, 100), postcode: clean(f.postcode, 10).toUpperCase().replace(/\s+/g, ''), note: clean(f.note, 200) };
+  const form = { name: clean(f.name, 80), phone: clean(f.phone, 30), email: clean(f.email, 120).toLowerCase(), street: clean(f.street, 100), postcode: clean(f.postcode, 10).toUpperCase().replace(/\s+/g, ''), note: clean(f.note, 200) };
   if (!form.name) throw new Error('Vul je naam in.');
   if (form.phone.replace(/\D/g, '').length < 9) throw new Error('Vul je telefoonnummer in.');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.email)) throw new Error('Vul een geldig e-mailadres in voor je bevestiging.');
   if (mode === 'bezorgen') {
     const pc = Number(form.postcode.slice(0, 4));
     if (!form.street) throw new Error('Vul je straat en huisnummer in.');
@@ -66,7 +67,7 @@ function priceOrder(body) {
     `Totaal: ${money(total)}`, '',
     mode === 'bezorgen' ? `Bezorgen tussen ${body.slot}` : `Afhalen om ${body.slot}`,
     ...(mode === 'bezorgen' ? [`Adres: ${form.street}, ${form.postcode} Almere`] : []),
-    `Naam: ${form.name}`, `Telefoon: ${form.phone}`,
+    `Naam: ${form.name}`, `Telefoon: ${form.phone}`, `E-mail: ${form.email}`,
     ...(form.note ? [`Opmerking: ${form.note}`] : [])
   ].join('\n');
 
@@ -98,7 +99,7 @@ function origin(req) {
 // Mollie-metadata mag max 1 KB zijn: houd de bestelling compact.
 function fitMeta(msg) {
   let m = msg;
-  while (Buffer.byteLength(JSON.stringify({ order: m })) > 1000) m = m.slice(0, -20);
+  while (Buffer.byteLength(JSON.stringify({ order: m, email: 'x'.repeat(120), notified: false })) > 1000) m = m.slice(0, -20);
   return m === msg ? m : m + '…';
 }
 
