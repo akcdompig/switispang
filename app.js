@@ -9,6 +9,8 @@ const CONFIG = {
 
   // Bestellijn: false = site staat online, maar bestellen opent binnenkort. Zet op true zodra alles goedgekeurd is.
   orderingOpen: false,
+  // Automatisch open vanaf dit moment (op de echte site). Op de acceptatieversie staat bestellen altijd open.
+  orderingOpenAt: '2026-11-15T20:00:00+01:00',
 
   // Lancering: tot dit moment ziet de bezoeker een aftelpagina. Daarna verdwijnt die vanzelf.
   // Testen vóór de lancering: zet ?preview achter de link.
@@ -17,10 +19,10 @@ const CONFIG = {
   // Contact (staat in de footer en op de contactpagina)
   email: 'info@switispang.nl',
   phoneLabel: '06 24 58 48 54',
-  kvk: '', // KvK-nummer; leeg = niet tonen
+  kvk: '94670099', // KvK-nummer; leeg = niet tonen
 
   // Online betalen via Mollie (iDEAL). Op de acceptatieversie staat dit altijd aan, op switispang.nl pas als dit true is.
-  payOnline: false,
+  payOnline: true,
 
   drop: {
     label: 'Woensdag 18 november',
@@ -131,6 +133,7 @@ const state = {
   cart: [], // { key, dishId, variantId, extras:[ids], qty }
   mode: 'afhalen',
   slot: '',
+  full: [], // ophaaltijden die vol zijn (uit /api/stock)
   sent: false
 };
 
@@ -148,7 +151,7 @@ const $ = id => document.getElementById(id);
 const money = v => `€${Number(v).toFixed(2).replace('.', ',')}`;
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-function isSoon() { return !(CONFIG.orderingOpen || ACC); }
+function isSoon() { return !(CONFIG.orderingOpen || ACC || (CONFIG.orderingOpenAt && Date.now() >= new Date(CONFIG.orderingOpenAt).getTime())); }
 function isClosed() {
   return isSoon() || Date.now() > new Date(CONFIG.drop.deadline).getTime();
 }
@@ -328,6 +331,8 @@ function addToCart(dishId) {
   toast(`${qty}× ${d.name} toegevoegd`);
   renderMenu();
   renderCart();
+  loadStock();
+  if (isSoon() && CONFIG.orderingOpenAt) setTimeout(() => location.reload(), Math.max(1000, new Date(CONFIG.orderingOpenAt).getTime() - Date.now() + 1500));
 }
 
 /* ---------- cart + checkout ---------- */
@@ -366,7 +371,7 @@ function renderCart() {
   }
 
   const prev = readForm();
-  const slots = state.mode === 'bezorgen' ? CONFIG.delivery.slots : CONFIG.pickup.slots;
+  const slots = (state.mode === 'bezorgen' ? CONFIG.delivery.slots : CONFIG.pickup.slots).filter(s => state.mode === 'bezorgen' || !state.full.includes(s));
   if (!slots.includes(state.slot)) state.slot = '';
 
   body.innerHTML = `
@@ -388,12 +393,12 @@ function renderCart() {
     </div>
 
     <div class="field"><label>${state.mode === 'afhalen' ? 'Ophaaltijd' : 'Tijdvak'} op ${esc(CONFIG.drop.dayShort)}</label>
-      <div class="slot-grid">${slots.map(s => `<button type="button" class="slot-button ${state.slot === s ? 'active' : ''}" data-slot="${s}">${s}</button>`).join('')}</div>
+      <div class="slot-grid">${slots.map(s => `<button type="button" class="slot-button ${state.slot === s ? 'active' : ''}" data-slot="${s}">${s}</button>`).join('')}</div>${slots.length ? '' : '<p class="drawer-note">Alle ophaaltijden zijn vol. Kies bezorgen of probeer het later nog eens.</p>'}
     </div>
 
     <div class="field"><label for="fName">Naam</label><input id="fName" type="text" autocomplete="name" placeholder="Voor- en achternaam" value="${esc(prev.name)}"/></div>
     <div class="field"><label for="fPhone">Telefoon</label><input id="fPhone" type="tel" autocomplete="tel" placeholder="Voor als er iets is" value="${esc(prev.phone)}"/></div>
-    ${PAY ? `<div class="field"><label for="fEmail">E-mail</label><input id="fEmail" type="email" autocomplete="email" placeholder="Hier komt je bevestiging" value="${esc(prev.email)}"/></div>` : ''}
+    ${PAY ? `<div class="field"><label for="fEmail">E-mail (optioneel)</label><input id="fEmail" type="email" autocomplete="email" placeholder="Voor je bevestiging" value="${esc(prev.email)}"/></div>` : ''}
     ${state.mode === 'bezorgen' ? `
       <div class="field"><label for="fStreet">Straat + huisnummer</label><input id="fStreet" type="text" autocomplete="street-address" value="${esc(prev.street)}"/></div>
       <div class="field"><label for="fPostcode">Postcode</label><input id="fPostcode" type="text" autocomplete="postal-code" placeholder="13.. ..  (Almere)" value="${esc(prev.postcode)}"/></div>` : ''}
@@ -409,7 +414,7 @@ function renderCart() {
       <div class="line-total total"><span>Totaal</span><strong>${money(subtotal() + fee)}</strong></div>
     </div>
     <button class="checkout-btn ${PAY ? '' : 'wa'}" type="button" id="checkoutBtn" ${ready ? '' : 'disabled'}>${!ready ? 'Bestellen opent binnenkort' : PAY ? `Betalen met iDEAL · ${money(subtotal() + fee)}` : 'Bestellen en betalen via WhatsApp'}</button>
-    <div class="drawer-note">${PAY ? 'Je betaalt veilig via Mollie. Daarna krijg je meteen een bevestiging per e-mail.' : 'Na je bestelling krijg je een betaalverzoek. Je bestelling staat vast na betaling.'} Door te bestellen ga je akkoord met onze <a href="voorwaarden.html" target="_blank">voorwaarden</a> en <a href="privacy.html" target="_blank">privacyverklaring</a>.</div>
+    <div class="drawer-note">${PAY ? 'Je betaalt veilig via Mollie. Daarna zie je meteen je bevestiging.' : 'Na je bestelling krijg je een betaalverzoek. Je bestelling staat vast na betaling.'} Door te bestellen ga je akkoord met onze <a href="voorwaarden.html" target="_blank">voorwaarden</a> en <a href="privacy.html" target="_blank">privacyverklaring</a>.</div>
   `;
 
   body.querySelectorAll('[data-c]').forEach(b => b.addEventListener('click', () => {
@@ -451,7 +456,7 @@ function checkout() {
   if (!state.slot) return toast(state.mode === 'bezorgen' ? 'Kies een tijdvak.' : 'Kies een ophaaltijd.');
   if (!f.name) return toast('Vul je naam in.');
   if (f.phone.replace(/\D/g, '').length < 9) return toast('Vul je telefoonnummer in.');
-  if (PAY && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.email)) return toast('Vul een geldig e-mailadres in voor je bevestiging.');
+  if (PAY && f.email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.email)) return toast('Dit e-mailadres klopt niet. Laat het leeg of controleer het.');
   if (state.mode === 'bezorgen') {
     if (!f.street) return toast('Vul je straat en huisnummer in.');
     const pc = Number(f.postcode.slice(0, 4));
@@ -473,13 +478,40 @@ async function payOnline(f) {
       body: JSON.stringify({ cart: state.cart.map(({ dishId, variantId, extras, qty }) => ({ dishId, variantId, extras, qty })), mode: state.mode, slot: state.slot, form: f })
     });
     const j = await r.json().catch(() => ({}));
-    if (!r.ok || !j.checkoutUrl) throw new Error(j.error || 'Betalen lukt even niet. Probeer het zo opnieuw.');
+    if (!r.ok || !j.checkoutUrl) { if (j.refresh) loadStock(); throw new Error(j.error || 'Betalen lukt even niet. Probeer het zo opnieuw.'); }
     store.set('ss_order', { msg: state.lastMessage, id: j.id, cart: state.cart, mode: state.mode, slot: state.slot, form: f });
     location.href = j.checkoutUrl;
   } catch (e) {
     toast(e.message);
     renderCart();
   }
+}
+
+// Wat is er op en welke ophaaltijden zijn vol? Uit de betalingen van alle klanten (server).
+async function loadStock() {
+  if (!PAY) return;
+  try {
+    const j = await (await fetch('/api/stock', { cache: 'no-store' })).json();
+    const sig = JSON.stringify([j.soldOut || [], j.fullSlots || []]);
+    if (sig === state.stockSig) return; // niets veranderd: menu niet opnieuw tekenen
+    state.stockSig = sig;
+    CONFIG_RUNTIME_RESET();
+    (j.soldOut || []).forEach(k => {
+      const [id, vid] = k.split(':');
+      const d = dish(id);
+      if (!d) return;
+      if (vid) { const v = d.variants.find(x => x.id === vid); if (v) v.soldOut = true; } else d.soldOut = true;
+    });
+    state.full = j.fullSlots || [];
+    if (state.slot && state.full.includes(state.slot) && state.mode === 'afhalen') state.slot = '';
+    renderBoard(); renderMenu(); renderCart();
+  } catch (e) { /* geen verbinding met voorraad: de server controleert bij het afrekenen toch */ }
+}
+// Zet eerder gezette 'op'-markeringen terug, zodat een ronde die weer vrijkomt (bv. na een verlopen betaling) weer te bestellen is.
+const BASE_SOLD = new Map();
+function CONFIG_RUNTIME_RESET() {
+  if (!BASE_SOLD.size) [...MENU, ...DRINKS].forEach(d => { BASE_SOLD.set(d.id, !!d.soldOut); d.variants.forEach(v => BASE_SOLD.set(d.id + ':' + v.id, !!v.soldOut)); });
+  [...MENU, ...DRINKS].forEach(d => { d.soldOut = BASE_SOLD.get(d.id); d.variants.forEach(v => { v.soldOut = BASE_SOLD.get(d.id + ':' + v.id); }); });
 }
 
 // Terug van Mollie zonder te betalen: zet de winkelmand terug.
@@ -512,7 +544,7 @@ function toast(msg) {
   clearTimeout(toast.t);
   toast.t = setTimeout(() => t.classList.remove('show'), 2400);
 }
-function openCart() { $('cartDrawer').classList.add('open'); $('scrim').classList.add('show'); document.body.style.overflow = 'hidden'; }
+function openCart() { loadStock(); $('cartDrawer').classList.add('open'); $('scrim').classList.add('show'); document.body.style.overflow = 'hidden'; }
 function closeCart() { $('cartDrawer').classList.remove('open'); $('scrim').classList.remove('show'); document.body.style.overflow = ''; }
 
 function initLaunch() {

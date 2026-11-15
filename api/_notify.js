@@ -17,8 +17,8 @@ async function telegram(text) {
 
 async function mail(to, subject, text) {
   const key = process.env.RESEND_API_KEY;
-  if (!key || !to) return false;
-  const from = process.env.MAIL_FROM || 'Switi Spang <onboarding@resend.dev>';
+  const from = process.env.MAIL_FROM; // pas zetten als het domein bij Resend geverifieerd is
+  if (!key || !from || !to) return false;
   const r = await fetch('https://api.resend.com/emails', {
     method: 'POST', headers: { Authorization: 'Bearer ' + key, 'Content-Type': 'application/json' },
     body: JSON.stringify({ from, to: [to], subject, text })
