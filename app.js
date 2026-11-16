@@ -41,12 +41,12 @@ const CONFIG = {
     freeFrom: 30,
     slots: ['17:00 – 18:00', '18:00 – 19:00', '19:00 – 20:00'],
     // Buiten Almere: alleen vanaf een minimumbedrag, met hogere bezorgkosten (rit moet rendabel zijn)
-    region: {
-      label: 'Amsterdam, Diemen en het Gooi',
-      minOrder: 60,
-      fee: 7.5,
-      ranges: [[1000, 1109], [1111, 1112], [1211, 1228], [1380, 1382], [1398, 1399], [1400, 1412]] // pas aan om plaatsen toe te voegen
-    }
+    // Buiten Almere: per zone een minimumbestelling + vaste bezorgkosten (rit moet rendabel zijn)
+    zones: [
+      { key: 'dichtbij',  label: 'Diemen, Weesp, Muiden, Bussum en Naarden', minOrder: 60, fee: 12.5, ranges: [[1111, 1112], [1380, 1382], [1398, 1399], [1400, 1412]] },
+      { key: 'gooi',      label: 'Hilversum en het Gooi',                    minOrder: 70, fee: 15,   ranges: [[1211, 1228]] },
+      { key: 'amsterdam', label: 'Amsterdam',                                minOrder: 80, fee: 17.5, ranges: [[1000, 1109]] }
+    ]
   },
   instagram: 'https://www.instagram.com/switispang',
   tiktok: 'https://www.tiktok.com/@switispang'
@@ -198,21 +198,23 @@ function zoneOf(pcRaw) {
   if (!/^\d{4}[A-Z]{2}$/.test(pc)) return '';
   const n = Number(pc.slice(0, 4));
   if (n >= 1311 && n <= 1364) return 'almere';
-  return CONFIG.delivery.region.ranges.some(([a, b]) => n >= a && n <= b) ? 'regio' : 'buiten';
+  const z = CONFIG.delivery.zones.find(z => z.ranges.some(([a, b]) => n >= a && n <= b));
+  return z ? z.key : 'buiten';
 }
+function zoneInfo(key) { return CONFIG.delivery.zones.find(z => z.key === key); }
 function currentZone() { return state.mode === 'bezorgen' ? zoneOf(readForm().postcode) : ''; }
 function deliveryFee() {
   if (state.mode !== 'bezorgen') return 0;
   const z = currentZone();
-  if (z === 'regio') return CONFIG.delivery.region.fee;
+  if (zoneInfo(z)) return zoneInfo(z).fee;
   return subtotal() >= CONFIG.delivery.freeFrom ? 0 : CONFIG.delivery.fee;
 }
 // Melding bij het gekozen adres (leeg = alles goed)
 function deliveryProblem() {
   if (state.mode !== 'bezorgen') return '';
-  const z = currentZone(), R = CONFIG.delivery.region;
-  if (z === 'buiten') return `Hier bezorgen we helaas niet. We bezorgen in Almere en (vanaf ${money(R.minOrder)}) in ${R.label}. Afhalen kan altijd.`;
-  if (z === 'regio' && subtotal() < R.minOrder) return `Bezorgen in ${R.label} kan vanaf ${money(R.minOrder)}. Nog ${money(R.minOrder - subtotal())} te gaan, of kies afhalen.`;
+  const z = currentZone(), R = zoneInfo(z);
+  if (z === 'buiten') return 'Hier bezorgen we helaas niet. We bezorgen in Almere, Amsterdam, Diemen en het Gooi. Afhalen kan altijd.';
+  if (R && subtotal() < R.minOrder) return `Bezorgen in ${R.label} kan vanaf ${money(R.minOrder)}. Nog ${money(R.minOrder - subtotal())} te gaan, of kies afhalen.`;
   return '';
 }
 
@@ -414,7 +416,7 @@ function renderCart() {
       </div>
       <p class="hint">${state.mode === 'afhalen'
         ? `Afhalen in ${CONFIG.pickup.area}. Het adres krijg je bij je bevestiging.`
-        : `Almere: bezorgen ${money(CONFIG.delivery.fee)}, gratis vanaf ${money(CONFIG.delivery.freeFrom)}. Buiten Almere (${CONFIG.delivery.region.label}): vanaf ${money(CONFIG.delivery.region.minOrder)}, bezorgkosten ${money(CONFIG.delivery.region.fee)}, zodat de rit de moeite waard is.`}</p>
+        : `Almere: bezorgen ${money(CONFIG.delivery.fee)}, gratis vanaf ${money(CONFIG.delivery.freeFrom)}. Buiten Almere: ${CONFIG.delivery.zones.map(z => `${z.label} vanaf ${money(z.minOrder)} (bezorgkosten ${money(z.fee)})`).join('; ')}.`}</p>
     </div>
 
     <div class="field"><label>${state.mode === 'afhalen' ? 'Ophaaltijd' : 'Tijdvak'} op ${esc(CONFIG.drop.dayShort)}</label>
@@ -480,7 +482,7 @@ function buildMessage(f) {
   lines.push(`Totaal: ${money(subtotal() + fee)}`);
   lines.push('');
   lines.push(state.mode === 'bezorgen' ? `Bezorgen tussen ${state.slot}` : `Afhalen om ${state.slot}`);
-  if (state.mode === 'bezorgen') lines.push(`Adres: ${f.street}, ${f.postcode}${zoneOf(f.postcode) === 'regio' ? ' (buiten Almere)' : ' Almere'}`);
+  if (state.mode === 'bezorgen') lines.push(`Adres: ${f.street}, ${f.postcode}${zoneOf(f.postcode) !== 'almere' ? ' (buiten Almere)' : ' Almere'}`);
   lines.push(`Naam: ${f.name}`);
   lines.push(`Telefoon: ${f.phone}`);
   if (f.note) lines.push(`Opmerking: ${f.note}`);

@@ -55,16 +55,17 @@ function priceOrder(body, opts = {}) {
   if (!form.name) throw new Error('Vul je naam in.');
   if (form.phone.replace(/\D/g, '').length < 9) throw new Error('Vul je telefoonnummer in.');
   if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(form.email)) throw new Error('Dit e-mailadres klopt niet. Laat het leeg of controleer het.');
-  let zone = '';
+  let zone = '', R = null;
   if (mode === 'bezorgen') {
     if (!form.street) throw new Error('Vul je straat en huisnummer in.');
     if (!/^\d{4}[A-Z]{2}$/.test(form.postcode)) throw new Error('Vul een geldige postcode in.');
-    const n = Number(form.postcode.slice(0, 4)), R = CONFIG.delivery.region;
-    zone = n >= 1311 && n <= 1364 ? 'almere' : R.ranges.some(([x, y]) => n >= x && n <= y) ? 'regio' : 'buiten';
+    const n = Number(form.postcode.slice(0, 4));
+    R = CONFIG.delivery.zones.find(z => z.ranges.some(([x, y]) => n >= x && n <= y));
+    zone = n >= 1311 && n <= 1364 ? 'almere' : R ? R.key : 'buiten';
     if (zone === 'buiten') throw new Error('Op dit adres bezorgen we helaas niet.');
-    if (zone === 'regio' && cents(sub) < cents(R.minOrder)) throw new Error(`Bezorgen in ${R.label} kan vanaf ${money(R.minOrder)}.`);
+    if (R && cents(sub) < cents(R.minOrder)) throw new Error(`Bezorgen in ${R.label} kan vanaf ${money(R.minOrder)}.`);
   }
-  const fee = mode !== 'bezorgen' ? 0 : zone === 'regio' ? CONFIG.delivery.region.fee : (sub < CONFIG.delivery.freeFrom ? CONFIG.delivery.fee : 0);
+  const fee = mode !== 'bezorgen' ? 0 : R ? R.fee : (sub < CONFIG.delivery.freeFrom ? CONFIG.delivery.fee : 0);
   const total = cents(sub + fee) / 100;
 
   const msg = [
@@ -73,7 +74,7 @@ function priceOrder(body, opts = {}) {
     ...(mode === 'bezorgen' ? [`Bezorgen: ${fee ? money(fee) : 'gratis'}`] : []),
     `Totaal: ${money(total)}`, '',
     mode === 'bezorgen' ? `Bezorgen tussen ${body.slot}` : `Afhalen om ${body.slot}`,
-    ...(mode === 'bezorgen' ? [`Adres: ${form.street}, ${form.postcode}${zone === 'regio' ? ' (buiten Almere)' : ' Almere'}`] : []),
+    ...(mode === 'bezorgen' ? [`Adres: ${form.street}, ${form.postcode}${zone !== 'almere' ? ' (buiten Almere)' : ' Almere'}`] : []),
     `Naam: ${form.name}`, `Telefoon: ${form.phone}`,
     ...(form.email ? [`E-mail: ${form.email}`] : []),
     ...(form.note ? [`Opmerking: ${form.note}`] : [])
