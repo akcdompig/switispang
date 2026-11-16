@@ -39,7 +39,14 @@ const CONFIG = {
   delivery: {
     fee: 2.5,
     freeFrom: 30,
-    slots: ['17:00 – 18:00', '18:00 – 19:00', '19:00 – 20:00']
+    slots: ['17:00 – 18:00', '18:00 – 19:00', '19:00 – 20:00'],
+    // Buiten Almere: alleen vanaf een minimumbedrag, met hogere bezorgkosten (rit moet rendabel zijn)
+    region: {
+      label: 'Amsterdam, Diemen en het Gooi',
+      minOrder: 60,
+      fee: 7.5,
+      ranges: [[1000, 1109], [1111, 1112], [1211, 1228], [1380, 1382], [1398, 1399], [1400, 1412]] // pas aan om plaatsen toe te voegen
+    }
   },
   instagram: 'https://www.instagram.com/switispang',
   tiktok: 'https://www.tiktok.com/@switispang'
@@ -186,9 +193,27 @@ function selectedVariant(d) {
 }
 
 function subtotal() { return state.cart.reduce((s, i) => s + lineInfo(i).unit * i.qty, 0); }
+function zoneOf(pcRaw) {
+  const pc = String(pcRaw || '').toUpperCase().replace(/\s+/g, '');
+  if (!/^\d{4}[A-Z]{2}$/.test(pc)) return '';
+  const n = Number(pc.slice(0, 4));
+  if (n >= 1311 && n <= 1364) return 'almere';
+  return CONFIG.delivery.region.ranges.some(([a, b]) => n >= a && n <= b) ? 'regio' : 'buiten';
+}
+function currentZone() { return state.mode === 'bezorgen' ? zoneOf(readForm().postcode) : ''; }
 function deliveryFee() {
   if (state.mode !== 'bezorgen') return 0;
+  const z = currentZone();
+  if (z === 'regio') return CONFIG.delivery.region.fee;
   return subtotal() >= CONFIG.delivery.freeFrom ? 0 : CONFIG.delivery.fee;
+}
+// Melding bij het gekozen adres (leeg = alles goed)
+function deliveryProblem() {
+  if (state.mode !== 'bezorgen') return '';
+  const z = currentZone(), R = CONFIG.delivery.region;
+  if (z === 'buiten') return `Hier bezorgen we helaas niet. We bezorgen in Almere en (vanaf ${money(R.minOrder)}) in ${R.label}. Afhalen kan altijd.`;
+  if (z === 'regio' && subtotal() < R.minOrder) return `Bezorgen in ${R.label} kan vanaf ${money(R.minOrder)}. Nog ${money(R.minOrder - subtotal())} te gaan, of kies afhalen.`;
+  return '';
 }
 
 /* ---------- hero board + countdown ---------- */
@@ -389,7 +414,7 @@ function renderCart() {
       </div>
       <p class="hint">${state.mode === 'afhalen'
         ? `Afhalen in ${CONFIG.pickup.area}. Het adres krijg je bij je bevestiging.`
-        : `Alleen binnen Almere. Bezorgen ${money(CONFIG.delivery.fee)}, gratis vanaf ${money(CONFIG.delivery.freeFrom)}.`}</p>
+        : `Almere: bezorgen ${money(CONFIG.delivery.fee)}, gratis vanaf ${money(CONFIG.delivery.freeFrom)}. Buiten Almere (${CONFIG.delivery.region.label}): vanaf ${money(CONFIG.delivery.region.minOrder)}, bezorgkosten ${money(CONFIG.delivery.region.fee)}, zodat de rit de moeite waard is.`}</p>
     </div>
 
     <div class="field"><label>${state.mode === 'afhalen' ? 'Ophaaltijd' : 'Tijdvak'} op ${esc(CONFIG.drop.dayShort)}</label>
@@ -401,21 +426,11 @@ function renderCart() {
     ${PAY ? `<div class="field"><label for="fEmail">E-mail (optioneel)</label><input id="fEmail" type="email" autocomplete="email" placeholder="Voor je bevestiging" value="${esc(prev.email)}"/></div>` : ''}
     ${state.mode === 'bezorgen' ? `
       <div class="field"><label for="fStreet">Straat + huisnummer</label><input id="fStreet" type="text" autocomplete="street-address" value="${esc(prev.street)}"/></div>
-      <div class="field"><label for="fPostcode">Postcode</label><input id="fPostcode" type="text" autocomplete="postal-code" placeholder="13.. ..  (Almere)" value="${esc(prev.postcode)}"/></div>` : ''}
+      <div class="field"><label for="fPostcode">Postcode</label><input id="fPostcode" type="text" autocomplete="postal-code" placeholder="Postcode, bijv. 1315 AB" value="${esc(prev.postcode)}"/></div>` : ''}
     <div class="field"><label for="fNote">Opmerking of allergie (optioneel)</label><input id="fNote" type="text" value="${esc(prev.note)}"/></div>
   `;
 
-  const fee = deliveryFee();
-  const ready = !!CONFIG.whatsapp && !isClosed();
-  foot.innerHTML = `
-    <div class="totals">
-      <div class="line-total"><span>Subtotaal</span><strong>${money(subtotal())}</strong></div>
-      <div class="line-total"><span>${state.mode === 'bezorgen' ? 'Bezorgen' : 'Afhalen'}</span><strong>${fee ? money(fee) : 'Gratis'}</strong></div>
-      <div class="line-total total"><span>Totaal</span><strong>${money(subtotal() + fee)}</strong></div>
-    </div>
-    <button class="checkout-btn ${PAY ? '' : 'wa'}" type="button" id="checkoutBtn" ${ready ? '' : 'disabled'}>${!ready ? 'Bestellen opent binnenkort' : PAY ? `Betalen met iDEAL · ${money(subtotal() + fee)}` : 'Bestellen en betalen via WhatsApp'}</button>
-    <div class="drawer-note">${PAY ? 'Je betaalt veilig via Mollie. Daarna zie je meteen je bevestiging.' : 'Na je bestelling krijg je een betaalverzoek. Je bestelling staat vast na betaling.'} Door te bestellen ga je akkoord met onze <a href="voorwaarden.html" target="_blank">voorwaarden</a> en <a href="privacy.html" target="_blank">privacyverklaring</a>.</div>
-  `;
+  renderFoot();
 
   body.querySelectorAll('[data-c]').forEach(b => b.addEventListener('click', () => {
     const i = state.cart[Number(b.dataset.i)];
@@ -429,6 +444,27 @@ function renderCart() {
   }));
   body.querySelectorAll('[data-mode]').forEach(b => b.addEventListener('click', () => { state.mode = b.dataset.mode; renderCart(); }));
   body.querySelectorAll('[data-slot]').forEach(b => b.addEventListener('click', () => { state.slot = b.dataset.slot; renderCart(); }));
+  const pcEl = $('fPostcode');
+  if (pcEl) pcEl.addEventListener('input', () => { renderFoot(); });
+}
+
+function renderFoot() {
+  const foot = $('drawerFooter');
+  $('stickyTotal').textContent = money(subtotal() + deliveryFee());
+  const fee = deliveryFee();
+  const problem = deliveryProblem();
+  const ready = !!CONFIG.whatsapp && !isClosed() && !problem;
+  foot.innerHTML = `
+    <div class="totals">
+      <div class="line-total"><span>Subtotaal</span><strong>${money(subtotal())}</strong></div>
+      <div class="line-total"><span>${state.mode === 'bezorgen' ? 'Bezorgen' : 'Afhalen'}</span><strong>${fee ? money(fee) : 'Gratis'}</strong></div>
+      <div class="line-total total"><span>Totaal</span><strong>${money(subtotal() + fee)}</strong></div>
+    </div>
+    ${problem ? `<p class="drawer-note" style="color:#e0ae42;font-weight:600">${esc(problem)}</p>` : ''}
+    <button class="checkout-btn ${PAY ? '' : 'wa'}" type="button" id="checkoutBtn" ${ready ? '' : 'disabled'}>${!ready ? (problem ? 'Controleer je adres' : 'Bestellen opent binnenkort') : PAY ? `Betalen met iDEAL · ${money(subtotal() + fee)}` : 'Bestellen en betalen via WhatsApp'}</button>
+    <div class="drawer-note">${PAY ? 'Je betaalt veilig via Mollie. Daarna zie je meteen je bevestiging.' : 'Na je bestelling krijg je een betaalverzoek. Je bestelling staat vast na betaling.'} Door te bestellen ga je akkoord met onze <a href="voorwaarden.html" target="_blank">voorwaarden</a> en <a href="privacy.html" target="_blank">privacyverklaring</a>.</div>
+  `;
+
   const cb = $('checkoutBtn');
   if (cb) cb.addEventListener('click', checkout);
 }
@@ -444,7 +480,7 @@ function buildMessage(f) {
   lines.push(`Totaal: ${money(subtotal() + fee)}`);
   lines.push('');
   lines.push(state.mode === 'bezorgen' ? `Bezorgen tussen ${state.slot}` : `Afhalen om ${state.slot}`);
-  if (state.mode === 'bezorgen') lines.push(`Adres: ${f.street}, ${f.postcode} Almere`);
+  if (state.mode === 'bezorgen') lines.push(`Adres: ${f.street}, ${f.postcode}${zoneOf(f.postcode) === 'regio' ? ' (buiten Almere)' : ' Almere'}`);
   lines.push(`Naam: ${f.name}`);
   lines.push(`Telefoon: ${f.phone}`);
   if (f.note) lines.push(`Opmerking: ${f.note}`);
@@ -459,8 +495,9 @@ function checkout() {
   if (PAY && f.email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.email)) return toast('Dit e-mailadres klopt niet. Laat het leeg of controleer het.');
   if (state.mode === 'bezorgen') {
     if (!f.street) return toast('Vul je straat en huisnummer in.');
-    const pc = Number(f.postcode.slice(0, 4));
-    if (!/^\d{4}[A-Z]{2}$/.test(f.postcode) || pc < 1311 || pc > 1364) return toast('We bezorgen alleen in Almere (postcode 1311–1364).');
+    if (!/^\d{4}[A-Z]{2}$/.test(f.postcode)) return toast('Vul een geldige postcode in, bijvoorbeeld 1315AB.');
+    const problem = deliveryProblem();
+    if (problem) return toast(problem);
   }
   state.lastMessage = buildMessage(f);
   if (PAY) return payOnline(f);
