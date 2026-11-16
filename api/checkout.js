@@ -1,3 +1,4 @@
+const { usedBefore } = require('./_codes');
 const { priceOrder, mollie, origin, buildMeta, dropPayments, tally, overLimit, PROD_HOSTS, hostOf } = require('./_shop');
 
 module.exports = async (req, res) => {
@@ -10,6 +11,8 @@ module.exports = async (req, res) => {
     // 1. Is er nog genoeg over?
     const err = overLimit(o, tally(await dropPayments(label)));
     if (err) return res.status(409).json({ error: err, refresh: true });
+
+    if (o.code && await usedBefore(o.code)) return res.status(409).json({ error: 'Deze code is al gebruikt.', codeUsed: true });
 
     // 2. Betaling aanmaken
     const base = origin(req);
@@ -31,6 +34,12 @@ module.exports = async (req, res) => {
     if (err2) {
       await mollie('PATCH', `/payments/${p.id}`, { metadata: { ...meta, void: true } }).catch(() => {});
       return res.status(409).json({ error: err2, refresh: true });
+    }
+
+    // Zelfde voor de kortingscode: bij twee gelijktijdige betalingen met dezelfde code wint de eerste.
+    if (o.code && await usedBefore(o.code, p.createdAt, p.id)) {
+      await mollie('PATCH', `/payments/${p.id}`, { metadata: { ...meta, void: true } }).catch(() => {});
+      return res.status(409).json({ error: 'Deze code is al gebruikt.', codeUsed: true });
     }
 
     // Nu we het betaal-ID hebben: terug naar een pagina die de status kan opvragen.

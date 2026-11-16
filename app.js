@@ -137,6 +137,7 @@ const REPERTOIRE = [
 /* ============================================================ */
 
 const state = {
+  code: '', codeMsg: '', // geldige kortingscode (gratis bezorging) + melding
   cart: [], // { key, dishId, variantId, extras:[ids], qty }
   mode: 'afhalen',
   slot: '',
@@ -205,6 +206,7 @@ function zoneInfo(key) { return CONFIG.delivery.zones.find(z => z.key === key); 
 function currentZone() { return state.mode === 'bezorgen' ? zoneOf(readForm().postcode) : ''; }
 function deliveryFee() {
   if (state.mode !== 'bezorgen') return 0;
+  if (state.code) return 0;
   const z = currentZone();
   if (zoneInfo(z)) return zoneInfo(z).fee;
   return subtotal() >= CONFIG.delivery.freeFrom ? 0 : CONFIG.delivery.fee;
@@ -428,7 +430,10 @@ function renderCart() {
     ${PAY ? `<div class="field"><label for="fEmail">E-mail (optioneel)</label><input id="fEmail" type="email" autocomplete="email" placeholder="Voor je bevestiging" value="${esc(prev.email)}"/></div>` : ''}
     ${state.mode === 'bezorgen' ? `
       <div class="field"><label for="fStreet">Straat + huisnummer</label><input id="fStreet" type="text" autocomplete="street-address" value="${esc(prev.street)}"/></div>
-      <div class="field"><label for="fPostcode">Postcode</label><input id="fPostcode" type="text" autocomplete="postal-code" placeholder="Postcode, bijv. 1315 AB" value="${esc(prev.postcode)}"/></div>` : ''}
+      <div class="field"><label for="fPostcode">Postcode</label><input id="fPostcode" type="text" autocomplete="postal-code" placeholder="Postcode, bijv. 1315 AB" value="${esc(prev.postcode)}"/></div>
+      <div class="field"><label for="fCode">Kortingscode (optioneel)</label>
+        <div style="display:flex;gap:8px"><input id="fCode" type="text" autocapitalize="characters" autocomplete="off" placeholder="Bijv. WOC-XXXX" value="${esc(state.code)}" ${state.code ? 'readonly' : ''} style="flex:1"/><button type="button" class="ghost-btn" id="codeBtn" style="width:auto;padding:0 16px">${state.code ? 'Weghalen' : 'Toepassen'}</button></div>
+        <p class="hint" id="codeMsg" style="${state.code ? 'color:#5fbf7a;font-weight:600' : ''}">${esc(state.codeMsg)}</p></div>` : ''}
     <div class="field"><label for="fNote">Opmerking of allergie (optioneel)</label><input id="fNote" type="text" value="${esc(prev.note)}"/></div>
   `;
 
@@ -444,10 +449,26 @@ function renderCart() {
     if (i.qty <= 0) state.cart.splice(Number(b.dataset.i), 1);
     renderCart(); renderMenu();
   }));
-  body.querySelectorAll('[data-mode]').forEach(b => b.addEventListener('click', () => { state.mode = b.dataset.mode; renderCart(); }));
+  body.querySelectorAll('[data-mode]').forEach(b => b.addEventListener('click', () => { state.mode = b.dataset.mode; if (state.mode !== 'bezorgen') { state.code = ''; state.codeMsg = ''; } renderCart(); }));
+  const codeBtn = $('codeBtn');
+  if (codeBtn) codeBtn.addEventListener('click', applyCode);
   body.querySelectorAll('[data-slot]').forEach(b => b.addEventListener('click', () => { state.slot = b.dataset.slot; renderCart(); }));
   const pcEl = $('fPostcode');
   if (pcEl) pcEl.addEventListener('input', () => { renderFoot(); });
+}
+
+async function applyCode() {
+  if (state.code) { state.code = ''; state.codeMsg = ''; return renderCart(); }
+  const raw = ($('fCode') || {}).value || '';
+  if (!raw.trim()) { $('codeMsg').textContent = 'Vul een code in.'; return; }
+  const btn = $('codeBtn'); btn.disabled = true;
+  try {
+    const r = await fetch('/api/code', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: raw, mode: state.mode }) });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok || !j.ok) throw new Error(j.error || 'Code controleren lukt even niet.');
+    state.code = j.code; state.codeMsg = `Code toegepast: ${j.label}`;
+    renderCart();
+  } catch (e) { btn.disabled = false; $('codeMsg').textContent = e.message; $('codeMsg').style.color = '#e0ae42'; }
 }
 
 function renderFoot() {
@@ -514,11 +535,11 @@ async function payOnline(f) {
   try {
     const r = await fetch('/api/checkout', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ cart: state.cart.map(({ dishId, variantId, extras, qty }) => ({ dishId, variantId, extras, qty })), mode: state.mode, slot: state.slot, form: f })
+      body: JSON.stringify({ cart: state.cart.map(({ dishId, variantId, extras, qty }) => ({ dishId, variantId, extras, qty })), mode: state.mode, slot: state.slot, form: f, code: state.mode === 'bezorgen' ? state.code : '' })
     });
     const j = await r.json().catch(() => ({}));
-    if (!r.ok || !j.checkoutUrl) { if (j.refresh) loadStock(); throw new Error(j.error || 'Betalen lukt even niet. Probeer het zo opnieuw.'); }
-    store.set('ss_order', { msg: state.lastMessage, id: j.id, cart: state.cart, mode: state.mode, slot: state.slot, form: f });
+    if (!r.ok || !j.checkoutUrl) { if (j.refresh) loadStock(); if (j.codeUsed) { state.code = ''; state.codeMsg = ''; renderCart(); } throw new Error(j.error || 'Betalen lukt even niet. Probeer het zo opnieuw.'); }
+    store.set('ss_order', { msg: state.lastMessage, id: j.id, cart: state.cart, mode: state.mode, slot: state.slot, form: f, code: state.mode === 'bezorgen' ? state.code : '' });
     location.href = j.checkoutUrl;
   } catch (e) {
     toast(e.message);

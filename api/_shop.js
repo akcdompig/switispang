@@ -65,13 +65,15 @@ function priceOrder(body, opts = {}) {
     if (zone === 'buiten') throw new Error('Op dit adres bezorgen we helaas niet.');
     if (R && cents(sub) < cents(R.minOrder)) throw new Error(`Bezorgen in ${R.label} kan vanaf ${money(R.minOrder)}.`);
   }
-  const fee = mode !== 'bezorgen' ? 0 : R ? R.fee : (sub < CONFIG.delivery.freeFrom ? CONFIG.delivery.fee : 0);
+  const code = require('./_codes').validate(body.code, mode); // gooit een fout bij ongeldige code
+  const fee = mode !== 'bezorgen' || code ? 0 : R ? R.fee : (sub < CONFIG.delivery.freeFrom ? CONFIG.delivery.fee : 0);
   const total = cents(sub + fee) / 100;
 
   const msg = [
     `Bestelling Switi Spang – ${CONFIG.drop.label}`, '',
     ...lines.map(l => `${l.qty}× ${l.label} – ${money(l.total)}`), '',
     ...(mode === 'bezorgen' ? [`Bezorgen: ${fee ? money(fee) : 'gratis'}`] : []),
+    ...(code ? [`Kortingscode: ${code} (gratis bezorging)`] : []),
     `Totaal: ${money(total)}`, '',
     mode === 'bezorgen' ? `Bezorgen tussen ${body.slot}` : `Afhalen om ${body.slot}`,
     ...(mode === 'bezorgen' ? [`Adres: ${form.street}, ${form.postcode}${zone !== 'almere' ? ' (buiten Almere)' : ' Almere'}`] : []),
@@ -80,7 +82,7 @@ function priceOrder(body, opts = {}) {
     ...(form.note ? [`Opmerking: ${form.note}`] : [])
   ].join('\n');
 
-  return { CONFIG, total, msg, form, mode, slot: body.slot, used, maxes, names, slotKey: `${mode}|${body.slot}` };
+  return { CONFIG, total, msg, form, mode, code, slot: body.slot, used, maxes, names, slotKey: `${mode}|${body.slot}` };
 }
 
 async function mollie(method, url, data) {
@@ -107,7 +109,7 @@ function origin(req) {
 
 // Mollie-metadata mag max 1 KB zijn: de bestelling zelf wordt ingekort als het niet past.
 function buildMeta(o) {
-  const meta = { drop: o.CONFIG.drop.label, slot: o.slotKey, used: o.used, email: o.form.email || '', notified: false, void: false };
+  const meta = { drop: o.CONFIG.drop.label, slot: o.slotKey, used: o.used, code: o.code || '', email: o.form.email || '', notified: false, void: false };
   let order = o.msg;
   while (Buffer.byteLength(JSON.stringify({ ...meta, order })) > 980) order = order.slice(0, -20);
   return { ...meta, order: order === o.msg ? order : order + '…' };
@@ -155,4 +157,4 @@ function pools() {
 const PROD_HOSTS = ['switispang.nl', 'www.switispang.nl', 'switispang.vercel.app'];
 const hostOf = req => String(req.headers['x-forwarded-host'] || req.headers.host || '').split(':')[0];
 
-module.exports = { priceOrder, mollie, origin, buildMeta, dropPayments, tally, overLimit, pools, shop, SLOT_MAX, PROD_HOSTS, hostOf };
+module.exports = { isLive, priceOrder, mollie, origin, buildMeta, dropPayments, tally, overLimit, pools, shop, SLOT_MAX, PROD_HOSTS, hostOf };
