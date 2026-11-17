@@ -27,8 +27,8 @@ const CONFIG = {
   drop: {
     label: 'Woensdag 18 november',
     dayShort: 'woensdag',
-    deadline: '2026-11-17T20:00:00+01:00', // bestellen sluit
-    deadlineLabel: 'dinsdag 17 november, 20:00'
+    deadline: '2026-11-17T20:30:00+01:00', // bestellen sluit
+    deadlineLabel: 'dinsdag 17 november, 20:30'
   },
   next: 'Zaterdag 21 november: menu volgt woensdagavond op Instagram. Bestellen kan tot vrijdag 17:00.',
 
