@@ -230,7 +230,7 @@ function renderBoard() {
     const own = d.variants.filter(v => v.portions).map(v => ` · ${v.portions} ${v.unit || 'stuks'}`).join('');
     return `<li><span class="board-item-name">${d.name}${d.fixed ? ' <small>(altijd)</small>' : ''}</span><span class="board-item-stock ${d.soldOut ? 'out' : ''}">${d.soldOut ? 'Uitverkocht' : `${d.variants.length > 1 ? 'vanaf ' : ''}${money(Math.min(...d.variants.map(v => v.price)))}`}</span></li>`;
   }).join('');
-  $('deadlineLabel').textContent = isSoon() ? 'Bestellen opent binnenkort. Volg ons op Instagram en WhatsApp.' : isClosed() ? 'Bestellen is gesloten voor deze ronde' : `Bestellen sluit ${CONFIG.drop.deadlineLabel}`;
+  $('deadlineLabel').textContent = isSoon() ? 'Bestellen opent binnenkort. Volg ons op Instagram en WhatsApp.' : isClosed() ? 'Bestellen is gesloten voor deze ronde' : (new Date(CONFIG.drop.deadline).getTime() - Date.now() < 3600e3 ? `🔥 Bijna uitverkocht · laatste kans, bestellen sluit ${CONFIG.drop.deadlineLabel}` : `Bestellen sluit ${CONFIG.drop.deadlineLabel}`);
   document.querySelectorAll('[data-deadline]').forEach(n => { n.textContent = CONFIG.drop.deadlineLabel; });
   document.querySelectorAll('[data-droplabel]').forEach(n => { n.textContent = CONFIG.drop.label; });
   $('nextDrop').textContent = CONFIG.next;
