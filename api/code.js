@@ -1,4 +1,4 @@
-const { validate, usedBefore } = require('./_codes');
+const { validate, usedBefore, kindOf, percentOf } = require('./_codes');
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Alleen POST.' });
@@ -7,7 +7,8 @@ module.exports = async (req, res) => {
     const code = validate(body.code, body.mode);
     if (!code) return res.status(400).json({ error: 'Vul een code in.' });
     if (await usedBefore(code)) return res.status(409).json({ error: 'Deze code is al gebruikt.' });
-    res.status(200).json({ ok: true, code, label: 'Gratis bezorging' });
+    const kind = kindOf(code), pct = percentOf(code);
+    res.status(200).json({ ok: true, code, kind, pct, label: kind === 'actie' ? pct + '% korting' : 'Gratis bezorging' });
   } catch (e) {
     res.status(e.status || 400).json({ error: e.message });
   }

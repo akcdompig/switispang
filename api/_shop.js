@@ -66,14 +66,17 @@ function priceOrder(body, opts = {}) {
     if (R && cents(sub) < cents(R.minOrder)) throw new Error(`Bezorgen in ${R.label} kan vanaf ${money(R.minOrder)}.`);
   }
   const code = require('./_codes').validate(body.code, mode); // gooit een fout bij ongeldige code
-  const fee = mode !== 'bezorgen' || code ? 0 : R ? R.fee : (sub < CONFIG.delivery.freeFrom ? CONFIG.delivery.fee : 0);
-  const total = cents(sub + fee) / 100;
+  const C = require('./_codes'), kind = C.kindOf(code), pct = C.percentOf(code);
+  const discount = kind === 'actie' ? Math.round(cents(sub) * pct / 100) / 100 : 0; // korting op de gerechten, niet op bezorgkosten
+  const fee = mode !== 'bezorgen' || kind === 'woc' ? 0 : R ? R.fee : (sub < CONFIG.delivery.freeFrom ? CONFIG.delivery.fee : 0);
+  const total = cents(sub - discount + fee) / 100;
 
   const msg = [
     `Bestelling Switi Spang – ${CONFIG.drop.label}`, '',
     ...lines.map(l => `${l.qty}× ${l.label} – ${money(l.total)}`), '',
     ...(mode === 'bezorgen' ? [`Bezorgen: ${fee ? money(fee) : 'gratis'}`] : []),
-    ...(code ? [`Kortingscode: ${code} (gratis bezorging)`] : []),
+    ...(kind === 'woc' ? [`Kortingscode: ${code} (gratis bezorging)`] : []),
+    ...(kind === 'actie' ? [`Kortingscode: ${code} (${pct}% korting): -${money(discount)}`] : []),
     `Totaal: ${money(total)}`, '',
     mode === 'bezorgen' ? `Bezorgen tussen ${body.slot}` : `Afhalen om ${body.slot}`,
     ...(mode === 'bezorgen' ? [`Adres: ${form.street}, ${form.postcode}${zone !== 'almere' ? ' (buiten Almere)' : ' Almere'}`] : []),

@@ -137,7 +137,7 @@ const REPERTOIRE = [
 /* ============================================================ */
 
 const state = {
-  code: '', codeMsg: '', // geldige kortingscode (gratis bezorging) + melding
+  code: '', codeKind: '', codePct: 0, codeMsg: '', // geldige kortingscode (gratis bezorging) + melding
   cart: [], // { key, dishId, variantId, extras:[ids], qty }
   mode: 'afhalen',
   slot: '',
@@ -194,6 +194,9 @@ function selectedVariant(d) {
 }
 
 function subtotal() { return state.cart.reduce((s, i) => s + lineInfo(i).unit * i.qty, 0); }
+function discount() { return state.code && state.codeKind === 'actie' ? Math.round(subtotal() * 100 * state.codePct / 100) / 100 : 0; }
+function payTotal() { return Math.round((subtotal() - discount() + deliveryFee()) * 100) / 100; }
+function clearCode() { state.code = ''; state.codeKind = ''; state.codePct = 0; state.codeMsg = ''; }
 function zoneOf(pcRaw) {
   const pc = String(pcRaw || '').toUpperCase().replace(/\s+/g, '');
   if (!/^\d{4}[A-Z]{2}$/.test(pc)) return '';
@@ -206,7 +209,7 @@ function zoneInfo(key) { return CONFIG.delivery.zones.find(z => z.key === key); 
 function currentZone() { return state.mode === 'bezorgen' ? zoneOf(readForm().postcode) : ''; }
 function deliveryFee() {
   if (state.mode !== 'bezorgen') return 0;
-  if (state.code) return 0;
+  if (state.code && state.codeKind === 'woc') return 0;
   const z = currentZone();
   if (zoneInfo(z)) return zoneInfo(z).fee;
   return subtotal() >= CONFIG.delivery.freeFrom ? 0 : CONFIG.delivery.fee;
@@ -373,7 +376,7 @@ function readForm() {
 function renderCart() {
   const count = state.cart.reduce((s, i) => s + i.qty, 0);
   $('cartCount').textContent = String(count);
-  $('stickyTotal').textContent = money(subtotal() + deliveryFee());
+  $('stickyTotal').textContent = money(payTotal());
   $('stickyCart').classList.toggle('show', count > 0 && !state.sent);
 
   const body = $('drawerBody');
@@ -431,9 +434,10 @@ function renderCart() {
     ${state.mode === 'bezorgen' ? `
       <div class="field"><label for="fStreet">Straat + huisnummer</label><input id="fStreet" type="text" autocomplete="street-address" value="${esc(prev.street)}"/></div>
       <div class="field"><label for="fPostcode">Postcode</label><input id="fPostcode" type="text" autocomplete="postal-code" placeholder="Postcode, bijv. 1315 AB" value="${esc(prev.postcode)}"/></div>
-      <div class="field"><label for="fCode">Kortingscode (optioneel)</label>
-        <div style="display:flex;gap:8px"><input id="fCode" type="text" autocapitalize="characters" autocomplete="off" placeholder="Bijv. WOC-XXXX" value="${esc(state.code)}" ${state.code ? 'readonly' : ''} style="flex:1"/><button type="button" class="ghost-btn" id="codeBtn" style="width:auto;padding:0 16px">${state.code ? 'Weghalen' : 'Toepassen'}</button></div>
-        <p class="hint" id="codeMsg" style="${state.code ? 'color:#5fbf7a;font-weight:600' : ''}">${esc(state.codeMsg)}</p></div>` : ''}
+` : ''}
+    <div class="field"><label for="fCode">Kortingscode (optioneel)</label>
+        <div style="display:flex;gap:8px"><input id="fCode" type="text" autocapitalize="characters" autocomplete="off" placeholder="Heb je een code?" value="${esc(state.code)}" ${state.code ? 'readonly' : ''} style="flex:1"/><button type="button" class="ghost-btn" id="codeBtn" style="width:auto;padding:0 16px">${state.code ? 'Weghalen' : 'Toepassen'}</button></div>
+        <p class="hint" id="codeMsg" style="${state.code ? 'color:#5fbf7a;font-weight:600' : ''}">${esc(state.codeMsg)}</p></div>
     <div class="field"><label for="fNote">Opmerking of allergie (optioneel)</label><input id="fNote" type="text" value="${esc(prev.note)}"/></div>
   `;
 
@@ -449,7 +453,7 @@ function renderCart() {
     if (i.qty <= 0) state.cart.splice(Number(b.dataset.i), 1);
     renderCart(); renderMenu();
   }));
-  body.querySelectorAll('[data-mode]').forEach(b => b.addEventListener('click', () => { state.mode = b.dataset.mode; if (state.mode !== 'bezorgen') { state.code = ''; state.codeMsg = ''; } renderCart(); }));
+  body.querySelectorAll('[data-mode]').forEach(b => b.addEventListener('click', () => { state.mode = b.dataset.mode; if (state.mode !== 'bezorgen' && state.codeKind === 'woc') clearCode(); renderCart(); }));
   const codeBtn = $('codeBtn');
   if (codeBtn) codeBtn.addEventListener('click', applyCode);
   body.querySelectorAll('[data-slot]').forEach(b => b.addEventListener('click', () => { state.slot = b.dataset.slot; renderCart(); }));
@@ -458,7 +462,7 @@ function renderCart() {
 }
 
 async function applyCode() {
-  if (state.code) { state.code = ''; state.codeMsg = ''; return renderCart(); }
+  if (state.code) { clearCode(); return renderCart(); }
   const raw = ($('fCode') || {}).value || '';
   if (!raw.trim()) { $('codeMsg').textContent = 'Vul een code in.'; return; }
   const btn = $('codeBtn'); btn.disabled = true;
@@ -466,25 +470,26 @@ async function applyCode() {
     const r = await fetch('/api/code', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code: raw, mode: state.mode }) });
     const j = await r.json().catch(() => ({}));
     if (!r.ok || !j.ok) throw new Error(j.error || 'Code controleren lukt even niet.');
-    state.code = j.code; state.codeMsg = `Code toegepast: ${j.label}`;
+    state.code = j.code; state.codeKind = j.kind; state.codePct = j.pct || 0; state.codeMsg = `Code toegepast: ${j.label}`;
     renderCart();
   } catch (e) { btn.disabled = false; $('codeMsg').textContent = e.message; $('codeMsg').style.color = '#e0ae42'; }
 }
 
 function renderFoot() {
   const foot = $('drawerFooter');
-  $('stickyTotal').textContent = money(subtotal() + deliveryFee());
+  $('stickyTotal').textContent = money(payTotal());
   const fee = deliveryFee();
   const problem = deliveryProblem();
   const ready = !!CONFIG.whatsapp && !isClosed() && !problem;
   foot.innerHTML = `
     <div class="totals">
       <div class="line-total"><span>Subtotaal</span><strong>${money(subtotal())}</strong></div>
+      ${discount() ? `<div class="line-total"><span>Korting (${esc(state.code)})</span><strong>-${money(discount())}</strong></div>` : ''}
       <div class="line-total"><span>${state.mode === 'bezorgen' ? 'Bezorgen' : 'Afhalen'}</span><strong>${fee ? money(fee) : 'Gratis'}</strong></div>
-      <div class="line-total total"><span>Totaal</span><strong>${money(subtotal() + fee)}</strong></div>
+      <div class="line-total total"><span>Totaal</span><strong>${money(payTotal())}</strong></div>
     </div>
     ${problem ? `<p class="drawer-note" style="color:#e0ae42;font-weight:600">${esc(problem)}</p>` : ''}
-    <button class="checkout-btn ${PAY ? '' : 'wa'}" type="button" id="checkoutBtn" ${ready ? '' : 'disabled'}>${!ready ? (problem ? 'Controleer je adres' : 'Bestellen opent binnenkort') : PAY ? `Betalen met iDEAL · ${money(subtotal() + fee)}` : 'Bestellen en betalen via WhatsApp'}</button>
+    <button class="checkout-btn ${PAY ? '' : 'wa'}" type="button" id="checkoutBtn" ${ready ? '' : 'disabled'}>${!ready ? (problem ? 'Controleer je adres' : 'Bestellen opent binnenkort') : PAY ? `Betalen met iDEAL · ${money(payTotal())}` : 'Bestellen en betalen via WhatsApp'}</button>
     <div class="drawer-note">${PAY ? 'Je betaalt veilig via Mollie. Daarna zie je meteen je bevestiging.' : 'Na je bestelling krijg je een betaalverzoek. Je bestelling staat vast na betaling.'} Door te bestellen ga je akkoord met onze <a href="voorwaarden.html" target="_blank">voorwaarden</a> en <a href="privacy.html" target="_blank">privacyverklaring</a>.</div>
   `;
 
@@ -500,7 +505,8 @@ function buildMessage(f) {
   lines.push('');
   const fee = deliveryFee();
   if (state.mode === 'bezorgen') lines.push(`Bezorgen: ${fee ? money(fee) : 'gratis'}`);
-  lines.push(`Totaal: ${money(subtotal() + fee)}`);
+  if (discount()) lines.push(`Kortingscode: ${state.code} (${state.codePct}% korting): -${money(discount())}`);
+  lines.push(`Totaal: ${money(payTotal())}`);
   lines.push('');
   lines.push(state.mode === 'bezorgen' ? `Bezorgen tussen ${state.slot}` : `Afhalen om ${state.slot}`);
   if (state.mode === 'bezorgen') lines.push(`Adres: ${f.street}, ${f.postcode}${zoneOf(f.postcode) !== 'almere' ? ' (buiten Almere)' : ' Almere'}`);
@@ -535,11 +541,11 @@ async function payOnline(f) {
   try {
     const r = await fetch('/api/checkout', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ cart: state.cart.map(({ dishId, variantId, extras, qty }) => ({ dishId, variantId, extras, qty })), mode: state.mode, slot: state.slot, form: f, code: state.mode === 'bezorgen' ? state.code : '' })
+      body: JSON.stringify({ cart: state.cart.map(({ dishId, variantId, extras, qty }) => ({ dishId, variantId, extras, qty })), mode: state.mode, slot: state.slot, form: f, code: state.code })
     });
     const j = await r.json().catch(() => ({}));
-    if (!r.ok || !j.checkoutUrl) { if (j.refresh) loadStock(); if (j.codeUsed) { state.code = ''; state.codeMsg = ''; renderCart(); } throw new Error(j.error || 'Betalen lukt even niet. Probeer het zo opnieuw.'); }
-    store.set('ss_order', { msg: state.lastMessage, id: j.id, cart: state.cart, mode: state.mode, slot: state.slot, form: f, code: state.mode === 'bezorgen' ? state.code : '' });
+    if (!r.ok || !j.checkoutUrl) { if (j.refresh) loadStock(); if (j.codeUsed) { clearCode(); renderCart(); } throw new Error(j.error || 'Betalen lukt even niet. Probeer het zo opnieuw.'); }
+    store.set('ss_order', { msg: state.lastMessage, id: j.id, cart: state.cart, mode: state.mode, slot: state.slot, form: f, code: state.code });
     location.href = j.checkoutUrl;
   } catch (e) {
     toast(e.message);
