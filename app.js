@@ -61,7 +61,7 @@ const MENU = [
     portions: 10,
     image: 'img/bravoe.jpg',
     origin: 'Surinaamse feestsoep · alle volken in één pan',
-    desc: 'Een krachtige maaltijdsoep met rund en gerookte kip, aardvruchten (groene banaan, cassave, zoete aardappel) en groenten, met krontomirki (kokosmelk). Met witte rijst, sambal apart.',
+    desc: 'Een krachtige maaltijdsoep met rund en gerookte kip, aardvruchten (groene banaan, cassave, zoete aardappel) en groenten (oker). Met witte rijst, sambal apart.',
     story: 'Ala kondre bravoe betekent soep uit alle landen. Alle bevolkingsgroepen van Suriname komen samen in één pan, en daarom eet je hem op nationale feestdagen.',
     allergens: 'Selderij',
     variants: [{ id: 'std', name: 'met rijst', price: 15.0 }],
