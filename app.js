@@ -73,11 +73,10 @@ const MENU = [
   {
     id: 'saoto',
     name: 'Saoto',
-    fixed: true, // basissoep: altijd te bestellen, elke ronde
     portions: 10,
     image: 'img/saoto.jpg',
     origin: 'Javaanse keuken · 1890',
-    desc: 'Onze basissoep, altijd te bestellen. Een volle maaltijdsoep: heldere, kruidige kippensoep met kip, taugé, gebakken aardappel en ei. Met witte rijst; sambal, ketjap en gebakken uitjes apart.',
+    desc: 'Een volle maaltijdsoep: heldere, kruidige kippensoep met kip, taugé, gebakken aardappel en ei. Met witte rijst; sambal, ketjap en gebakken uitjes apart.',
     story: 'Op 9 augustus 1890 kwamen de eerste Javaanse contractarbeiders aan in Suriname. Uit hun soto ayam groeide saoto, met Surinaamse ingrediënten. Nu is het de soep van heel Suriname.',
     allergens: 'Ei, gluten, selderij. Ketjap en gebakken uitjes (apart, optioneel): soja, gluten',
     variants: [{ id: 'std', name: 'met rijst', price: 10.5 }],
@@ -104,7 +103,7 @@ const COMING = [
 // De Switi Spang-keuken: wat er de komende weken langskomt (geen prijzen, wisselt per week).
 // Items: tekst, of [tekst, prijs]. Prijzen incl. btw; formule: (kostprijs + ~€10) × 1,09, getoetst aan concurrenten in Almere.
 const REPERTOIRE = [
-  { icon: '🍲', title: 'Soepen', sub: 'Maaltijdsoepen, traditioneel, met rijst', items: [['Gritibana', 13.5], ['Okersoep', 13.5], ['Bravoe', 15], ['Tayersoep', 13.5], ['Pindasoep', 13.5], ['Cassavesoep', 13.5], ['Saoto (basis)', 10.5]] },
+  { icon: '🍲', title: 'Soepen', sub: 'Maaltijdsoepen, traditioneel, met rijst', items: [['Gritibana', 13.5], ['Okersoep', 13.5], ['Bravoe', 15], ['Tayersoep', 13.5], ['Pindasoep', 13.5], ['Cassavesoep', 13.5], ['Saoto', 10.5]] },
   { icon: '🫓', title: 'Roti', sub: 'Met verse rotiplaat, aardappel, kousenband en ei', items: [['Roti kip (kippenbout)', 17.5], ['Roti kip (kippendijfilet)', 18.5], ['Roti lams', 19.5], ['Roti masala doks: op traditionele wijze boven de chula (houtskoolvuur) gegaard', 21.5], ['Roti vega', 15], ['Rotirol kippendijfilet', 11.95], ['Rotirol lams', 13.95]] },
   { icon: '🍛', title: 'Hoofdgerechten', sub: 'Met rijst, bami of chow mein · gestoofd of geroosterd, zoals thuis', items: [['Rijst met kip en antroewa', 16.5], ['Rijst met kip en sopropo', 14.95], ['Rijst met gestoofd rundvlees en Surinaamse zuurkool, met aardappel en kiprookworst', 14.95], ['Witte rijst met kousenband, aardappel en garnalen', 14.95], ['Masoesa moksi alesi met geroosterde kip', 14.95], ['Nasi met geroosterde kip', 14.95], ['Bami met geroosterde kip', 14.95], ['Chow mein met geroosterde kip', 14.95]] },
   { icon: '🥟', title: 'Buns', sub: 'Van traditie naar trendy · met frisse toppings als prei en komkommer', items: [['Garnalen bun: garnalen in pittige tomatenjus (2 stuks)', 9.5], ['Redi Fowru bun: geroosterde kip met rode kruiden (2 stuks)', 9.5], 'Extra spicy saus? Kan erbij'] },
