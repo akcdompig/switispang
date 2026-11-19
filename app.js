@@ -66,7 +66,6 @@ const MENU = [
     allergens: 'Selderij',
     variants: [{ id: 'std', name: 'met rijst', price: 15.0 }],
     extras: [
-      { id: 'antroewa', name: 'Antroewa erbij', hint: 'Surinaamse aubergine, in de soep gekookt', price: 2.0 },
       { id: 'rijst', name: 'Extra rijst', price: 1.5 }
     ]
   },
