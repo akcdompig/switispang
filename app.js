@@ -8,7 +8,7 @@ const CONFIG = {
   whatsapp: '31624584854',
 
   // Bestellijn: false = site staat online, maar bestellen opent binnenkort. Zet op true zodra alles goedgekeurd is.
-  orderingOpen: false,
+  orderingOpen: true,
   // Automatisch open vanaf dit moment (op de echte site). Op de acceptatieversie staat bestellen altijd open.
   orderingOpenAt: '2026-11-15T20:00:00+01:00',
 
