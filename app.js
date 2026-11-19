@@ -25,12 +25,12 @@ const CONFIG = {
   payOnline: true,
 
   drop: {
-    label: 'Woensdag 18 november',
-    dayShort: 'woensdag',
-    deadline: '2026-11-17T20:30:00+01:00', // bestellen sluit
-    deadlineLabel: 'dinsdag 17 november, 20:30'
+    label: 'Zaterdag 21 november',
+    dayShort: 'zaterdag',
+    deadline: '2026-11-20T17:00:00+01:00', // bestellen sluit
+    deadlineLabel: 'vrijdag 20 november, 17:00'
   },
-  next: 'Zaterdag 21 november: menu volgt woensdagavond op Instagram. Bestellen kan tot vrijdag 17:00.',
+  next: 'Woensdag 25 november: menu volgt zaterdagavond op Instagram. Bestellen kan tot dinsdag 20:00.',
 
   pickup: {
     area: 'Almere-Buiten',
@@ -56,37 +56,17 @@ const CONFIG = {
 // De teller telt per bestelling; houd zelf bij hoeveel er via WhatsApp binnen zijn.
 const MENU = [
   {
-    id: 'roti',
-    name: 'Roti kip',
+    id: 'bravoe',
+    name: 'Bravoe',
     portions: 10,
-    image: 'img/roti-kip.jpg',
-    origin: 'India → Suriname · 1873',
-    desc: 'De rotiplaat wordt vers met de hand gemaakt, en daar proef je het verschil. Alleen de rotiplaat zelf is al heerlijk om zo te eten. Met kip in masala met jeera, aardappel, kousenband en ei. Kies kippenbout, kippendijfilet of vega (zonder kip). Liever een rotirol? Kies "rotirol": kippendijfilet met aardappel, kousenband en ei, gerold in een verse rotiplaat. Makkelijk mee te nemen.',
-    story: 'Op 5 juni 1873 legde de Lalla Rookh aan in Suriname, met mensen uit India aan boord. Met hun kruiden en hun brood. Zo kwam roti naar Suriname, en werd hij van ons allemaal.',
-    allergens: 'Gluten, ei, soja, selderij, mosterd',
-    variants: [
-      { id: 'bout', name: 'met kippenbout', price: 17.5 },
-      { id: 'filet', name: 'met kippendijfilet', price: 18.5 },
-      { id: 'vega', name: 'vega 🌱', hint: 'aardappel, kousenband en ei', cart: 'Roti vega', price: 15.0 },
-      { id: 'rol', name: 'rotirol', hint: 'kippendijfilet gerold in een verse rotiplaat', cart: 'Rotirol kippendijfilet', price: 11.95, portions: 10, unit: 'rotirollen' } // eigen teller
-    ],
+    image: 'img/bravoe.jpg',
+    origin: 'Surinaamse feestsoep · alle volken in één pan',
+    desc: 'Een krachtige maaltijdsoep met rund en gerookte kip, aardvruchten (groene banaan, cassave, zoete aardappel) en groenten (oker), met krontomirki (kokosmelk). Met witte rijst, sambal apart.',
+    story: 'Ala kondre bravoe betekent soep uit alle landen. Alle bevolkingsgroepen van Suriname komen samen in één pan, en daarom eet je hem op nationale feestdagen.',
+    allergens: 'Selderij',
+    variants: [{ id: 'std', name: 'met rijst', price: 15.0 }],
     extras: [
-      { id: 'groot', name: "Maak 'm groot", cart: '(groot)', price: 3.5, only: ['bout', 'filet', 'lams'], hint: 'extra stuk kip, meer aardappel en kousenband' },
-      { id: 'ei', name: 'Extra ei', price: 1.5 },
-      { id: 'roti', name: 'Extra verse rotiplaat', hint: 'lekker om zo bij te eten', price: 3.0, only: ['bout', 'filet', 'vega', 'lams'] }
-    ]
-  },
-  {
-    id: 'gritibana',
-    name: 'Gritibana',
-    portions: 10,
-    image: 'img/gritibana.jpg',
-    origin: 'Creoolse keuken · Afrikaanse wortels',
-    desc: 'Een volle maaltijdsoep van geraspte groene banaan, met kippendij, halal zoutvlees en krontomirki (kokosmelk). Met witte rijst, sambal apart.',
-    story: 'Griti = raspen, bana = banaan. De banaan wordt met de hand geraspt en tot balletjes gedraaid. Echte oso nyan: wat je bij oma kreeg als het koud was.',
-    allergens: 'Gluten, selderij',
-    variants: [{ id: 'std', name: 'met rijst', price: 13.5 }],
-    extras: [
+      { id: 'antroewa', name: 'Antroewa erbij', hint: 'Surinaamse aubergine, in de soep gekookt', price: 2.0 },
       { id: 'rijst', name: 'Extra rijst', price: 1.5 }
     ]
   },
@@ -118,14 +98,13 @@ const DRINKS = [
 
 const COMING = [
   { name: 'Okersoep', image: 'img/okersoep.jpg' },
-  { name: 'Bravoe', image: 'img/bravoe.jpg' },
   { name: 'Tayersoep', image: 'img/tayersoep.jpg' }
 ];
 
 // De Switi Spang-keuken: wat er de komende weken langskomt (geen prijzen, wisselt per week).
 // Items: tekst, of [tekst, prijs]. Prijzen incl. btw; formule: (kostprijs + ~€10) × 1,09, getoetst aan concurrenten in Almere.
 const REPERTOIRE = [
-  { icon: '🍲', title: 'Soepen', sub: 'Maaltijdsoepen, traditioneel, met rijst', items: [['Gritibana', 13.5], ['Okersoep', 13.5], ['Bravoe', 13.5], ['Tayersoep', 13.5], ['Pindasoep', 13.5], ['Cassavesoep', 13.5], ['Saoto (basis)', 10.5]] },
+  { icon: '🍲', title: 'Soepen', sub: 'Maaltijdsoepen, traditioneel, met rijst', items: [['Gritibana', 13.5], ['Okersoep', 13.5], ['Bravoe', 15], ['Tayersoep', 13.5], ['Pindasoep', 13.5], ['Cassavesoep', 13.5], ['Saoto (basis)', 10.5]] },
   { icon: '🫓', title: 'Roti', sub: 'Met verse rotiplaat, aardappel, kousenband en ei', items: [['Roti kip (kippenbout)', 17.5], ['Roti kip (kippendijfilet)', 18.5], ['Roti lams', 19.5], ['Roti masala doks: op traditionele wijze boven de chula (houtskoolvuur) gegaard', 21.5], ['Roti vega', 15], ['Rotirol kippendijfilet', 11.95], ['Rotirol lams', 13.95]] },
   { icon: '🍛', title: 'Hoofdgerechten', sub: 'Met rijst, bami of chow mein · gestoofd of geroosterd, zoals thuis', items: [['Rijst met kip en antroewa', 16.5], ['Rijst met kip en sopropo', 14.95], ['Rijst met gestoofd rundvlees en Surinaamse zuurkool, met aardappel en kiprookworst', 14.95], ['Witte rijst met kousenband, aardappel en garnalen', 14.95], ['Masoesa moksi alesi met geroosterde kip', 14.95], ['Nasi met geroosterde kip', 14.95], ['Bami met geroosterde kip', 14.95], ['Chow mein met geroosterde kip', 14.95]] },
   { icon: '🥟', title: 'Buns', sub: 'Van traditie naar trendy · met frisse toppings als prei en komkommer', items: [['Garnalen bun: garnalen in pittige tomatenjus (2 stuks)', 9.5], ['Redi Fowru bun: geroosterde kip met rode kruiden (2 stuks)', 9.5], 'Extra spicy saus? Kan erbij'] },
