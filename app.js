@@ -61,11 +61,12 @@ const MENU = [
     portions: 10,
     image: 'img/tayersoep.jpg',
     origin: 'Surinaamse keuken',
-    desc: 'Een romige maaltijdsoep met tayer, vlees en groenten. Met witte rijst, sambal apart.',
+    desc: 'Een romige maaltijdsoep met kip, tayer en andere aardvruchten. Met witte rijst, sambal apart.',
     story: 'Tayer is een aardvrucht die in Suriname veel in soepen en stoofgerechten gebruikt wordt. Zo koken we hem zoals thuis, langzaam en met liefde.',
     allergens: 'Nog te bevestigen',
     variants: [{ id: 'std', name: 'met rijst', price: 13.5 }],
     extras: [
+      { id: 'rund', name: 'Rund erbij', price: 2.0 },
       { id: 'rijst', name: 'Extra rijst', price: 1.5 }
     ]
   },
