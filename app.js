@@ -25,12 +25,12 @@ const CONFIG = {
   payOnline: true,
 
   drop: {
-    label: 'Zaterdag 21 november',
-    dayShort: 'zaterdag',
-    deadline: '2026-11-20T17:00:00+01:00', // bestellen sluit
-    deadlineLabel: 'vrijdag 20 november, 17:00'
+    label: 'Woensdag 25 november',
+    dayShort: 'woensdag',
+    deadline: '2026-11-24T20:00:00+01:00', // bestellen sluit
+    deadlineLabel: 'dinsdag 24 november, 20:00'
   },
-  next: 'Woensdag 25 november: menu volgt zaterdagavond op Instagram. Bestellen kan tot dinsdag 20:00.',
+  next: 'Zaterdag 28 november: menu volgt woensdagavond op Instagram. Bestellen kan tot vrijdag 17:00.',
 
   pickup: {
     area: 'Almere-Buiten',
@@ -56,16 +56,34 @@ const CONFIG = {
 // De teller telt per bestelling; houd zelf bij hoeveel er via WhatsApp binnen zijn.
 const MENU = [
   {
-    id: 'bravoe',
-    name: 'Bravoe',
+    id: 'tayersoep',
+    name: 'Tayersoep',
     portions: 10,
-    image: 'img/bravoe.jpg',
-    origin: 'Surinaamse feestsoep · alle volken in één pan',
-    desc: 'Een krachtige maaltijdsoep met rund en gerookte kip, aardvruchten (groene banaan, cassave, zoete aardappel) en groenten (oker). Met witte rijst, sambal apart.',
-    story: 'Ala kondre bravoe betekent soep uit alle landen. Alle bevolkingsgroepen van Suriname komen samen in één pan, en daarom eet je hem op nationale feestdagen.',
+    image: 'img/tayersoep.jpg',
+    origin: 'Creoolse keuken · oso nyan',
+    desc: 'Romige, hartige maaltijdsoep van tayer met kip, langzaam gekookt zoals thuis. Met of zonder zoutvlees, dat kies je zelf. Met witte rijst, sambal apart.',
+    story: 'Tayer is een knol die in Suriname al generaties in de pot gaat. Wij maken de soep nog precies zoals we hem thuis kregen.',
     allergens: 'Selderij',
-    variants: [{ id: 'std', name: 'met rijst', price: 15.0 }],
+    variants: [
+      { id: 'zoutvlees', name: 'met zoutvlees', price: 15.0 },
+      { id: 'zonder', name: 'zonder zoutvlees', price: 15.0 }
+    ],
     extras: [
+      { id: 'rijst', name: 'Extra rijst', price: 1.5 }
+    ]
+  },
+  {
+    id: 'bruinebonen',
+    name: 'Bruine bonen',
+    portions: 10,
+    image: 'img/bruinebonen.jpg',
+    origin: 'Creoolse keuken · oso nyan',
+    desc: 'Langzaam gestoofde bruine bonen, romig en vol smaak, met mals gestoofde kip en witte rijst. Komkommer in azijn met ui en peper apart erbij.',
+    story: 'Bruine bonen met rijst is in Suriname echt thuiseten: een grote pan op het vuur die de hele familie samenbrengt.',
+    allergens: 'Selderij',
+    variants: [{ id: 'std', name: 'met gestoofde kip en rijst', price: 14.95 }],
+    extras: [
+      { id: 'zoutvlees', name: 'Zoutvlees erbij', price: 1.5 },
       { id: 'rijst', name: 'Extra rijst', price: 1.5 }
     ]
   },
@@ -96,15 +114,15 @@ const DRINKS = [
 
 const COMING = [
   { name: 'Okersoep', image: 'img/okersoep.jpg' },
-  { name: 'Tayersoep', image: 'img/tayersoep.jpg' }
+  { name: 'Bravoe', image: 'img/bravoe.jpg' }
 ];
 
 // De Switi Spang-keuken: wat er de komende weken langskomt (geen prijzen, wisselt per week).
 // Items: tekst, of [tekst, prijs]. Prijzen incl. btw; formule: (kostprijs + ~€10) × 1,09, getoetst aan concurrenten in Almere.
 const REPERTOIRE = [
-  { icon: '🍲', title: 'Soepen', sub: 'Maaltijdsoepen, traditioneel, met rijst', items: [['Gritibana', 13.5], ['Okersoep', 13.5], ['Bravoe', 15], ['Tayersoep', 13.5], ['Pindasoep', 13.5], ['Cassavesoep', 13.5], ['Saoto', 10.5]] },
+  { icon: '🍲', title: 'Soepen', sub: 'Maaltijdsoepen, traditioneel, met rijst', items: [['Gritibana', 15], ['Okersoep', 15], ['Bravoe', 15], ['Tayersoep', 15], ['Pindasoep', 15], ['Cassavesoep', 15], ['Saoto', 10.5]] },
   { icon: '🫓', title: 'Roti', sub: 'Met verse rotiplaat, aardappel, kousenband en ei', items: [['Roti kip (kippenbout)', 17.5], ['Roti kip (kippendijfilet)', 18.5], ['Roti lams', 19.5], ['Roti masala doks: op traditionele wijze boven de chula (houtskoolvuur) gegaard', 21.5], ['Roti vega', 15], ['Rotirol kippendijfilet', 11.95], ['Rotirol lams', 13.95]] },
-  { icon: '🍛', title: 'Hoofdgerechten', sub: 'Met rijst, bami of chow mein · gestoofd of geroosterd, zoals thuis', items: [['Rijst met kip en antroewa', 16.5], ['Rijst met kip en sopropo', 14.95], ['Rijst met gestoofd rundvlees en Surinaamse zuurkool, met aardappel en kiprookworst', 14.95], ['Witte rijst met kousenband, aardappel en garnalen', 14.95], ['Masoesa moksi alesi met geroosterde kip', 14.95], ['Nasi met geroosterde kip', 14.95], ['Bami met geroosterde kip', 14.95], ['Chow mein met geroosterde kip', 14.95]] },
+  { icon: '🍛', title: 'Hoofdgerechten', sub: 'Met rijst, bami of chow mein · gestoofd of geroosterd, zoals thuis', items: [['Rijst met kip en antroewa', 16.5], ['Bruine bonen met gestoofde kip en witte rijst (zoutvlees optioneel)', 14.95], ['Rijst met kip en sopropo', 14.95], ['Rijst met gestoofd rundvlees en Surinaamse zuurkool, met aardappel en kiprookworst', 14.95], ['Witte rijst met kousenband, aardappel en garnalen', 14.95], ['Masoesa moksi alesi met geroosterde kip', 14.95], ['Nasi met geroosterde kip', 14.95], ['Bami met geroosterde kip', 14.95], ['Chow mein met geroosterde kip', 14.95]] },
   { icon: '🥟', title: 'Buns', sub: 'Van traditie naar trendy · met frisse toppings als prei en komkommer', items: [['Garnalen bun: garnalen in pittige tomatenjus (2 stuks)', 9.5], ['Redi Fowru bun: geroosterde kip met rode kruiden (2 stuks)', 9.5], 'Extra spicy saus? Kan erbij'] },
   { icon: '🦀', title: 'Seafood boil · Paramaribo style', sub: 'Binnenkort · alleen als speciale ronde', items: ['Prijs volgt zodra hij op het menu staat', 'Krab, grote garnalen, rivierkreeft en spinkrab', 'Met krieltjes, maïs en worst in masala en kokosmelk', 'Hoe pittig? Dat kies je zelf'] },
   { icon: '✨', title: 'Weekend specials', sub: 'Surinaams in een ander jasje', items: ['Elke week een verrassing', 'Volg Instagram en onze WhatsApp-community'] },
