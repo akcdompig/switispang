@@ -27,8 +27,8 @@ const CONFIG = {
   drop: {
     label: 'Woensdag 25 november',
     dayShort: 'woensdag',
-    deadline: '2026-11-24T20:00:00+01:00', // bestellen sluit
-    deadlineLabel: 'dinsdag 24 november, 20:00'
+    deadline: '2026-11-24T17:00:00+01:00', // bestellen sluit
+    deadlineLabel: 'dinsdag 24 november, 17:00'
   },
   next: 'Zaterdag 28 november: menu volgt woensdagavond op Instagram. Bestellen kan tot vrijdag 17:00.',
 
@@ -61,14 +61,12 @@ const MENU = [
     portions: 10,
     image: 'img/tayersoep.jpg',
     origin: 'Creoolse keuken · oso nyan',
-    desc: 'Romige, hartige maaltijdsoep van tayer met kip, langzaam gekookt zoals thuis. Met of zonder zoutvlees, dat kies je zelf. Met witte rijst, sambal apart.',
+    desc: 'Romige, hartige maaltijdsoep met kip, tayer en andere aardvruchten, langzaam gekookt zoals thuis. Met witte rijst, sambal apart. Rund erbij kan voor €2.',
     story: 'Tayer is een knol die in Suriname al generaties in de pot gaat. Wij maken de soep nog precies zoals we hem thuis kregen.',
     allergens: 'Selderij',
-    variants: [
-      { id: 'zoutvlees', name: 'met zoutvlees', price: 15.0 },
-      { id: 'zonder', name: 'zonder zoutvlees', price: 15.0 }
-    ],
+    variants: [{ id: 'std', name: 'met rijst', price: 15.0 }],
     extras: [
+      { id: 'rund', name: 'Rund erbij', price: 2.0 },
       { id: 'rijst', name: 'Extra rijst', price: 1.5 }
     ]
   },
