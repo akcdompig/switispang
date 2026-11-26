@@ -25,12 +25,12 @@ const CONFIG = {
   payOnline: true,
 
   drop: {
-    label: 'Woensdag 25 november',
-    dayShort: 'woensdag',
-    deadline: '2026-11-24T17:00:00+01:00', // bestellen sluit
-    deadlineLabel: 'dinsdag 24 november, 17:00'
+    label: 'Zaterdag 28 november',
+    dayShort: 'zaterdag',
+    deadline: '2026-11-27T17:00:00+01:00', // bestellen sluit
+    deadlineLabel: 'vrijdag 27 november, 17:00'
   },
-  next: 'Zaterdag 28 november: menu volgt woensdagavond op Instagram. Bestellen kan tot vrijdag 17:00.',
+  next: 'Woensdag 2 december: menu volgt zaterdagavond op Instagram.',
 
   pickup: {
     area: 'Almere-Buiten',
@@ -56,19 +56,16 @@ const CONFIG = {
 // De teller telt per bestelling; houd zelf bij hoeveel er via WhatsApp binnen zijn.
 const MENU = [
   {
-    id: 'tayersoep',
-    name: 'Chinese tayersoep',
+    id: 'bamikip',
+    name: 'Bami kip',
     portions: 10,
-    image: 'img/tayersoep.jpg',
-    origin: 'Creoolse keuken · oso nyan',
-    desc: 'Romige, hartige maaltijdsoep met kip, tayer en andere aardvruchten, langzaam gekookt zoals thuis. Met witte rijst, sambal apart. Rund erbij kan voor €2.',
-    story: 'Tayer is een knol die in Suriname al generaties in de pot gaat. Wij maken de soep nog precies zoals we hem thuis kregen.',
-    allergens: 'Selderij',
-    variants: [{ id: 'std', name: 'met rijst', price: 15.0 }],
-    extras: [
-      { id: 'rund', name: 'Rund erbij', price: 2.0 },
-      { id: 'rijst', name: 'Extra rijst', price: 1.5 }
-    ]
+    image: 'img/bamikip.jpg',
+    origin: 'Chinees-Surinaamse keuken · oso nyan',
+    desc: 'Bami met mals gestoofde kip. Komkommer in azijn met ui en sambal apart erbij. Groente erbij kan, laat het weten bij je bestelling.',
+    story: 'Bami kwam met de Chinese migranten naar Suriname en hoort er allang bij op tafel. Wij maken hem met gestoofde kip, zoals we hem thuis eten.',
+    allergens: 'Vraag het ons even via 06 24 58 48 54',
+    variants: [{ id: 'std', name: 'met gestoofde kip', price: 14.95 }],
+    extras: []
   },
   {
     id: 'bruinebonen',
@@ -82,22 +79,6 @@ const MENU = [
     variants: [{ id: 'std', name: 'met gestoofde kip en rijst', price: 14.95 }],
     extras: [
       { id: 'zoutvlees', name: 'Zoutvlees erbij', price: 1.5 },
-      { id: 'rijst', name: 'Extra rijst', price: 1.5 }
-    ]
-  },
-  {
-    id: 'saoto',
-    name: 'Saoto',
-    portions: 10,
-    image: 'img/saoto.jpg',
-    origin: 'Javaanse keuken · 1890',
-    desc: 'Een volle maaltijdsoep: heldere, kruidige kippensoep met kip, taugé, gebakken aardappel en ei. Met witte rijst; sambal, ketjap en gebakken uitjes apart.',
-    story: 'Op 9 augustus 1890 kwamen de eerste Javaanse contractarbeiders aan in Suriname. Uit hun soto ayam groeide saoto, met Surinaamse ingrediënten. Nu is het de soep van heel Suriname.',
-    allergens: 'Ei, gluten, selderij. Ketjap en gebakken uitjes (apart, optioneel): soja, gluten',
-    variants: [{ id: 'std', name: 'met rijst', price: 10.5 }],
-    extras: [
-      { id: 'vulling', name: 'Extra vulling', hint: 'kip, taugé en gebakken aardappel', price: 3.0 },
-      { id: 'ei', name: 'Extra ei', price: 1.5 },
       { id: 'rijst', name: 'Extra rijst', price: 1.5 }
     ]
   }
