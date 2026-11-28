@@ -37,16 +37,25 @@ async function notifyIfPaid(p) {
   const amount = '€' + Number(p.amount.value).toFixed(2).replace('.', ',');
   const order = meta.order || '(bestelling niet gevonden, zie Mollie)';
   const test = p.mode === 'test';
+  const [slotMode, slotTime] = String(meta.slot || '').split('|');
+  const afhalen = slotMode === 'afhalen';
+  const address = (process.env.PICKUP_ADDRESS || '').trim();
+  // Eerst de bevestigingsmail, zodat de melding aan de eigenaar kan zeggen of die is aangekomen.
+  let mailed = false;
+  if (meta.email) {
+    const where = afhalen
+      ? `Je haalt je bestelling op: ${meta.drop ? meta.drop.toLowerCase() + ', ' : ''}om ${slotTime}.\nAfhaaladres: ${address || 'dit sturen we je zo persoonlijk via WhatsApp of telefoon'}`
+      : `We bezorgen je bestelling ${meta.drop ? meta.drop.toLowerCase() + ' ' : ''}tussen ${slotTime}. Zorg dat er iemand thuis is.`;
+    mailed = await mail(meta.email, 'Je bestelling bij Switi Spang is bevestigd',
+      `Bedankt voor je bestelling! We hebben je betaling van ${amount} ontvangen en gaan ermee aan de slag.\n\n${where}\n\n--- Je bestelling ---\n${order}\n\n` +
+      `Vragen of iets aan te passen? App ons op 06 24 58 48 54.\n\nSwiti Spang · Almere-Buiten\nswitispang.nl`
+    ).catch(e => { console.error(e); return false; });
+  }
+  const warn = mailed ? '' : `\n\n⚠️ <b>Geen bevestigingsmail verstuurd${meta.email ? ' (versturen mislukt)' : ' (geen e-mail opgegeven)'}.</b> App de klant zelf de bevestiging${afhalen ? ' en het afhaaladres' : ''}.`;
   const ok = await telegram(
-    `${test ? '🧪 TEST · ' : ''}🍛 <b>Nieuwe bestelling – betaald ${amount}</b>\n\n${esc(order)}\n\n${meta.email ? '✉️ ' + esc(meta.email) + '\n' : ''}<i>${esc(p.id)}</i>`
+    `${test ? '🧪 TEST · ' : ''}🍛 <b>Nieuwe bestelling – betaald ${amount}</b>\n\n${esc(order)}\n\n${meta.email ? '✉️ ' + esc(meta.email) + (mailed ? ' (bevestiging verstuurd)' : '') + '\n' : ''}<i>${esc(p.id)}</i>${warn}`
   ).catch(e => { console.error(e); return false; });
   if (!ok) await mollie('PATCH', `/payments/${p.id}`, { metadata: { ...meta, notified: false } }).catch(() => {});
-  if (meta.email) {
-    await mail(meta.email, 'Bedankt voor je bestelling bij Switi Spang',
-      `Bedankt voor je bestelling! We hebben je betaling van ${amount} ontvangen en gaan ermee aan de slag.\n\n${order}\n\n` +
-      `Vragen of iets aan te passen? App ons op 06 24 58 48 54.\n\nSwiti Spang · Almere-Buiten\nswitispang.nl`
-    ).catch(e => console.error(e));
-  }
   return ok;
 }
 

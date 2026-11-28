@@ -404,7 +404,7 @@ function renderCart() {
 
     <div class="field"><label for="fName">Naam</label><input id="fName" type="text" autocomplete="name" placeholder="Voor- en achternaam" value="${esc(prev.name)}"/></div>
     <div class="field"><label for="fPhone">Telefoon</label><input id="fPhone" type="tel" autocomplete="tel" placeholder="Voor als er iets is" value="${esc(prev.phone)}"/></div>
-    ${PAY ? `<div class="field"><label for="fEmail">E-mail (optioneel)</label><input id="fEmail" type="email" autocomplete="email" placeholder="Voor je bevestiging" value="${esc(prev.email)}"/></div>` : ''}
+    ${PAY ? `<div class="field"><label for="fEmail">E-mail (voor je bevestiging en het afhaaladres)</label><input id="fEmail" type="email" autocomplete="email" required placeholder="naam@voorbeeld.nl" value="${esc(prev.email)}"/></div>` : ''}
     ${state.mode === 'bezorgen' ? `
       <div class="field"><label for="fStreet">Straat + huisnummer</label><input id="fStreet" type="text" autocomplete="street-address" value="${esc(prev.street)}"/></div>
       <div class="field"><label for="fPostcode">Postcode</label><input id="fPostcode" type="text" autocomplete="postal-code" placeholder="Postcode, bijv. 1315 AB" value="${esc(prev.postcode)}"/></div>
@@ -495,7 +495,7 @@ function checkout() {
   if (!state.slot) return toast(state.mode === 'bezorgen' ? 'Kies een tijdvak.' : 'Kies een ophaaltijd.');
   if (!f.name) return toast('Vul je naam in.');
   if (f.phone.replace(/\D/g, '').length < 9) return toast('Vul je telefoonnummer in.');
-  if (PAY && f.email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.email)) return toast('Dit e-mailadres klopt niet. Laat het leeg of controleer het.');
+  if (PAY && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.email || '')) return toast('Vul je e-mailadres in. Daar sturen we je bevestiging en het afhaaladres naartoe.');
   if (state.mode === 'bezorgen') {
     if (!f.street) return toast('Vul je straat en huisnummer in.');
     if (!/^\d{4}[A-Z]{2}$/.test(f.postcode)) return toast('Vul een geldige postcode in, bijvoorbeeld 1315AB.');
